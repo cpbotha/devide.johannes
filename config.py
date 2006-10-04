@@ -2,6 +2,7 @@ import os
 import sys
 
 SVN = '/usr/bin/svn'
+CVS = '/usr/bin/cvs'
 
 def init():
     global working_dir, archive_dir, build_dir, inst_dir
