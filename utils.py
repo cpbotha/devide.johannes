@@ -3,6 +3,15 @@ import os
 import sys, urllib
 import tarfile
 
+def output(message, rpad=0):
+    s = "#####J> %s" % (message,)
+    pn = rpad - len(s)
+    if pn < 0:
+        pn = 0
+    p = pn * '#'
+        
+    print "%s %s" % (s,p)
+
 def urlget(url):
     """Simple method to retrieve URL.  It will get the file in the current
     directory.
@@ -19,11 +28,11 @@ def urlget(url):
     filename = url[i+1:]
     print url, "->", filename
     if os.path.exists(filename):
-        print "%s already present, skipping download." % (filename,)
+        output("%s already present, skipping download." % (filename,))
 
     else:
         urllib.urlretrieve(url, filename, reporthook)
-        print "Download complete."
+        output("Download complete.")
 
     return filename
 
@@ -34,14 +43,10 @@ def goto_archive():
 def goto_build():
     os.chdir(config.build_dir)
 
-def urlget_and_unpack(url):
-    print "##### Downloading."
-    goto_archive()
-    filename = urlget(url)
-    full_filename = os.path.join(config.archive_dir, filename)
-
-    print "##### Unpacking %s" % (filename,)
+def unpack_build(archive_filename):
+    """Unpack given archive_filename in build directory.
+    """
     goto_build()
-    tar = tarfile.open(full_filename, 'r|bz2')
+    tar = tarfile.open(archive_filename, 'r|bz2')
     tar.extractall()
     tar.close()
