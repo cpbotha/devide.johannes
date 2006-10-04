@@ -81,19 +81,23 @@ class WXPython(InstallPackage):
                                         (os.path.join(self.inst_dir, 'lib'),
                                          os.pathsep,
                                          os.environ['LD_LIBRARY_PATH'])
+        # we don't want config.py to find an existing build_config.py
+        # somewhere else when setup.py runs
+        os.environ['PYTHONPATH'] = ''
+
         # find path to current python binary        
         exe = sys.executable
 
         # fix problem in 2.6.3.3 setup.py
-        inputfile = open('setup.py')
-        outputfile = open('setup_new.py', 'w')
-        for l in inputfile:
-            if not l.startswith("copy_file('build_options.py'"):
-                outputfile.write(l)
+        #inputfile = open('setup.py')
+        #outputfile = open('setup_new.py', 'w')
+        #for l in inputfile:
+        #    if not l.startswith("copy_file('build_options.py'"):
+        #        outputfile.write(l)
 
-        inputfile.close()
-        outputfile.close()
-        shutil.copyfile('setup_new.py','setup.py')
+        #inputfile.close()
+        #outputfile.close()
+        #shutil.copyfile('setup_new.py','setup.py')
         
         
         ret = os.system('%s setup.py build_ext --inplace UNICODE=1' % (exe,))
@@ -121,6 +125,7 @@ class WXPython(InstallPackage):
         else:
             # build wxPython now
             utils.output("Building wxPython.")
+            self.build_wxpython()
 
     def install(self):
         os.chdir(self.build_dir)
