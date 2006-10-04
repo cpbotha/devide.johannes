@@ -19,7 +19,7 @@ mkdir inst
 cd archive
 wget -c http://www.python.org/ftp/python/2.5/Python-2.5.tar.bz2
 cd ../build
-tar xjvf Python-2.5.tar.bz2
+tar xjvf ../archive/Python-2.5.tar.bz2
 cd Python-2.5
 ./configure --prefix=$WD/inst/python
 
