@@ -2,6 +2,7 @@ import config
 import os
 import utils
 import sys
+import shutil
 from install_package import InstallPackage
 import utils
 
@@ -15,6 +16,7 @@ class WXPython(InstallPackage):
     def __init__(self):
         self.tbfilename = os.path.join(config.archive_dir, WXP_TARBALL)
         self.build_dir = os.path.join(config.build_dir, WXP_DIRBASE)
+        self.inst_dir = os.path.join(config.inst_dir, 'wx')
 
     def get(self):
         if os.path.exists(self.tbfilename):
@@ -44,7 +46,7 @@ class WXPython(InstallPackage):
 
         ret = os.system('../configure --prefix=%s --with-gtk --with-opengl '
                         '--enable-unicode' %
-                        (os.path.join(config.inst_dir,'wx'),))
+                        (self.inst_dir,))
         if ret != 0:
             raise RuntimeError(
                 '##### Error configuring wxWidgets.  Fix and try again.')
@@ -69,8 +71,40 @@ class WXPython(InstallPackage):
             raise RuntimeError(
                 '##### Error making wxWidgets STC.  Fix and try again.')
 
+    def build_wxpython(self):
+        os.chdir(os.path.join(self.build_dir, 'wxPython'))
+
+        # add wx bin to path and wx lib to LD_LIBRARY_PATH
+        os.environ['PATH'] = "%s%s%s" % (os.path.join(self.inst_dir, 'bin'),
+                                         os.pathsep, os.environ['PATH'])
+        os.environ['LD_LIBRARY_PATH'] = "%s%s%s" % \
+                                        (os.path.join(self.inst_dir, 'lib'),
+                                         os.pathsep,
+                                         os.environ['LD_LIBRARY_PATH'])
+        # find path to current python binary        
+        exe = sys.executable
+
+        # fix problem in 2.6.3.3 setup.py
+        inputfile = open('setup.py')
+        outputfile = open('setup_new.py', 'w')
+        for l in inputfile:
+            if not l.startswith("copy_file('build_options.py'"):
+                outputfile.write(l)
+
+        inputfile.close()
+        outputfile.close()
+        shutil.copyfile('setup_new.py','setup.py')
+        
+        
+        ret = os.system('%s setup.py build_ext --inplace UNICODE=1' % (exe,))
+        if ret != 0:
+            utils.error('wxPython setup failed.  Please fix and try again.')
+
         
     def build(self):
+        # our build step includes config,build and install of wxwidgets,
+        # as this is a dependency of wxPython
+        
         os.chdir(self.build_dir)
 
         if os.path.exists(os.path.join(config.inst_dir, 'wx/bin/wx-config')):
@@ -79,11 +113,26 @@ class WXPython(InstallPackage):
         else:
             utils.output("Building wxWidgets.")
             self.build_and_install_wxwidgets()
+            # wxWidgets is now installed to inst_dir/wx
 
-        utils.output("Building wxPython.")
-        os.chdir(os.path.join(self.build_dir, 'wxPython'))
-        
+        if os.path.exists(os.path.join(
+            self.build_dir, 'wxPython/wx/_core_.so')):
+            utils.output("wxPython already built.")
+        else:
+            # build wxPython now
+            utils.output("Building wxPython.")
+
     def install(self):
-        pass
+        os.chdir(self.build_dir)
+        os.chdir('wxPython')
+
+        if os.path.exists(os.path.join(self.inst_dir, 'wxPython')):
+            utils.output('wxPython already installed.')
+
+        else:
+            utils.output('Installing wxPython.')
+            shutil.copytree(os.path.join(self.build_dir, 'wxPython'),
+                            os.path.join(self.inst_dir, 'wxPython'))
+        
 
 

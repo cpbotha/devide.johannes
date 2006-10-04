@@ -14,17 +14,19 @@ def main():
         config.init()
 
         rpad = 70
+        rpad_char = '+'
         for ip in [wxpython.WXPython()]:
             n = ip.__module__
-            utils.output("%s :: get()" % (n,), rpad)
+            utils.output("%s" % (n,), rpad, '#')
+            utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()
-            utils.output("%s :: unpack()" % (n,), rpad)
+            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
             ip.unpack()
-            utils.output("%s :: configure()" % (n,), rpad)
+            utils.output("%s :: configure()" % (n,), rpad, rpad_char)
             ip.configure()
-            utils.output("%s :: build()" % (n,), rpad)
+            utils.output("%s :: build()" % (n,), rpad, rpad_char)
             ip.build()
-            utils.output("%s :: install()" % (n,), rpad)
+            utils.output("%s :: install()" % (n,), rpad, rpad_char)
             ip.install()
 
 if __name__ == '__main__':

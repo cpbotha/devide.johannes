@@ -3,14 +3,17 @@ import os
 import sys, urllib
 import tarfile
 
-def output(message, rpad=0):
+def output(message, rpad=0, rpad_char='#'):
     s = "#####J> %s" % (message,)
     pn = rpad - len(s)
     if pn < 0:
         pn = 0
-    p = pn * '#'
+    p = pn * rpad_char
         
     print "%s %s" % (s,p)
+
+def error(message):
+    raise RuntimeError('!!!!! %s' % (message,))
 
 def urlget(url):
     """Simple method to retrieve URL.  It will get the file in the current
