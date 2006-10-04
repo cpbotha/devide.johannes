@@ -28,6 +28,7 @@ echo "JOHANNES ##### Python config error.  Please fix errors and try again."
 exit
 fi
 
+make
 make install
 
 if [ "$?" -ne "0" ]; then
