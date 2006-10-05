@@ -35,6 +35,7 @@ def urlget(url):
 
     else:
         urllib.urlretrieve(url, filename, reporthook)
+        sys.stdout.write("\n")
         output("Download complete.")
 
     return filename
@@ -50,6 +51,12 @@ def unpack_build(archive_filename):
     """Unpack given archive_filename in build directory.
     """
     goto_build()
-    tar = tarfile.open(archive_filename, 'r|bz2')
+
+    if archive_filename.lower().endswith('bz2'):
+        m = 'r|bz2'
+    else:
+        m = 'r|gz'
+        
+    tar = tarfile.open(archive_filename, m)
     tar.extractall()
     tar.close()

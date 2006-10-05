@@ -1,5 +1,5 @@
 import config
-from install_packages import wxpython
+from install_packages import wxpython, cmake, vtk
 import sys
 import utils
 
@@ -15,7 +15,7 @@ def main():
 
         rpad = 70
         rpad_char = '+'
-        for ip in [wxpython.WXPython()]:
+        for ip in [wxpython.WXPython(), cmake.CMake(), vtk.VTK()]:
             n = ip.__module__
             utils.output("%s" % (n,), rpad, '#')
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
