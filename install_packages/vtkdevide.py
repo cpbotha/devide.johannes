@@ -42,7 +42,11 @@ class VTKDEVIDE(InstallPackage):
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
-                       "-DVTK_DIR=%s" % (self.inst_dir, config.VTK_DIR)
+                       "-DVTK_DIR=%s " \
+                       "-DDCMTK_INCLUDE_PATH=%s " \
+                       "-DDCMTK_LIB_PATH=%s" % \
+                       (self.inst_dir, config.VTK_DIR,
+                        config.DCMTK_INCLUDE, config.DCMTK_LIB)
 
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))

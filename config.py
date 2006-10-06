@@ -19,17 +19,23 @@ MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 # nothing for you to edit below this line
 #######################################################################
 
-CMAKE = '' # this will be set by the cmake InstallPackage when it runs
+# the following variables are written by various InstallPackages
+CMAKE = '' 
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 
-VTK_DIR = '' # this will be set by the vtk InstallPackage
+DCMTK_INCLUDE = ''
+DCMTK_LIB = ''
+
+VTK_DIR = '' 
 VTK_LIB = ''
 VTK_PYTHON = ''
 
-WX_LIB_PATH = '' # will be set by wxpython InstallPackage
-WXP_PYTHONPATH = '' # will be set by wxpython InstallPackage
+WX_LIB_PATH = '' 
+WXP_PYTHONPATH = '' 
 
-DEVIDE_PY = '' # written by devide InstallPackage
+DEVIDE_PY = ''
+
+#######################################################################
 
 def init():
     global working_dir, archive_dir, build_dir, inst_dir
