@@ -100,7 +100,10 @@ class WXPython(InstallPackage):
         #shutil.copyfile('setup_new.py','setup.py')
         
         
-        ret = os.system('%s setup.py build_ext --inplace UNICODE=1' % (exe,))
+        ret = os.system(
+            '%s setup.py build_ext --inplace UNICODE=1 BUILD_GLCANVAS=1' %
+            (exe,))
+        
         if ret != 0:
             utils.error('wxPython setup failed.  Please fix and try again.')
 
