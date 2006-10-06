@@ -36,7 +36,7 @@ class WXPython(InstallPackage):
     def configure(self):
         pass
 
-    def build_and_install_wxwidgets():
+    def build_and_install_wxwidgets(self):
         os.chdir(self.build_dir)
 
         if not os.path.isdir('bld'):
