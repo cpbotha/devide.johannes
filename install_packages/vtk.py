@@ -113,6 +113,8 @@ class VTK(InstallPackage):
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s" % (config.MAKE,))
+            if ret != 0:
+                utils.error("Error building VTK.  Fix and try again.")
 
     def install(self):
         if os.path.exists(
@@ -122,4 +124,9 @@ class VTK(InstallPackage):
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s install" % (config.MAKE,))
+            if ret != 0:
+                utils.error("Could not install VTK.  Fix and try again.")
+
+        # whatever the case may be, we have to register VTK_DIR
+        config.VTK_DIR = os.path.join(self.inst_dir, 'lib/vtk-5.0')
         
