@@ -65,5 +65,7 @@ class VTKTUD(InstallPackage):
         
 
     def install(self):
-        utils.output("No install step.  This is used from the build-dir.")
-        
+        config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
+        config.VTKTUD_PYTHON = os.path.join(
+            self.source_dir, 'Wrapping/Python')
+ 

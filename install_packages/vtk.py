@@ -127,6 +127,10 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error("Could not install VTK.  Fix and try again.")
 
-        # whatever the case may be, we have to register VTK_DIR
-        config.VTK_DIR = os.path.join(self.inst_dir, 'lib/vtk-5.0')
+        # whatever the case may be, we have to register VTK variables
+        config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
+        # I dunno why this is python2.4 when we've build with python2.5...
+        config.VTK_PYTHON = os.path.join(
+            config.VTK_LIB, 'python2.4/site-packages')
+        config.VTK_DIR = os.path.join(config.VTK_LIB, 'vtk-5.0')
         

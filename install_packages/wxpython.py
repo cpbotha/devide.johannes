@@ -138,6 +138,9 @@ class WXPython(InstallPackage):
             utils.output('Installing wxPython.')
             shutil.copytree(os.path.join(self.build_dir, 'wxPython'),
                             os.path.join(self.inst_dir, 'wxPython'))
+
+        config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
+        config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
         
 
 

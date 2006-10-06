@@ -6,17 +6,17 @@ class InstallPackage:
     software package.
     """
 
-    def get():
+    def get(self):
         pass
 
-    def unpack():
+    def unpack(self):
         pass
 
-    def configure():
+    def configure(self):
         pass
 
-    def build():
+    def build(self):
         pass
 
-    def install():
+    def install(self):
         pass

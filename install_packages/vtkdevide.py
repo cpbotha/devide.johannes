@@ -65,5 +65,8 @@ class VTKDEVIDE(InstallPackage):
         
 
     def install(self):
-        utils.output("No install step.  This is used from the build-dir.")
+        config.VTKDEVIDE_LIB = os.path.join(self.build_dir, 'bin')
+        config.VTKDEVIDE_PYTHON = os.path.join(
+            self.source_dir, 'Wrapping/Python')
+        
         

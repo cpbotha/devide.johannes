@@ -15,10 +15,21 @@ PATCH = 'patch'
 # this should move to the platform dependent part of init()
 MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 
+
+# nothing for you to edit below this line
+#######################################################################
+
 CMAKE = '' # this will be set by the cmake InstallPackage when it runs
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 
 VTK_DIR = '' # this will be set by the vtk InstallPackage
+VTK_LIB = ''
+VTK_PYTHON = ''
+
+WX_LIB_PATH = '' # will be set by wxpython InstallPackage
+WXP_PYTHONPATH = '' # will be set by wxpython InstallPackage
+
+DEVIDE_PY = '' # written by devide InstallPackage
 
 def init():
     global working_dir, archive_dir, build_dir, inst_dir
@@ -27,10 +38,11 @@ def init():
     build_dir = os.path.join(working_dir, 'build')
     inst_dir = os.path.join(working_dir, 'inst')
 
-    global python_include_path, python_library
+    global python_include_path, python_library, python_binary_path
     python_include_path = os.path.join(inst_dir, 'python/include/python2.5')
     python_library = os.path.join(
         inst_dir, 'python/lib/python2.5/config/libpython2.5.a')
+    python_binary_path = os.path.join(inst_dir, 'python/bin')
 
     # platform dependent stuff =========================================
     # use conditionals based on os.name (posix, nt) and sys.platform (linux2,
