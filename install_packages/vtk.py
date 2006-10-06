@@ -91,6 +91,7 @@ class VTK(InstallPackage):
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
+		       "-DVTK_USE_TK=NO " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DPYTHON_LIBRARY=%s " \
                        "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
