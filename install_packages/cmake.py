@@ -50,11 +50,16 @@ class CMake(InstallPackage):
                 utils.error('Could not build cmake.  Fix and try again.')
 
     def install(self):
-        if os.path.exists(os.path.join(self.inst_dir, 'bin/cmake')):
+        cmake_binpath = os.path.join(self.inst_dir, 'bin/cmake')
+        if os.path.exists(cmake_binpath):
             utils.output("CMAKE already installed. Skipping.")
 
         else:
             ret = os.system('make install')
             if ret != 0:
                 utils.error('Could not install cmake.  Fix and try again.')
+
+        # either way, we have to register our binary path with config
+        config.CMAKE = '%s %s' % (cmake_binpath, config.CMAKE_DEFAULT_PARAMS)
+        
         
