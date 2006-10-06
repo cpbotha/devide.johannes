@@ -62,7 +62,7 @@ export LD_LIBRARY_PATH
 export PYTHONPATH
 
 # invoke DeVIDE ###########################################
-python %(devide_py)s --no-kits itk_kit,numpy_kit,matplotlib_kit
+python %(devide_py)s --no-kits itk_kit,numpy_kit,matplotlib_kit $*
         """ % vardict
 
         invoking_script_fn = os.path.join(config.working_dir, 'devide.sh')

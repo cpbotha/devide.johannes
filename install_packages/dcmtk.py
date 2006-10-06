@@ -36,7 +36,11 @@ class DCMTK(InstallPackage):
         if os.path.exists("dcmdata/config.log"):
             utils.output("DCMTK already configured.  Not redoing.")
         else:
-            ret = os.system('./configure --prefix=%s' % (self.inst_dir,))
+            # we need to configure this without zlib, otherwise dcmtk
+            # complains (at least on this system) about the symbol
+            # inflateEnd not being available.
+            ret = os.system('./configure --without-zlib --prefix=%s' % \
+                            (self.inst_dir,))
             if ret != 0:
                 utils.error('Could not configure dcmtk.  Fix and try again.')
 
