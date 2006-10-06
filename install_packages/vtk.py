@@ -21,6 +21,11 @@ EXC_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
 GCC40_PATCH = "vtk502_gcc40_pythonutil.diff"
 GCC40_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
                   GCC40_PATCH
+
+# this applies all WXVTKRWI fixes from VTK CVS 200610 to the 5.0.2 source
+WXVTKRWI_PATCH = "wxvtkrwi_502_to_200610.diff"
+WXVTKRWI_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
+                     WXVTKRWI_PATCH
                   
 class VTK(InstallPackage):
     
@@ -34,6 +39,8 @@ class VTK(InstallPackage):
                                                EXC_PATCH)
         self.gcc40_patch_filename = os.path.join(config.archive_dir,
                                                  GCC40_PATCH)
+        self.wxvtkrwi_patch_filename = os.path.join(config.archive_dir,
+                                                    WXVTKRWI_PATCH)        
 
     def get(self):
         if os.path.exists(self.tbfilename):
@@ -50,7 +57,10 @@ class VTK(InstallPackage):
         if not os.path.exists(self.gcc40_patch_filename):
             utils.goto_archive()
             utils.urlget(GCC40_PATCH_URL)
-            
+
+        if not os.path.exists(self.wxvtkrwi_patch_filename):
+            utils.goto_archive()
+            utils.urlget(WXVTKRWI_PATCH_URL)
 
     def unpack(self):
         if os.path.isdir(self.source_dir):
@@ -76,6 +86,16 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.output(
                     "Could not apply GCC40 patch.  Fix and try again.")
+
+            # WXVTKRWI patch
+            utils.output("Applying WXVTKRWI patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.wxvtkrwi_patch_filename))
+            if ret != 0:
+                utils.output(
+                    "Could not apply WXVTKRWI patch.  Fix and try again.")
+                
                 
     def configure(self):
         if os.path.exists(
