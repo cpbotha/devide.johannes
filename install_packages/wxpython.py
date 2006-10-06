@@ -80,7 +80,7 @@ class WXPython(InstallPackage):
         os.environ['LD_LIBRARY_PATH'] = "%s%s%s" % \
                                         (os.path.join(self.inst_dir, 'lib'),
                                          os.pathsep,
-                                         os.environ['LD_LIBRARY_PATH'])
+                                         os.environ.get('LD_LIBRARY_PATH'))
         # we don't want config.py to find an existing build_config.py
         # somewhere else when setup.py runs
         os.environ['PYTHONPATH'] = ''
