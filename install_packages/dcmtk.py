@@ -39,7 +39,8 @@ class DCMTK(InstallPackage):
             # we need to configure this without zlib, otherwise dcmtk
             # complains (at least on this system) about the symbol
             # inflateEnd not being available.
-            ret = os.system('./configure --without-zlib --prefix=%s' % \
+            ret = os.system('./configure --without-zlib '
+                            '--prefix=%s' % \
                             (self.inst_dir,))
             if ret != 0:
                 utils.error('Could not configure dcmtk.  Fix and try again.')
