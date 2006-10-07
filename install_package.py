@@ -20,3 +20,10 @@ class InstallPackage:
 
     def install(self):
         pass
+
+    def clean_build(self):
+        """This method should clean up in such a way that the next build
+        of this package will result in AT LEAST all steps from configure
+        and onwards.
+        """
+        pass
