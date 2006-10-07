@@ -57,7 +57,7 @@ class DCMTK(InstallPackage):
                      ('(^LIBEXT\s*=\s*)a', '\\1so'),
                      ('(^RANLIB\s*=\s*)ranlib', '\\1:')]
 
-            utils.re_sub_filter_file('config/Makefile.def')
+            utils.re_sub_filter_file(repls, 'config/Makefile.def')
 
 
     def build(self):
