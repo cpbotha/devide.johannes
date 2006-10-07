@@ -44,6 +44,10 @@ class DCMTK(InstallPackage):
                             (self.inst_dir,))
             if ret != 0:
                 utils.error('Could not configure dcmtk.  Fix and try again.')
+                
+            # now modify the generated config/Makefile.def to enable
+            # building shared libraries as per
+            # http://forum.dcmtk.org/viewtopic.php?t=19
 
     def build(self):
         os.chdir(self.build_dir)
