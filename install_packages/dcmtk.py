@@ -62,7 +62,7 @@ class DCMTK(InstallPackage):
 
     def build(self):
         os.chdir(self.build_dir)
-        if os.path.exists("dcmdata/libsrc/libdcmdata.a"):
+        if os.path.exists("dcmdata/libsrc/libdcmdata.so"):
             utils.output("DCMTK already built. Skipping.")
 
         else:
@@ -89,3 +89,9 @@ class DCMTK(InstallPackage):
         # either way, we have to register our binary path with config
         config.DCMTK_INCLUDE = os.path.join(self.inst_dir, 'include')
         config.DCMTK_LIB = os.path.join(self.inst_dir, 'lib')
+
+    def clean_build(self):
+        # nuke installation and build directories, at the next run this
+        # will lead to a configure, build and install.
+        shutil.rmtree(self.build_dir)
+        shutil.rmtree(self.inst_dir)
