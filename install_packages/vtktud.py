@@ -1,6 +1,7 @@
 import config
 from install_package import InstallPackage
 import os
+import shutil
 import utils
 
 BASENAME = "vtktud"
@@ -69,3 +70,7 @@ class VTKTUD(InstallPackage):
         config.VTKTUD_PYTHON = os.path.join(
             self.source_dir, 'Wrapping/Python')
  
+    def clean_build(self):
+        # nuke the build dir, the source dir is pristine and there is
+        # no installation
+        shutil.rmtree(self.build_dir)
