@@ -1,6 +1,8 @@
 import config
 import os
+import re
 import sys, urllib
+import shutil
 import tarfile
 
 def output(message, rpad=0, rpad_char='#'):
@@ -60,3 +62,30 @@ def unpack_build(archive_filename):
     tar = tarfile.open(archive_filename, m)
     tar.extractall()
     tar.close()
+
+def re_sub_filter_file(repls, filename):
+    """Given a list of repls (tuples with regular expresions and
+    replacement patterns that are used as the first and second params
+    of re.sub), filter filename line by line.
+
+    A backup of the file is made to filename.orig.
+    """
+
+    newfilename = '%s.new' % (filename,)
+    origfilename = '%s.orig' % (filename,)
+
+    shutil.copyfile(filename, origfilename)
+
+    ifile = file(filename)
+    ofile = file(newfilename, 'w')
+
+    for l in ifile:
+        for r in repls:
+            l = re.sub(r[0], r[1], l)
+
+        ofile.write(l)
+
+    ifile.close()
+    ofile.close()
+            
+    shutil.copyfile(newfilename, filename)

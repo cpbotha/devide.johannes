@@ -1,6 +1,8 @@
 import config
 from install_package import InstallPackage
 import os
+import re
+import shutil
 import utils
 
 DCMTK_TARBALL = "dcmtk-3.5.4.tar.gz"
@@ -48,6 +50,15 @@ class DCMTK(InstallPackage):
             # now modify the generated config/Makefile.def to enable
             # building shared libraries as per
             # http://forum.dcmtk.org/viewtopic.php?t=19
+            repls = [('(^CFLAGS\s*=\s*)-O', '\\1-fPIC -O2'),
+                     ('(^CXXFLAGS\s*=\s*)-O', '\\1-fPIC -O2'),
+                     ('(^AR\s*=\s*)ar', '\\1gcc'),
+                     ('(^ARFLAGS\s*=\s*)cruv', '\\1-shared -o'),
+                     ('(^LIBEXT\s*=\s*)a', '\\1so'),
+                     ('(^RANLIB\s*=\s*)ranlib', '\\1:')]
+
+            utils.re_sub_filter_file('config/Makefile.def')
+
 
     def build(self):
         os.chdir(self.build_dir)
