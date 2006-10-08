@@ -44,9 +44,16 @@ class ITK(InstallPackage):
             os.mkdir(self.build_dir)
 
         os.chdir(self.build_dir)
-        cmake_params = "-DBUILD_TESTING=OFF " \
+        cmake_params = "-DBUILD_EXAMPLES=OFF " \
+                       "-DBUILD_SHARED_LIBS=ON " \
+                       "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
-                       "-DCMAKE_INSTALL_PREFIX=%s " % (self.inst_dir,)
+                       "-DCMAKE_INSTALL_PREFIX=%s " \
+                       "-DUSE_WRAP_ITK=ON " \
+                       "-DCableSwig_DIR=%s"
+                       % (self.inst_dir,)
+
+        # cableswig_dir = /data/scratch/wd/inst/CableSwig/lib/CableSwig/
         
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
