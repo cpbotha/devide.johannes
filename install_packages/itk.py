@@ -48,7 +48,7 @@ class ITK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DUSE_WRAP_ITK=ON " \
-                       "-DCableSwig_DIR=%s" \
+                       "-DCableSwig_DIR=%s " \
                        "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DPYTHON_LIBRARY=%s " \
