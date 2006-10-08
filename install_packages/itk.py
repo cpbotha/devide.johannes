@@ -4,11 +4,12 @@ import os
 import shutil
 import utils
 
-BASENAME = "CableSwig"
-CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + BASENAME
+BASENAME = "Insight"
+# password part of REPO spec
+CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-D 20061008"
 
-class CableSwig(InstallPackage):
+class ITK(InstallPackage):
     
     def __init__(self):
         self.source_dir = os.path.join(config.build_dir, BASENAME)
@@ -18,11 +19,10 @@ class CableSwig(InstallPackage):
 
     def get(self):
         if os.path.exists(self.source_dir):
-            utils.output("CableSwig already checked out, skipping step.")
+            utils.output("ITK already checked out, skipping step.")
 
         else:
             os.chdir(config.build_dir)
-            # we do not need to login for CableSwig
             ret = os.system("%s -d %s co %s %s" %
                             (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
             
@@ -33,6 +33,8 @@ class CableSwig(InstallPackage):
         pass
 
     def configure(self):
+        return
+    
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
             utils.output("CableSwig build already configured.")
@@ -53,6 +55,8 @@ class CableSwig(InstallPackage):
             utils.error("Could not configure CableSwig.  Fix and try again.")
 
     def build(self):
+        return
+        
         if os.path.exists(
             os.path.join(self.build_dir, 'bin/cswig')):
             utils.output("CableSwig already built.  Skipping build step.")
@@ -64,6 +68,8 @@ class CableSwig(InstallPackage):
                 utils.error("Error building CableSwig.  Fix and try again.")
 
     def install(self):
+        return
+        
         if os.path.exists(
             os.path.join(self.inst_dir, 'bin/cswig')):
             utils.output("CableSwig already installed.  Skipping build step.")
