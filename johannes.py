@@ -82,7 +82,7 @@ def main():
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
-                            cableswig.CableSwig(),
+                            #cableswig.CableSwig(),
                             vtktud.VTKTUD(),
                             vtkdevide.VTKDEVIDE(),
                             devide.DeVIDE()]

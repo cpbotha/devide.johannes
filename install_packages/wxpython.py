@@ -44,6 +44,15 @@ class WXPython(InstallPackage):
         
         os.chdir('bld')
 
+        # now we have to fix the IDIOTIC wxWidgets configure; on an FC3
+        # machine with openwin on (don't ask, it's amterdam), gl.h is
+        # found in /usr/openwin instead of /usr/include.  We prepend
+        # /usr/include to this list, we don't care about solaris machines
+        # at the moment...
+        repls = [('^SEARCH_INCLUDE="\\\\',
+                  'SEARCH_INCLUDE="\\\\\n    /usr/include        \\\\')]
+        utils.re_sub_filter_file(repls, '../configure')
+
         ret = os.system('../configure --prefix=%s --with-gtk --with-opengl '
                         '--enable-unicode' %
                         (self.inst_dir,))
