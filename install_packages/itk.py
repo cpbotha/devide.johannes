@@ -33,8 +33,6 @@ class ITK(InstallPackage):
         pass
 
     def configure(self):
-        return
-    
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
             utils.output("CableSwig build already configured.")
@@ -51,7 +49,18 @@ class ITK(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DUSE_WRAP_ITK=ON " \
                        "-DCableSwig_DIR=%s" \
-                       % (self.inst_dir,)
+                       "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
+                       "-DPYTHON_INCLUDE_PATH=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_EXECUTABLE=%s " \
+                       "-DWRAP_ITK_PYTHON=ON " \
+                       "-DWRAP_ITK_TCL=OFF " \
+                       "-DWRAP_ITK_JAVA=OFF " \
+                       "-DWRAP_unsigned_short=OFF " \
+                       "-DWRAP_signed_short=ON " \
+                       % (self.inst_dir, config.CABLESWIG_DIR,
+                          config.python_include_path, config.python_library,
+                          config.python_binary_path)
 
         # cableswig_dir = /data/scratch/wd/inst/CableSwig/lib/CableSwig/
         
@@ -59,35 +68,28 @@ class ITK(InstallPackage):
                         (config.CMAKE, cmake_params, self.source_dir))
 
         if ret != 0:
-            utils.error("Could not configure CableSwig.  Fix and try again.")
+            utils.error("Could not configure ITK.  Fix and try again.")
 
     def build(self):
-        return
-        
         if os.path.exists(
             os.path.join(self.build_dir, 'bin/cswig')):
-            utils.output("CableSwig already built.  Skipping build step.")
+            utils.output("ITK already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s" % (config.MAKE,))
             if ret != 0:
-                utils.error("Error building CableSwig.  Fix and try again.")
+                utils.error("Error building ITK.  Fix and try again.")
 
     def install(self):
-        return
-        
         if os.path.exists(
             os.path.join(self.inst_dir, 'bin/cswig')):
-            utils.output("CableSwig already installed.  Skipping build step.")
+            utils.output("ITK already installed.  Skipping step.")
 
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s install" % (config.MAKE,))
             if ret != 0:
-                utils.error("Could not install CableSwig.  Fix and try again.")
+                utils.error("Could not install ITK.  Fix and try again.")
 
-        # whatever the case may be, register variables
-        config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib')
-        
         

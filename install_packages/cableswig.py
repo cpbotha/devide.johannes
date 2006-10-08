@@ -75,6 +75,8 @@ class CableSwig(InstallPackage):
                 utils.error("Could not install CableSwig.  Fix and try again.")
 
         # whatever the case may be, register variables
+        # CABLESWIG_DIR contains CableSwigConfig.cmake, and is usually
+        # something like: inst/CableSwig/lib/CableSwig/
         config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib')
         
         
