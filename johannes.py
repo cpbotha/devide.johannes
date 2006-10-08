@@ -72,6 +72,7 @@ def main():
         # we need at LEAST a working directory
         if not working_dir:
             usage()
+            return
 
         # init config (DURR)
         config.init(working_dir)
