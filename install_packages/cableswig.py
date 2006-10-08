@@ -27,3 +27,53 @@ class CableSwig(InstallPackage):
             
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
+
+    def unpack(self):
+        pass
+
+    def configure(self):
+        if os.path.exists(
+            os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
+            utils.output("CableSwig build already configured.")
+            return
+        
+        if not os.path.exists(self.build_dir):
+            os.mkdir(self.build_dir)
+
+        os.chdir(self.build_dir)
+        cmake_params = "-DBUILD_TESTING=OFF " \
+                       "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
+                       "-DCMAKE_INSTALL_PREFIX=%s " % (self.inst_dir,)
+        
+        ret = os.system("%s %s %s" %
+                        (config.CMAKE, cmake_params, self.source_dir))
+
+        if ret != 0:
+            utils.error("Could not configure CableSwig.  Fix and try again.")
+
+    def build(self):
+        if os.path.exists(
+            os.path.join(self.build_dir, 'bin/cswig')):
+            utils.output("CableSwig already built.  Skipping build step.")
+
+        else:
+            os.chdir(self.build_dir)
+            ret = os.system("%s" % (config.MAKE,))
+            if ret != 0:
+                utils.error("Error building CableSwig.  Fix and try again.")
+
+    def install(self):
+        if os.path.exists(
+            os.path.join(self.inst_dir, 'bin/cswig')):
+            utils.output("CableSwig already installed.  Skipping build step.")
+
+        else:
+            os.chdir(self.build_dir)
+            ret = os.system("%s install" % (config.MAKE,))
+            if ret != 0:
+                utils.error("Could not install CableSwig.  Fix and try again.")
+
+        # whatever the case may be, register variables
+        config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib')
+        
+        
