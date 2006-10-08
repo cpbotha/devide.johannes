@@ -7,6 +7,13 @@ echo "Specify working directory as first parameter."
 exit;
 fi
 
+p=$1/inst/python/bin/python
+if [ -f $p ]; then
+echo "It seems that bootstrap.sh has already executed."
+echo "If you want to run it again, delete $p."
+exit
+fi
+
 mkdir $1
 cd $1
 
