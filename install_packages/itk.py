@@ -50,7 +50,7 @@ class ITK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DUSE_WRAP_ITK=ON " \
-                       "-DCableSwig_DIR=%s"
+                       "-DCableSwig_DIR=%s" \
                        % (self.inst_dir,)
 
         # cableswig_dir = /data/scratch/wd/inst/CableSwig/lib/CableSwig/
