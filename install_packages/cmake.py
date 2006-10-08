@@ -1,6 +1,7 @@
 import config
 from install_package import InstallPackage
 import os
+import shutil
 import utils
 
 CMAKE_TARBALL = "cmake-2.4.3.tar.gz"
@@ -61,5 +62,14 @@ class CMake(InstallPackage):
 
         # either way, we have to register our binary path with config
         config.CMAKE = '%s %s' % (cmake_binpath, config.CMAKE_DEFAULT_PARAMS)
+
+    def clean_build(self):
+        utils.output("Removing build and install directories.")
+        if os.path.exists(self.build_dir):
+            shutil.rmtree(self.build_dir)
+
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+
         
         
