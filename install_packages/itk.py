@@ -35,7 +35,7 @@ class ITK(InstallPackage):
     def configure(self):
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
-            utils.output("CableSwig build already configured.")
+            utils.output("ITK build already configured.")
             return
         
         if not os.path.exists(self.build_dir):
@@ -71,6 +71,7 @@ class ITK(InstallPackage):
             utils.error("Could not configure ITK.  Fix and try again.")
 
     def build(self):
+        # FIXME: continue here with checks
         if os.path.exists(
             os.path.join(self.build_dir, 'bin/cswig')):
             utils.output("ITK already built.  Skipping build step.")
