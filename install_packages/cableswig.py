@@ -77,6 +77,6 @@ class CableSwig(InstallPackage):
         # whatever the case may be, register variables
         # CABLESWIG_DIR contains CableSwigConfig.cmake, and is usually
         # something like: inst/CableSwig/lib/CableSwig/
-        config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib')
+        config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib/CableSwig')
         
         
