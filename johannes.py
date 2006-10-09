@@ -2,7 +2,7 @@ import config
 import getopt
 from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
-from install_packages import cableswig, itk
+from install_packages import itk
 from install_packages import vtktud, vtkdevide, devide
 import sys
 import utils
@@ -82,8 +82,7 @@ def main():
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
-                            cableswig.CableSwig(),
-                            itk.ITK(),
+                            #itk.ITK(),
                             vtktud.VTKTUD(),
                             vtkdevide.VTKDEVIDE(),
                             devide.DeVIDE()]

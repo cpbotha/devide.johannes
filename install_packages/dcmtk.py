@@ -66,6 +66,11 @@ class DCMTK(InstallPackage):
             utils.output("DCMTK already built. Skipping.")
 
         else:
+            # some machines (read: amsterdam) set an ARCH env variable
+            # and this is integrated in the compile invocation, breaking
+            # it
+            os.environ['ARCH'] = ''
+
             ret = os.system('make all')
             if ret != 0:
                 utils.error('Could not build dcmtk.  Fix and try again.')
@@ -75,6 +80,11 @@ class DCMTK(InstallPackage):
             utils.output("DCMTK already installed. Skipping.")
 
         else:
+            # some machines (read: amsterdam) set an ARCH env variable
+            # and this is integrated in the compile invocation, breaking
+            # it
+            os.environ['ARCH'] = ''
+            
             ret = os.system('make install')
             if ret != 0:
                 utils.error('DCMTK make install failed.  Fix and try again.')
@@ -93,5 +103,9 @@ class DCMTK(InstallPackage):
     def clean_build(self):
         # nuke installation and build directories, at the next run this
         # will lead to a configure, build and install.
-        shutil.rmtree(self.build_dir)
-        shutil.rmtree(self.inst_dir)
+        utils.output("Removing DCMTK build and installation dirs.")
+        if os.path.exists(self.build_dir):
+            shutil.rmtree(self.build_dir)
+
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)

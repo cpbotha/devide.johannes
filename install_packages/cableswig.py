@@ -1,3 +1,7 @@
+# ITK CVS 20061008 does not seem to support an external CableSwig
+# so we're not using this InstallPackage (but integrating CableSwig
+# in the ITK source dir in the itk.py InstallPackage)
+
 import config
 from install_package import InstallPackage
 import os
@@ -66,7 +70,7 @@ class CableSwig(InstallPackage):
     def install(self):
         if os.path.exists(
             os.path.join(self.inst_dir, 'bin/cswig')):
-            utils.output("CableSwig already installed.  Skipping build step.")
+            utils.output("CableSwig already installed.  Skipping step.")
 
         else:
             os.chdir(self.build_dir)
@@ -77,6 +81,7 @@ class CableSwig(InstallPackage):
         # whatever the case may be, register variables
         # CABLESWIG_DIR contains CableSwigConfig.cmake, and is usually
         # something like: inst/CableSwig/lib/CableSwig/
+        utils.output("Registering CableSwig config variables.")
         config.CABLESWIG_DIR = os.path.join(self.inst_dir, 'lib/CableSwig')
         
         

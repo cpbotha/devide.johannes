@@ -3,11 +3,15 @@ from install_package import InstallPackage
 import os
 import shutil
 import utils
+import sys
 
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-D 20061008"
+
+CABLESWIG_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/CableSwig"
+CABLESWIG_VERSION = "-D 20061008"
 
 class ITK(InstallPackage):
     
@@ -29,6 +33,24 @@ class ITK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
+
+        utilities_dir = os.path.join(self.source_dir, 'Utilities')
+        cableswig_source_dir = os.path.join(utilities_dir,
+                                            'CableSwig')
+        
+        if os.path.exists(cableswig_source_dir):
+            utils.output("CableSwig already checked out, skipping step.")
+
+        else:
+            os.chdir(utilities_dir)
+            ret = os.system("%s -d %s co %s %s" %
+                            (config.CVS, CABLESWIG_REPO, CABLESWIG_VERSION,
+                             "CableSwig"))
+
+            if ret != 0:
+                utils.error(
+                    "Could not CVS checkout CableSwig.  Fix and try again.")
+
     def unpack(self):
         pass
 
@@ -48,7 +70,6 @@ class ITK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DUSE_WRAP_ITK=ON " \
-                       "-DCableSwig_DIR=%s " \
                        "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DPYTHON_LIBRARY=%s " \
@@ -58,12 +79,10 @@ class ITK(InstallPackage):
                        "-DWRAP_ITK_JAVA=OFF " \
                        "-DWRAP_unsigned_short=OFF " \
                        "-DWRAP_signed_short=ON " \
-                       % (self.inst_dir, config.CABLESWIG_DIR,
+                       % (self.inst_dir,
                           config.python_include_path, config.python_library,
-                          config.python_binary_path)
+                          sys.executable)
 
-        # cableswig_dir = /data/scratch/wd/inst/CableSwig/lib/CableSwig/
-        
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
 
@@ -92,5 +111,15 @@ class ITK(InstallPackage):
             ret = os.system("%s install" % (config.MAKE,))
             if ret != 0:
                 utils.error("Could not install ITK.  Fix and try again.")
+
+    def clean_build(self):
+        utils.output("Removing build and installation directories.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+
+        if os.path.exists(self.build_dir):
+            shutil.rmtree(self.build_dir)
+
+        
 
         
