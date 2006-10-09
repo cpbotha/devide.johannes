@@ -1,6 +1,7 @@
 import config
 from install_package import InstallPackage
 import os
+import sys
 import utils
 
 VTK_TARBALL = "vtk-5.0.2.tar.gz"
@@ -114,9 +115,11 @@ class VTK(InstallPackage):
 		       "-DVTK_USE_TK=NO " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_EXECUTABLE=%s " \
                        "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
                                                  config.python_include_path,
-                                                 config.python_library)
+                                                 config.python_library,
+                                                 sys.executable)
         
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
