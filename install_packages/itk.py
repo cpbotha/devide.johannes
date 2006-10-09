@@ -8,10 +8,10 @@ import sys
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-D 20061008"
+CVS_VERSION = "-D 20061010"
 
 CABLESWIG_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/CableSwig"
-CABLESWIG_VERSION = "-D 20061008"
+CABLESWIG_VERSION = "-D 20061010"
 
 class ITK(InstallPackage):
     
