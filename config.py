@@ -37,6 +37,10 @@ VTK_PYTHON = ''
 WX_LIB_PATH = ''
 WXP_PYTHONPATH = ''
 
+ITK_DIR = ''
+WRAPITK_LIB = ''
+WRAPITK_PYTHON = ''
+
 DEVIDE_PY = ''
 
 #######################################################################
@@ -48,10 +52,11 @@ def init(wd):
     build_dir = os.path.join(working_dir, 'build')
     inst_dir = os.path.join(working_dir, 'inst')
 
-    global python_include_path, python_library, python_binary_path
+    global python_include_path, python_library_path, python_library, \
+           python_binary_path
     python_include_path = os.path.join(inst_dir, 'python/include/python2.5')
-    python_library = os.path.join(
-        inst_dir, 'python/lib/libpython2.5.so')
+    python_library_path = os.path.join(inst_dir, 'python/lib')
+    python_library = os.path.join(python_library_path, 'libpython2.5.so')
     python_binary_path = os.path.join(inst_dir, 'python/bin')
 
     # platform dependent stuff =========================================
