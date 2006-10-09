@@ -5,6 +5,10 @@ import shutil
 import sys
 import utils
 
+# NB: for this module to build successfully, ITK has to be built with
+#     ITK_USE_REVIEW=ON (until the itkFlatStructuringElement moves OUT of the
+#     review directory, that is)
+
 BASENAME = "ItkVtkGlue"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
 

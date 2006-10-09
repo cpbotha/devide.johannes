@@ -64,6 +64,7 @@ class ITK(InstallPackage):
             os.mkdir(self.build_dir)
 
         os.chdir(self.build_dir)
+        # ITK_USE_REVIEW *must* be on for ItkVtkGlue to work!
         cmake_params = "-DBUILD_EXAMPLES=OFF " \
                        "-DBUILD_SHARED_LIBS=ON " \
                        "-DBUILD_TESTING=OFF " \
@@ -79,6 +80,7 @@ class ITK(InstallPackage):
                        "-DWRAP_ITK_JAVA=OFF " \
                        "-DWRAP_unsigned_short=OFF " \
                        "-DWRAP_signed_short=ON " \
+                       "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           config.python_include_path, config.python_library,
                           sys.executable)
