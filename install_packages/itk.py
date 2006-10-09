@@ -108,6 +108,11 @@ class ITK(InstallPackage):
         config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
         # contains itk.py
         config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
+
+        # also the source dir for other installpackages that wish to build
+        # WrapITK external projects
+        config.WRAPITK_SOURCE_DIR = os.path.join(self.source_dir,
+                                             'Wrapping/WrapITK')
         
         if os.path.exists(
             os.path.join(config.WRAPITK_LIB, '_UnaryPixelMathPython.so')):
