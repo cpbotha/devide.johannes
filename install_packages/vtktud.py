@@ -74,5 +74,5 @@ class VTKTUD(InstallPackage):
         # nuke the build dir, the source dir is pristine and there is
         # no installation
         utils.output("Removing build dir.")
-        if os.path.exist(self.build_dir):
+        if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
