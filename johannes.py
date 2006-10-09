@@ -14,6 +14,9 @@ and installation system of them all.  It could save you a lot of time though.
 This instance of johannes will get, build and install the following: wxpython,
 cmake, dcmtk, vtk, vtktud, vtkdevide, devide
 
+You need at least the following packages (or equivalents) on your system:
+gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev
+
 Before starting johannes.py, first run bootstrap.sh to download and install
 python.  After that, run johannes as follows:
 
