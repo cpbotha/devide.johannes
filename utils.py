@@ -65,6 +65,7 @@ def unpack_build(archive_filename):
     # tar.extractall()
     # we use a form that works on previous versions as well
     for tarinfo in tar:
+        print tarinfo.name
         tar.extract(tarinfo)
         
     tar.close()
