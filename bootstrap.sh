@@ -45,4 +45,4 @@ fi
 
 echo "JOHANNES #####"
 echo "Successfully built Python.  Start the build system with "
-echo "$WD/inst/python/bin/python johannes.py $WD"
+echo "$WD/inst/python/bin/python johannes.py -w $WD"
