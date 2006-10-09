@@ -85,7 +85,7 @@ def main():
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
-                            #itk.ITK(),
+                            itk.ITK(),
                             vtktud.VTKTUD(),
                             vtkdevide.VTKDEVIDE(),
                             devide.DeVIDE()]

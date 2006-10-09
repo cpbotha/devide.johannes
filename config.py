@@ -4,6 +4,10 @@
 # "RelWithDebInfo|Win32" /build RelWithDebInfo'
 # IX: make
 
+# FIXME: each installpackage should be able to register its own
+# library and python paths.  At the moment, devide.py is taking care
+# of creating the script containing all these... (not optimal!)
+
 import os
 import sys
 
