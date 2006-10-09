@@ -30,12 +30,12 @@ CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 DCMTK_INCLUDE = ''
 DCMTK_LIB = ''
 
-VTK_DIR = '' 
+VTK_DIR = ''
 VTK_LIB = ''
 VTK_PYTHON = ''
 
-WX_LIB_PATH = '' 
-WXP_PYTHONPATH = '' 
+WX_LIB_PATH = ''
+WXP_PYTHONPATH = ''
 
 DEVIDE_PY = ''
 
