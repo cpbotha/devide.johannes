@@ -28,7 +28,7 @@ wget -c http://www.python.org/ftp/python/2.5/Python-2.5.tar.bz2
 cd ../build
 tar xjvf ../archive/Python-2.5.tar.bz2
 cd Python-2.5
-./configure --prefix=$WD/inst/python
+./configure --enable-shared --prefix=$WD/inst/python
 
 if [ "$?" -ne "0" ]; then
 echo "JOHANNES ##### Python config error.  Please fix errors and try again."
