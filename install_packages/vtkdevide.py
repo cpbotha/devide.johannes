@@ -77,5 +77,7 @@ class VTKDEVIDE(InstallPackage):
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
         # no installation
-        shutil.rmtree(self.build_dir)
+        utils.output("Removing build dir.")
+        if os.path.exist(self.build_dir):
+            shutil.rmtree(self.build_dir)
         
