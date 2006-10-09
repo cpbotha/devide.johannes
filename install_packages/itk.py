@@ -90,9 +90,8 @@ class ITK(InstallPackage):
             utils.error("Could not configure ITK.  Fix and try again.")
 
     def build(self):
-        # FIXME: continue here with checks
         if os.path.exists(
-            os.path.join(self.build_dir, 'bin/cswig')):
+            os.path.join(self.build_dir, 'bin/')):
             utils.output("ITK already built.  Skipping build step.")
 
         else:

@@ -8,6 +8,7 @@ import utils
 VTK_TARBALL = "vtk-5.0.2.tar.gz"
 VTK_URL = "http://www.vtk.org/files/release/5.0/%s" % (VTK_TARBALL,)
 VTK_DIRBASE = "VTK"
+VTK_BASE_VERSION = "vtk-5.0"
 
 # this patch does two things:
 # 1. adds try/catch blocks to all python method calls in order
@@ -154,10 +155,11 @@ class VTK(InstallPackage):
 
         # whatever the case may be, we have to register VTK variables
         config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
-        # I dunno why this is python2.4 when we've build with python2.5...
+        # sys.version is (2, 5, 0, 'final', 0)
         config.VTK_PYTHON = os.path.join(
-            config.VTK_LIB, 'python2.4/site-packages')
-        config.VTK_DIR = os.path.join(config.VTK_LIB, 'vtk-5.0')
+            config.VTK_LIB, 'python%d.%d/site-packages' % \
+            sys.version_info[0:2])
+        config.VTK_DIR = os.path.join(config.VTK_LIB, VTK_BASE_VERSION)
         
     def clean_build(self):
         utils.output("Removing build and installation directories.")
