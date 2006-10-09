@@ -54,9 +54,9 @@ def init(wd):
 
     global python_include_path, python_library_path, python_library, \
            python_binary_path
-    python_include_path = os.path.join(inst_dir, 'python/include/python2.5')
+    python_include_path = os.path.join(inst_dir, 'python/include/python2.4')
     python_library_path = os.path.join(inst_dir, 'python/lib')
-    python_library = os.path.join(python_library_path, 'libpython2.5.so')
+    python_library = os.path.join(python_library_path, 'libpython2.4.so')
     python_binary_path = os.path.join(inst_dir, 'python/bin')
 
     # platform dependent stuff =========================================

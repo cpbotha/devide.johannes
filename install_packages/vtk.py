@@ -159,6 +159,7 @@ class VTK(InstallPackage):
         config.VTK_PYTHON = os.path.join(
             config.VTK_LIB, 'python%d.%d/site-packages' % \
             sys.version_info[0:2])
+        # this contains the VTK cmake config
         config.VTK_DIR = os.path.join(config.VTK_LIB, VTK_BASE_VERSION)
         
     def clean_build(self):
