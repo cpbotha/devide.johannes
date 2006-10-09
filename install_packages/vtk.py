@@ -158,3 +158,11 @@ class VTK(InstallPackage):
             config.VTK_LIB, 'python2.4/site-packages')
         config.VTK_DIR = os.path.join(config.VTK_LIB, 'vtk-5.0')
         
+    def clean_build(self):
+        utils.output("Removing build and installation directories.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+
+        if os.path.exists(self.build_dir):
+            shutil.rmtree(self.build_dir)
+        
