@@ -36,6 +36,9 @@ class DeVIDE(InstallPackage):
                    'vtkdevide_python' : config.VTKDEVIDE_PYTHON,
                    'vtktud_lib' : config.VTKTUD_LIB,
                    'vtktud_python' : config.VTKTUD_PYTHON,
+                   'itk_lib' : config.ITK_DIR,
+                   'wrapitk_lib' : config.WRAPITK_LIB,
+                   'wrapitk_python' : config.WRAPITK_PYTHON,
                    'devide_py' : config.DEVIDE_PY}
 
         script = """
@@ -57,6 +60,10 @@ PYTHONPATH=%(vtkdevide_python)s:%(vtkdevide_lib)s:$PYTHONPATH
 # vtktud
 LD_LIBRARY_PATH=%(vtktud_lib)s:$LD_LIBRARY_PATH
 PYTHONPATH=%(vtktud_python)s:%(vtktud_lib)s:$PYTHONPATH
+# ITK
+LD_LIBRARY_PATH=%(itk_lib)s:%(wrapitk_lib)s:$LD_LIBRARY_PATH
+PYTHONPATH=%(wrapitk_python)s:%(wrapitk_lib)s:$PYTHONPATH
+
 # finally export
 export LD_LIBRARY_PATH
 export PYTHONPATH

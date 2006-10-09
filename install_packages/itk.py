@@ -104,7 +104,9 @@ class ITK(InstallPackage):
         # this is the dir with the cmake config as well as all binaries
         config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
         config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
+        # contains all WrapITK shared objects / libraries
         config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
+        # contains itk.py
         config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
         
         if os.path.exists(
