@@ -60,7 +60,13 @@ def unpack_build(archive_filename):
         m = 'r|gz'
         
     tar = tarfile.open(archive_filename, m)
-    tar.extractall()
+
+    # extractall is from python 2.5 onwards
+    # tar.extractall()
+    # we use a form that works on previous versions as well
+    for tarinfo in tar:
+        tar.extract(tarinfo)
+        
     tar.close()
 
 def re_sub_filter_file(repls, filename):
