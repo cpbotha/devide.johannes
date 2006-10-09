@@ -91,7 +91,7 @@ class ITK(InstallPackage):
 
     def build(self):
         if os.path.exists(
-            os.path.join(self.build_dir, 'bin/')):
+            os.path.join(self.build_dir, 'bin/_RegistrationPython.so')):
             utils.output("ITK already built.  Skipping build step.")
 
         else:
@@ -101,8 +101,14 @@ class ITK(InstallPackage):
                 utils.error("Error building ITK.  Fix and try again.")
 
     def install(self):
+        # this is the dir with the cmake config as well as all binaries
+        config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
+        config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
+        config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
+        config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
+        
         if os.path.exists(
-            os.path.join(self.inst_dir, 'bin/cswig')):
+            os.path.join(config.WRAPITK_LIB, '_UnaryPixelMathPython.so')):
             utils.output("ITK already installed.  Skipping step.")
 
         else:
@@ -110,6 +116,7 @@ class ITK(InstallPackage):
             ret = os.system("%s install" % (config.MAKE,))
             if ret != 0:
                 utils.error("Could not install ITK.  Fix and try again.")
+
 
     def clean_build(self):
         utils.output("Removing build and installation directories.")
