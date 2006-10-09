@@ -47,7 +47,7 @@ cd $WD
 ENV_FILE=setup_env.sh
 echo "#!/bin/sh" > $ENV_FILE
 echo "export LD_LIBRARY_PATH=$WD/inst/python/lib" >> $ENV_FILE
-echo "export PATH=$WD/inst/python/bin/:$$PATH" >> $ENV_FILE
+echo "export PATH=$WD/inst/python/bin/:\$PATH" >> $ENV_FILE
 
 echo "JOHANNES #####"
 echo "Successfully built Python.  Start the build system with "
