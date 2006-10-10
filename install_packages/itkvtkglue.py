@@ -58,25 +58,29 @@ class ItkVtkGlue(InstallPackage):
             os.mkdir(self.build_dir)
 
         os.chdir(self.build_dir)
+        # we need the PATH types for VTK_DIR and for WrapITK_DIR, else
+        # these variables are NOT stored.  That's just weird.
         cmake_params = "-DBUILD_WRAPPERS=ON " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
+                       "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
-                       "-DVTK_DIR=%s " \
-                       "-DWrapITK_DIR=%s " \
+                       "-DWrapITK_DIR:PATH=%s " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        % \
-                       (config.ITK_DIR, config.VTK_DIR, config.WRAPITK_DIR,
+                       (config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
                         config.python_include_path, config.python_library,
                         sys.executable)
 
+        # first pass
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
 
         if ret != 0:
-            utils.error("Could not configure ItkVtkGlue.  Fix and try again.")
-        
+            utils.error(
+                "Could not configure ItkVtkGlue (P1).  Fix and try again.")
+
 
     def build(self):
         if os.path.exists(
