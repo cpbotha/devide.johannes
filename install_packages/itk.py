@@ -103,6 +103,8 @@ class ITK(InstallPackage):
                 utils.error("Error building ITK.  Fix and try again.")
 
     def install(self):
+        # ITK external packages will need this
+        config.ITK_INSTALL_PREFIX = os.path.join(self.inst_dir)
         # this is the dir with the cmake config as well as all binaries
         config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
         # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)

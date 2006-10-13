@@ -10,7 +10,6 @@ import utils
 #     review directory, that is)
 
 BASENAME = "ItkVtkGlue"
-SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
 
 class ItkVtkGlue(InstallPackage):
     
@@ -60,8 +59,11 @@ class ItkVtkGlue(InstallPackage):
         os.chdir(self.build_dir)
         # we need the PATH types for VTK_DIR and for WrapITK_DIR, else
         # these variables are NOT stored.  That's just weird.
+        # we also need to pass the same instal prefix as for ITK, so
+        # that the external module can be put in the right place.
         cmake_params = "-DBUILD_WRAPPERS=ON " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
+                       "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
@@ -69,7 +71,8 @@ class ItkVtkGlue(InstallPackage):
                        "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        % \
-                       (config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
+                       (config.ITK_INSTALL_PREFIX,
+                        config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
                         config.python_include_path, config.python_library,
                         sys.executable)
 
@@ -84,7 +87,7 @@ class ItkVtkGlue(InstallPackage):
 
     def build(self):
         if os.path.exists(
-            os.path.join(self.build_dir, 'bin/libvtktudImagingPython.so')):
+            os.path.join(self.build_dir, 'lib/_ItkVtkGluePython.so')):
 
             utils.output("ItkVtkGlue already built.  Skipping build step.")
 
@@ -96,10 +99,21 @@ class ItkVtkGlue(InstallPackage):
         
 
     def install(self):
-        return
-        config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
-        config.VTKTUD_PYTHON = os.path.join(
-            self.source_dir, 'Wrapping/Python')
+        #config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
+        #config.VTKTUD_PYTHON = os.path.join(
+        #    self.source_dir, 'Wrapping/Python')
+
+        if os.path.exists(
+            os.path.join(config.WRAPITK_LIB, '_ItkVtkGluePython.so')):
+            utils.output("ItkVtkGlue already installed.  Skipping step.")
+
+        else:
+            os.chdir(self.build_dir)
+            ret = os.system("%s install" % (config.MAKE,))
+            if ret != 0:
+                utils.error(
+                    "Could not install ItkVtkGlue.  Fix and try again.")
+
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
