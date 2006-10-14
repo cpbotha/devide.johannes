@@ -32,7 +32,7 @@ class DeVIDE(InstallPackage):
 # invoke DeVIDE ###########################################
 echo "Did you remember to run \". setup_env.sh\"?"
 echo "Starting up DeVIDE..."
-python %s --no-kits itk_kit,numpy_kit,matplotlib_kit $*
+python %s --no-kits numpy_kit,matplotlib_kit $*
         """ % (config.DEVIDE_PY,)
 
         invoking_script_fn = os.path.join(config.working_dir, 'devide.sh')

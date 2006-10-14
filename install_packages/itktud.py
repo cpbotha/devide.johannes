@@ -10,38 +10,24 @@ import utils
 #     review directory, that is)
 
 BASENAME = "itktud"
+SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
 
 class ITKTUD(InstallPackage):
     
     def __init__(self):
-        self.source_dir = '' # will set in get()
+        self.source_dir = os.path.join(config.build_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
-        #self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
     def get(self):
-        self.source_dir = os.path.join(config.WRAPITK_SOURCE_DIR,
-                                       'ExternalProjects/itktud')
-        
-        if not os.path.exists(self.source_dir):
-            utils.error("itktud source not available.  Have you executed "
-                        "the ITK InstallPackage?")
+        if os.path.exists(self.source_dir):
+            utils.output("itktud already checked out, skipping step.")
 
         else:
-            # make sure that ENABLE_TESTING() in the CMakeLists.txt has been
-            # deactivated
-            repls = [('ENABLE_TESTING\(\)', '')]
-            utils.re_sub_filter_file(
-                repls,
-                os.path.join(self.source_dir,'CMakeLists.txt'))
-
-            # and also disable inclusing of Wrapping/Python/Testing dir
-            # this will probably change in future versions of itktud
-            repls = [('SUBDIRS\(Tests\)', '')]
-            utils.re_sub_filter_file(
-                repls,
-                os.path.join(self.source_dir,
-                             'Wrapping/Python/CMakeLists.txt'))
+            os.chdir(config.build_dir)
+            ret = os.system("%s co %s" % (config.SVN, SVN_REPO))
+            if ret != 0:
+                utils.error("Could not SVN checkout.  Fix and try again.")
 
     def unpack(self):
         # no unpack step
@@ -50,7 +36,7 @@ class ITKTUD(InstallPackage):
     def configure(self):
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
-            utils.output("itkvtkglue build already configured.")
+            utils.output("itktud build already configured.")
             return
         
         if not os.path.exists(self.build_dir):
@@ -64,7 +50,6 @@ class ITKTUD(InstallPackage):
         cmake_params = "-DBUILD_WRAPPERS=ON " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
-                       "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
@@ -72,7 +57,7 @@ class ITKTUD(InstallPackage):
                        "-DPYTHON_EXECUTABLE=%s " \
                        % \
                        (config.ITK_INSTALL_PREFIX,
-                        config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
+                        config.ITK_DIR, config.WRAPITK_DIR,
                         config.python_include_path, config.python_library,
                         sys.executable)
 
@@ -82,7 +67,7 @@ class ITKTUD(InstallPackage):
 
         if ret != 0:
             utils.error(
-                "Could not configure itktud (P1).  Fix and try again.")
+                "Could not configure itktud.  Fix and try again.")
 
 
     def build(self):
@@ -121,3 +106,8 @@ class ITKTUD(InstallPackage):
         utils.output("Removing build dir.")
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
+
+        inst_so = os.path.join(config.WRAPITK_LIB, '_itktudPython.so')
+        if os.path.exists(inst_so):
+            os.remove(inst_so)
+

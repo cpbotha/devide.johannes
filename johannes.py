@@ -3,7 +3,7 @@ import getopt
 from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
 from install_packages import vtktud, vtkdevide
-from install_packages import itk, itkvtkglue
+from install_packages import itk, itkvtkglue, itktud
 from install_packages import setupenvironment, devide
 import sys
 import utils
@@ -90,6 +90,7 @@ def main():
                             vtkdevide.VTKDEVIDE(),
                             itk.ITK(),
                             itkvtkglue.ItkVtkGlue(),
+                            itktud.ITKTUD(),
                             setupenvironment.SetupEnvironment(),
                             devide.DeVIDE()]
 
