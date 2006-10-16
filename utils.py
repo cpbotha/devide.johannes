@@ -14,6 +14,9 @@ def output(message, rpad=0, rpad_char='#'):
         
     print "%s %s" % (s,p)
 
+    # flush the buffer, else things are out of sync in any log files
+    sys.stdout.flush()
+
 def error(message):
     raise RuntimeError('!!!!! %s' % (message,))
 
