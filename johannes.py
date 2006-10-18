@@ -1,5 +1,6 @@
 import config
 import getopt
+from install_packages import numpy
 from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
 from install_packages import vtktud, vtkdevide
@@ -17,6 +18,8 @@ cmake, dcmtk, vtk, vtktud, vtkdevide, devide
 
 You need at least the following packages (or equivalents) on your system:
 gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev
+
+For a fast numeric python, you also need the libatlas-dev package.
 
 Before starting johannes.py, first run bootstrap.sh to download and install
 python.  After that, run johannes as follows:
@@ -82,7 +85,8 @@ def main():
         config.init(working_dir)
 
 
-        ip_instance_list = [wxpython.WXPython(),
+        ip_instance_list = [numpy.NumPy(),
+                            wxpython.WXPython(),
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
