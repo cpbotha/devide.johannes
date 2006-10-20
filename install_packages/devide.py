@@ -25,6 +25,8 @@ class DeVIDE(InstallPackage):
     def install(self):
         # setup some devide config variables
         config.DEVIDE_PY = os.path.join(self.source_dir, 'devide.py')
+        config.DEVIDE_MAKERELEASE_SH = os.path.join(
+            self.source_dir, 'installer/makeRelease.sh')
         
 
         script = """
@@ -32,7 +34,7 @@ class DeVIDE(InstallPackage):
 # invoke DeVIDE ###########################################
 echo "Did you remember to run \". setup_env.sh\"?"
 echo "Starting up DeVIDE..."
-python %s --no-kits numpy_kit,matplotlib_kit $*
+python %s $*
         """ % (config.DEVIDE_PY,)
 
         invoking_script_fn = os.path.join(config.working_dir, 'devide.sh')
@@ -42,4 +44,26 @@ python %s --no-kits numpy_kit,matplotlib_kit $*
 
         utils.output('Wrote %s.' % (invoking_script_fn,))
 
+        # now also create script with which packages can be built
+        PYINSTALLER_SCRIPT = os.path.join(config.INSTALLER_DIR, 'Build.py')
+
+        package_script = """
+#!/bin/bash
+echo "Did you remember to run \". setup_env.sh\"?"
+export PYINSTALLER_SCRIPT=%s
+sh %s package_only
+        """ % (PYINSTALLER_SCRIPT, config.DEVIDE_MAKERELEASE_SH)
+
+        ps_fn = os.path.join(config.working_dir, 'make_devide_package.sh')
+        psf = file(ps_fn, 'w')
+        psf.write(package_script)
+        psf.close()
+
+        utils.output('Wrote %s.' % (ps_fn,))
+
                
+    def clean_build(self):
+        utils.output("Removing source directory.")
+        if os.path.exists(self.source_dir):
+            shutil.rmtree(self.source_dir)
+            
