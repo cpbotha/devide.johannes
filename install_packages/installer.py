@@ -31,6 +31,9 @@ class Installer(InstallPackage):
         else:
             utils.output("Unpacking INSTALLER source.")
             utils.unpack_build(self.tbfilename)
+            # and we need to delete the irritating optparse.py from
+            # the installer directory
+            os.unlink(os.path.join(self.build_dir, 'optparse.py')
 
     def configure(self):
         pass
