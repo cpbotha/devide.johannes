@@ -33,7 +33,7 @@ class Installer(InstallPackage):
             utils.unpack_build(self.tbfilename)
             # and we need to delete the irritating optparse.py from
             # the installer directory
-            os.unlink(os.path.join(self.build_dir, 'optparse.py')
+            os.unlink(os.path.join(self.build_dir, 'optparse.py'))
 
     def configure(self):
         pass
