@@ -5,7 +5,7 @@ from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
 from install_packages import vtktud, vtkdevide
 from install_packages import itk, itkvtkglue, itktud
-from install_packages import setupenvironment, devide
+from install_packages import installer, setupenvironment, devide
 import sys
 import utils
 
@@ -97,6 +97,7 @@ def main():
                             itk.ITK(),
                             itkvtkglue.ItkVtkGlue(),
                             itktud.ITKTUD(),
+                            installer.Installer(),
                             setupenvironment.SetupEnvironment(),
                             devide.DeVIDE()]
 
