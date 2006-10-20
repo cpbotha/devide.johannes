@@ -148,10 +148,21 @@ class WXPython(InstallPackage):
 
         else:
             utils.output('Installing wxPython.')
-            shutil.copytree(os.path.join(self.build_dir, 'wxPython'),
+            wxp_build = os.path.join(self.build_dir, 'wxPython')
+            shutil.copytree(wxp_build,
                             os.path.join(self.inst_dir, 'wxPython'))
 
+            # also make sure that the include dir has been copied
+            # to self.inst_dir/include/wx-2.6/wx/wxPython
+            # I'm not so happy about this, but python setup.py --root=
+            # doesn't do what I want...
+            shutil.copytree(
+                os.path.join(wxp_build, 'include/wx/wxPython'),
+                os.path.join(self.inst_dir, 'include/wx-2.6/wx/wxPython'))
+
         config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
+        # this is where wx-config can be found
+        config.WX_BIN_PATH = os.path.join(self.inst_dir, 'bin')
         config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
         
 

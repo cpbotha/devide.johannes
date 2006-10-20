@@ -38,7 +38,9 @@ class NumPy(InstallPackage):
     def build(self):
         os.chdir(self.build_dir)
 
-        if os.path.exists('build/lib.linux-i686-2.4/numpy/random/mtrand.so'):
+        # weak test... there are .so files deeper, but they're in platform
+        # specific directories
+        if os.path.exists('build'):
             utils.output('numpy already built.  Skipping step.')
 
         else:

@@ -1,6 +1,6 @@
 import config
 import getopt
-from install_packages import numpy
+from install_packages import numpy, matplotlib
 from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
 from install_packages import vtktud, vtkdevide
@@ -17,7 +17,8 @@ This instance of johannes will get, build and install the following: wxpython,
 cmake, dcmtk, vtk, vtktud, vtkdevide, devide
 
 You need at least the following packages (or equivalents) on your system:
-gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev
+gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev,
+libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 
 For a fast numeric python, you also need the libatlas-dev package.
 
@@ -87,6 +88,7 @@ def main():
 
         ip_instance_list = [numpy.NumPy(),
                             wxpython.WXPython(),
+                            matplotlib.matplotlib(),
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
