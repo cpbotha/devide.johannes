@@ -45,12 +45,15 @@ DEVIDE_PY = ''
 
 #######################################################################
 
-def init(wd):
+def init(wd, the_profile):
     global working_dir, archive_dir, build_dir, inst_dir
     working_dir = os.path.abspath(wd)
     archive_dir = os.path.join(working_dir, 'archive')
     build_dir = os.path.join(working_dir, 'build')
     inst_dir = os.path.join(working_dir, 'inst')
+
+    global profile
+    profile = the_profile
 
     global python_include_path, python_library_path, python_library, \
            python_binary_path

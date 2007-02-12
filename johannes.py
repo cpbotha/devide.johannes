@@ -30,7 +30,8 @@ python.  After that, run johannes as follows:
 Options are as follows:
 -w, --working-dir      : specify working directory [REQUIRED]
 -h, --help             : show this help
--m, --mode             : working mode, 'build' (default) or 'clean_build'
+-m, --mode             : working mode, 'build' (default), 'clean_build' or
+                         'get_only'
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all
 
@@ -60,6 +61,7 @@ def main():
         mode = 'build'
         install_packages = None
         working_dir = None
+        profile = 'default'
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -77,14 +79,16 @@ def main():
             elif o in ('-w', '--working-dir'):
                 working_dir = a
 
+            elif o in ('--profile'):
+                profile = a
+
         # we need at LEAST a working directory
         if not working_dir:
             usage()
             return
 
         # init config (DURR)
-        config.init(working_dir)
-
+        config.init(working_dir, profile)
 
         ip_instance_list = [numpy.NumPy(),
                             wxpython.WXPython(),
@@ -111,6 +115,12 @@ def main():
         for ip in ip_instance_list:
             n = ip.__class__.__name__.lower()
             if n in install_packages:
+
+                if mode == 'get_only':
+                    utils.output("%s GET_ONLY" % (n,), 70, '#')
+                    utils.output("%s" % (n,), 70, '#')
+                    utils.output("%s :: get()" % (n,), rpad, rpad_char)
+                    ip.get()
 
                 if mode == 'build':
                     utils.output("%s" % (n,), 70, '#')
