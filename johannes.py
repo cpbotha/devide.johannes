@@ -111,6 +111,22 @@ def main():
             # ONLY w.r.t. case
             install_packages = [i.__class__.__name__.lower()
                                 for i in ip_instance_list]
+
+        def get_stage(ip, n):
+            utils.output("%s :: get()" % (n,), rpad, rpad_char)
+            ip.get()
+        
+        def unpack_to_install_stage(ip, n):
+            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
+            ip.unpack()
+            utils.output("%s :: configure()" % (n,), rpad, rpad_char)
+            ip.configure()
+            utils.output("%s :: build()" % (n,), rpad, rpad_char)
+            ip.build()
+            utils.output("%s :: install()" % (n,), rpad, rpad_char)
+            ip.install()
+            
+            
         
         for ip in ip_instance_list:
             n = ip.__class__.__name__.lower()
@@ -119,21 +135,12 @@ def main():
                 if mode == 'get_only':
                     utils.output("%s GET_ONLY" % (n,), 70, '#')
                     utils.output("%s" % (n,), 70, '#')
-                    utils.output("%s :: get()" % (n,), rpad, rpad_char)
-                    ip.get()
+                    get_stage(ip, n)
 
                 if mode == 'build':
                     utils.output("%s" % (n,), 70, '#')
-                    utils.output("%s :: get()" % (n,), rpad, rpad_char)
-                    ip.get()
-                    utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
-                    ip.unpack()
-                    utils.output("%s :: configure()" % (n,), rpad, rpad_char)
-                    ip.configure()
-                    utils.output("%s :: build()" % (n,), rpad, rpad_char)
-                    ip.build()
-                    utils.output("%s :: install()" % (n,), rpad, rpad_char)
-                    ip.install()
+                    get_stage(ip, n)
+                    unpack_to_install_stage(ip, n)
 
                 elif mode == 'clean_build':
                     utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
