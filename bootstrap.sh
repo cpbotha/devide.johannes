@@ -19,6 +19,11 @@ cd $1
 
 WD=`pwd`
 
+# * tarballs get downloaded in archive
+# * checkouts also get done in archive for things that support out of
+#   source builds
+# johannes should be able to do its whole thing without an internet connection
+# if archive has been properly filled.
 mkdir archive
 mkdir build
 mkdir inst
