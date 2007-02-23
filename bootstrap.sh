@@ -49,6 +49,7 @@ exit
 fi
 
 cd $WD
+
 ENV_FILE=python_setup_env.sh
 echo "#!/bin/sh" > $ENV_FILE
 echo "export LD_LIBRARY_PATH=$WD/inst/python/lib" >> $ENV_FILE
