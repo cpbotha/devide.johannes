@@ -72,6 +72,8 @@ def main():
             elif o in ('-m', '--mode'):
                 if a in ('clean', 'clean_build'):
                     mode = 'clean_build'
+                elif a == 'get_only':
+                    mode = a
 
             elif o in ('--install-packages'):
                 # list of package name to perform the action on
@@ -138,7 +140,7 @@ def main():
                     utils.output("%s" % (n,), 70, '#')
                     get_stage(ip, n)
 
-                if mode == 'build':
+                elif mode == 'build':
                     utils.output("%s" % (n,), 70, '#')
                     get_stage(ip, n)
                     unpack_to_install_stage(ip, n)
