@@ -24,7 +24,7 @@ class ITKTUD(InstallPackage):
             utils.output("itktud already checked out, skipping step.")
 
         else:
-            os.chdir(config.build_dir)
+            os.chdir(config.archive_dir)
             ret = os.system("%s co %s" % (config.SVN, SVN_REPO))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")

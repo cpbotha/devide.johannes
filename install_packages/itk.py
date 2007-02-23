@@ -26,7 +26,7 @@ class ITK(InstallPackage):
             utils.output("ITK already checked out, skipping step.")
 
         else:
-            os.chdir(config.build_dir)
+            os.chdir(config.archive_dir)
             ret = os.system("%s -d %s co %s %s" %
                             (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
             
