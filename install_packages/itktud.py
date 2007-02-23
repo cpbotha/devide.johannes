@@ -15,7 +15,7 @@ SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
 class ITKTUD(InstallPackage):
     
     def __init__(self):
-        self.source_dir = os.path.join(config.build_dir, BASENAME)
+        self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
 

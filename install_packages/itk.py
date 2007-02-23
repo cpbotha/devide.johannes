@@ -16,7 +16,7 @@ CABLESWIG_VERSION = "-D 20061012" # wrapitk+itk fix by Gaetan
 class ITK(InstallPackage):
     
     def __init__(self):
-        self.source_dir = os.path.join(config.build_dir, BASENAME)
+        self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
