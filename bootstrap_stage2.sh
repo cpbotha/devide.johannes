@@ -54,3 +54,7 @@ echo "JOHANNES #####"
 echo "Successfully built Python.  Start the build system with "
 echo ". $WD/$ENV_FILE"
 echo "$WD/inst/python/bin/python johannes.py -w $WD"
+
+cd flags
+touch $FLAG_FILE2
+cd $WD
