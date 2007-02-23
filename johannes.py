@@ -14,7 +14,7 @@ def usage():
 Welcome to johannes, the ugliest downloading/unpacking/configuring/building
 and installation system of them all.  It could save you a lot of time though.
 This instance of johannes will get, build and install the following: wxpython,
-cmake, dcmtk, vtk, vtktud, vtkdevide, devide
+cmake, dcmtk, vtk, vtktud, vtkdevide, itk, itktud, itkvtkglue, devide
 
 You need at least the following packages (or equivalents) on your system:
 gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev,
@@ -22,8 +22,9 @@ libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 
 For a fast numeric python, you also need the libatlas-dev package.
 
-Before starting johannes.py, first run bootstrap.sh to download and install
-python.  After that, run johannes as follows:
+Before starting johannes.py, first run bootstrap_stage1.sh and
+bootstrap_stage2.sh to download and install python.  After that, run johannes
+as follows:
 
 /you/new/python johannes.py -w working_directory
 
@@ -35,7 +36,7 @@ Options are as follows:
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all
 
-All of this ugliness is copyright 2006 Charl P. Botha http://cpbotha.net/
+All of this ugliness is copyright 2006,2007 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
 """
 
