@@ -56,7 +56,7 @@ class NumPy(InstallPackage):
         # and test the result (we could just import directly, but that would
         # only work once our invoking python has been stopped and started
         # again)
-        os.chdir(config.archive_dir) # we need to be elsewhere!
+        os.chdir(config.working_dir) # we need to be elsewhere!
         ret = os.system('%s -c "import numpy"' % (sys.executable,))
         if ret == 0:
             utils.output('numpy already installed.  Skipping step.')
