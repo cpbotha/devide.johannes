@@ -6,6 +6,7 @@ import shutil
 
 BASENAME = "devide"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
+SVN_REL = "2431"
 
 class DeVIDE(InstallPackage):
     
@@ -18,7 +19,7 @@ class DeVIDE(InstallPackage):
 
         else:
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s" % (config.SVN, SVN_REPO))
+            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout DeVIDE.  "
                             "Fix and try again.")

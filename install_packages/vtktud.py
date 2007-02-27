@@ -6,6 +6,7 @@ import utils
 
 BASENAME = "vtktud"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
+SVN_REL = "203"
 
 class VTKTUD(InstallPackage):
     
@@ -21,7 +22,7 @@ class VTKTUD(InstallPackage):
 
         else:
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s" % (config.SVN, SVN_REPO))
+            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
