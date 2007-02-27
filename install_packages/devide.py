@@ -2,6 +2,7 @@ import config
 from install_package import InstallPackage
 import os
 import utils
+import shutil
 
 BASENAME = "devide"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
@@ -29,6 +30,9 @@ class DeVIDE(InstallPackage):
             self.source_dir, 'installer/makeRelease.sh')
         
 
+        # first make script for starting DeVIDE right from the archive dir
+        # if the user wants to do so...
+        ##################################################################
         script = """
 #!/bin/bash
 # invoke DeVIDE ###########################################
@@ -45,6 +49,7 @@ python %s $*
         utils.output('Wrote %s.' % (invoking_script_fn,))
 
         # now also create script with which packages can be built
+        #################################################################
         PYINSTALLER_SCRIPT = os.path.join(config.INSTALLER_DIR, 'Build.py')
 
         package_script = """
@@ -61,6 +66,25 @@ sh %s package_only
 
         utils.output('Wrote %s.' % (ps_fn,))
 
+        # and then build the packages
+        ##################################################################
+        ret = os.system(". %s && %s" %
+                        (os.path.join(config.working_dir, 'setup_env.sh'),
+                         ps_fn))
+        if ret != 0:
+            utils.error("Could not build DeVIDE installer packages.")
+            return
+
+        # we should have complete DeVIDE tarballs in devide/installer
+        # and a complete (including ITK) installation in distdevide
+        # copy binaries in distdevide to wd/inst/devide
+        ddir = os.path.join(os.path.join(self.source_dir, 'installer'),
+                            'distdevide')
+        devide_destdir = os.path.join(config.inst_dir, 'devide')
+        # we have to delete the destination path first
+        # copytree doesn't work if the destination doesn't exist
+        shutil.rmtree(devide_destdir)
+        shutil.copytree(ddir, devide_destdir)
                
     def clean_build(self):
         utils.output("Removing source directory.")
