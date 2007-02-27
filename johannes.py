@@ -17,7 +17,9 @@ This instance of johannes will get, build and install the following: wxpython,
 cmake, dcmtk, vtk, vtktud, vtkdevide, itk, itktud, itkvtkglue, devide
 
 You need at least the following packages (or equivalents) on your system:
-gcc, g++, bzip2-dev, ncurses-dev, gtk2-dev,
+
+gcc, g++, cvs
+bzip2-dev, ncurses-dev, gtk2-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (for faster numpy)
 
