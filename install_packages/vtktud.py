@@ -6,7 +6,7 @@ import utils
 
 BASENAME = "vtktud"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
-SVN_REL = "203"
+SVN_REL = config.TUDVIS_REL
 
 class VTKTUD(InstallPackage):
     

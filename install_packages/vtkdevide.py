@@ -6,7 +6,7 @@ import utils
 
 BASENAME = "vtkdevide"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
-SVN_REL = "2435"
+SVN_REL = config.DEVIDE_REL
 
 class VTKDEVIDE(InstallPackage):
     

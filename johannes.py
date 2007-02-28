@@ -18,10 +18,10 @@ cmake, dcmtk, vtk, vtktud, vtkdevide, itk, itktud, itkvtkglue, devide
 
 You need at least the following packages (or equivalents) on your system:
 
-gcc, g++, cvs
+gcc, g++, cvs, svn, chrpath
 bzip2-dev, ncurses-dev, gtk2-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
-libatlas-dev (for faster numpy)
+libatlas-dev (*optional* for faster numpy)
 
 For a fast numeric python, you also need the libatlas-dev package.
 

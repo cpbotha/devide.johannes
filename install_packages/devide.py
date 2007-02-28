@@ -6,7 +6,7 @@ import shutil
 
 BASENAME = "devide"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
-SVN_REL = "2435"
+SVN_REL = config.DEVIDE_REL
 
 class DeVIDE(InstallPackage):
     
@@ -25,10 +25,15 @@ class DeVIDE(InstallPackage):
                             "Fix and try again.")
 
     def install(self):
-        # setup some devide config variables
+        # setup some devide config variables (we need to do this in anycase,
+        # because they're config vars and other modules might want them)
         config.DEVIDE_PY = os.path.join(self.source_dir, 'devide.py')
         config.DEVIDE_MAKERELEASE_SH = os.path.join(
             self.source_dir, 'installer/makeRelease.sh')
+
+        # check if devide has already been installed.
+        devide_destdir = os.path.join(config.inst_dir, 'devide')
+        
         
 
         # first make script for starting DeVIDE right from the archive dir
@@ -81,10 +86,12 @@ sh %s package_only
         # copy binaries in distdevide to wd/inst/devide
         ddir = os.path.join(os.path.join(self.source_dir, 'installer'),
                             'distdevide')
-        devide_destdir = os.path.join(config.inst_dir, 'devide')
+
         # we have to delete the destination path first
         # copytree doesn't work if the destination doesn't exist
-        shutil.rmtree(devide_destdir)
+        if os.path.isdir(devide_destdir):
+            shutil.rmtree(devide_destdir)
+            
         shutil.copytree(ddir, devide_destdir)
                
     def clean_build(self):
