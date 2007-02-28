@@ -31,10 +31,8 @@ class DeVIDE(InstallPackage):
         config.DEVIDE_MAKERELEASE_SH = os.path.join(
             self.source_dir, 'installer/makeRelease.sh')
 
-        # check if devide has already been installed.
+        # check if devide has already been installed. (TODO)
         devide_destdir = os.path.join(config.inst_dir, 'devide')
-        
-        
 
         # first make script for starting DeVIDE right from the archive dir
         # if the user wants to do so...
