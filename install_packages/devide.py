@@ -6,7 +6,7 @@ import shutil
 
 BASENAME = "devide"
 SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
-SVN_REL = "2431"
+SVN_REL = "2435"
 
 class DeVIDE(InstallPackage):
     
@@ -69,7 +69,7 @@ sh %s package_only
 
         # and then build the packages
         ##################################################################
-        ret = os.system(". %s && %s" %
+        ret = os.system(". %s && sh %s" %
                         (os.path.join(config.working_dir, 'setup_env.sh'),
                          ps_fn))
         if ret != 0:
