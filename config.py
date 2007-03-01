@@ -24,8 +24,10 @@ MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 # nothing for you to edit below this line
 #######################################################################
 
+THIS_REV = "$Revision$"
 DEVIDE_REL = "2445"
 TUDVIS_REL = "203"
+
 
 # the following variables are written by various InstallPackages
 CMAKE = '' 
