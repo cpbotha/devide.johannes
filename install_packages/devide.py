@@ -14,9 +14,10 @@ class DeVIDE(InstallPackage):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, BASENAME)
         self.full_version = '%s.%s.0' % (SVN_REL, config.JOHANNES_REL)
-        self.inst_dir = os.path.join(config.inst_dir,
-                                     '%s-%s' % (BASENAME,
-                                                self.full_version))
+        #self.inst_dir = os.path.join(config.inst_dir,
+        #                             '%s-%s' % (BASENAME,
+        #                                        self.full_version))
+        self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
         # setup some devide config variables (we need to do this in anycase,
         # because they're config vars and other modules might want them)
