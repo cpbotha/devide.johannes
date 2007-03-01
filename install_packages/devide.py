@@ -33,6 +33,9 @@ class DeVIDE(InstallPackage):
 
         # check if devide has already been installed. (TODO)
         devide_destdir = os.path.join(config.inst_dir, 'devide')
+        if os.path.isdir(devide_destdir):
+            utils.output('DeVIDE already installed.  Skipping step.')
+            return
 
         # first make script for starting DeVIDE right from the archive dir
         # if the user wants to do so...
