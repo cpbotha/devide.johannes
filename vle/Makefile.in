@@ -1,0 +1,19 @@
+# prefix is e.g. /some/dir/devide-1.2.3
+PREFIX=
+
+default: build
+
+build:
+	sh johannes/bootstrap_stage2.sh
+	sh johannes/johannes.py -w WORKINGDIR
+
+check: build
+	cd WORKINGDIR/inst/devide-1.2.3
+	./devide --test
+
+# we need to remove the destination directory and then copy
+# if the dest dir already exists, this will make a new
+# SUBDIR of the destination dir...
+install: build
+	rm -rf $(DESTDIR)/$(PREFIX)
+	cp -r WORKINGDIR/inst/devide-1.2.3 $(DESTDIR)/$(PREFIX)
