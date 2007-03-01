@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# dummy configure file to satisfy VL-e POC requirements
+# we'll generate a Makefile with a default and install targets
+# the --prefix= value will be used, the Makefile also has to
+# use DESTDIR, i.e. package has to be installed in $(DESTDIR)
+
+usage()
+{
+    echo "Dummy configure script for VL-e DeVIDE"
+    echo "Please specify at least the --prefix."
+}
+
+# default prefix
+prefix='/tmp/devide'
+
+set -- `getopt -n$0 -u --longoptions="prefix:,bindir:" -- "" "$@"` || usage
+[ $# -eq 1 ] && usage
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+       --prefix)   prefix=$2;shift;;
+       --exec-prefix) bindir=$2;shift;;
+       --)        shift;break;;
+       -*)        usage;;
+       *)         break;;
+    esac
+    shift
+done
+
+# we should have prefix now...
+
+cd `dirname $0` # go to the directory containing this script
+
