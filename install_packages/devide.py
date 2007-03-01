@@ -13,7 +13,7 @@ class DeVIDE(InstallPackage):
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, BASENAME)
-        self.full_version = '%s.%s' % (SVN_REL, config.JOHANNES_REL)
+        self.full_version = '%s.%s.0' % (SVN_REL, config.JOHANNES_REL)
         self.inst_dir = os.path.join(config.inst_dir,
                                      '%s-%s' % (BASENAME,
                                                 self.full_version))
