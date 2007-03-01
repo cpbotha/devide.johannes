@@ -13,7 +13,17 @@ class DeVIDE(InstallPackage):
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, BASENAME)
-        self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+        self.full_version = '%s.%s' % (SVN_REL, config.JOHANNES_REL)
+        self.inst_dir = os.path.join(config.inst_dir,
+                                     '%s-%s' % (BASENAME,
+                                                self.full_version))
+
+        # setup some devide config variables (we need to do this in anycase,
+        # because they're config vars and other modules might want them)
+        config.DEVIDE_PY = os.path.join(self.build_dir, 'devide.py')
+        config.DEVIDE_MAKERELEASE_SH = os.path.join(
+            self.build_dir, 'installer/makeRelease.sh')
+
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -42,19 +52,7 @@ class DeVIDE(InstallPackage):
               (SVN_REL, config.JOHANNES_REL))],
             devide_py)
 
-    def install(self):
-        # setup some devide config variables (we need to do this in anycase,
-        # because they're config vars and other modules might want them)
-        config.DEVIDE_PY = os.path.join(self.build_dir, 'devide.py')
-        config.DEVIDE_MAKERELEASE_SH = os.path.join(
-            self.build_dir, 'installer/makeRelease.sh')
-
-        # check if devide has already been installed. (TODO)
-        devide_destdir = os.path.join(config.inst_dir, 'devide')
-        if os.path.isdir(devide_destdir):
-            utils.output('DeVIDE already installed.  Skipping step.')
-            return
-
+    def build(self):
         # first make script for starting DeVIDE right from the build dir
         # if the user wants to do so...
         ##################################################################
@@ -93,11 +91,25 @@ sh %s package_only
 
         # and then build the packages
         ##################################################################
+        ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
+                            'distdevide')
+        if os.path.isdir(ddir):
+            utils.output('DeVIDE packages already built, skipping...')
+            return
+        
         ret = os.system(". %s && sh %s" %
                         (os.path.join(config.working_dir, 'setup_env.sh'),
                          ps_fn))
+        
         if ret != 0:
             utils.error("Could not build DeVIDE installer packages.")
+            return
+        
+
+    def install(self):
+        # check if devide has already been installed.
+        if os.path.isdir(self.inst_dir):
+            utils.output('DeVIDE already installed.  Skipping step.')
             return
 
         # we should have complete DeVIDE tarballs in devide/installer
@@ -108,10 +120,10 @@ sh %s package_only
 
         # we have to delete the destination path first
         # copytree doesn't work if the destination doesn't exist
-        if os.path.isdir(devide_destdir):
-            shutil.rmtree(devide_destdir)
+        if os.path.isdir(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
             
-        shutil.copytree(ddir, devide_destdir)
+        shutil.copytree(ddir, self.inst_dir)
                
     def clean_build(self):
         utils.output("Removing build and installation directories.")

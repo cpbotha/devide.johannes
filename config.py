@@ -20,7 +20,6 @@ PATCH = 'patch'
 # this should move to the platform dependent part of init()
 MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 
-
 # nothing for you to edit below this line
 #######################################################################
 
