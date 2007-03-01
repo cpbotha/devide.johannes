@@ -24,10 +24,14 @@ MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 # nothing for you to edit below this line
 #######################################################################
 
+# johannes is in the same repo as devide, so they share revision numbers
+# by doing it this way, the release of devide is automatically connected
+# to the release of johannes that we're using.  just make sure that the
+# config file is also updated... (the revision is always of the LAST
+# actual change of this file)
 THIS_REV = "$Revision$"
-DEVIDE_REL = "2445"
+DEVIDE_REL = THIS_REV.split()[1]
 TUDVIS_REL = "203"
-
 
 # the following variables are written by various InstallPackages
 CMAKE = '' 
