@@ -1,5 +1,6 @@
 #!/bin/bash
-# script for bootstrapping johannes DeVIDE build system
+# stage2 script for bootstrapping johannes DeVIDE build system
+# this will build and install python in the johannes working directory
 # copyright cpbotha.net
 
 if [ -z $1 ]; then

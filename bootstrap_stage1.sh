@@ -1,5 +1,6 @@
 #!/bin/bash
-# script for bootstrapping johannes DeVIDE build system
+# stage1 script for bootstrapping johannes DeVIDE build system
+# this will create the working directory tree and download the python tarball
 # copyright cpbotha.net
 
 if [ -z $1 ]; then

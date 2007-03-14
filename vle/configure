@@ -9,6 +9,7 @@ usage()
 {
     echo "Dummy configure script for VL-e DeVIDE"
     echo "Please specify at least the --prefix."
+    exit 1
 }
 
 # default prefix
@@ -32,4 +33,12 @@ done
 # we should have prefix now...
 
 cd `dirname $0` # go to the directory containing this script
+WORKINGDIR=`pwd`
 
+# search and replace on Makefile.in
+# all the nasty single quote / double quotes and the slashes are to ensure
+# that the slashes in the expanded directories don't confuse sed, and that
+# bash doesn't do any naughty substitutions (thanks Jorik Blaas)
+cat Makefile.in | \
+sed -e 's/^PREFIX\s*=\s*.*$/PREFIX='"${prefix//\//\\/}"'/g' \
+-e 's/^WORKINGDIR\s*=\s*.*$/WORKINGDIR='"${WORKINGDIR//\//\\/}"'/g' > Makefile

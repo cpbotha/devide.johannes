@@ -1,11 +1,16 @@
 # prefix is e.g. /some/dir/devide-1.2.3
 PREFIX=
+# DESTDIR is a fakeroot, i.e. PREFIX is relative to DESTDIR
+# DESTDIR=will be set by VL-e build system
+# WORKINGDIR is the johannes working directory
+WORKINGDIR=
 
 default: build
 
 build:
 	sh johannes/bootstrap_stage2.sh
-	sh johannes/johannes.py -w WORKINGDIR
+	. python_setup_env.sh
+	python johannes/johannes.py -w WORKINGDIR
 
 check: build
 	cd WORKINGDIR/inst/devide-1.2.3
