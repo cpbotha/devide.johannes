@@ -9,6 +9,10 @@ SHELL=sh
 
 default: build
 
+# we have to add this target, as we have a dir called 'build'
+# without .PHONY, make will think that 'build' is always up to date
+.PHONY: build
+
 build:
 	# build local python
 	sh johannes/bootstrap_stage2.sh $(WORKINGDIR)
