@@ -38,7 +38,12 @@ WORKINGDIR=`pwd`
 # search and replace on Makefile.in
 # all the nasty single quote / double quotes and the slashes are to ensure
 # that the slashes in the expanded directories don't confuse sed, and that
-# bash doesn't do any naughty substitutions (thanks Jorik Blaas)
+# bash doesn't do any naughty substitutions (thanks Jorik Blaas and me)
+
+QPREFIX=`echo $prefix | sed -e 's./.\\\\/.g'`
+QWORKINGDIR=`echo $WORKINGDIR | sed -e 's./.\\\\/.g'`
+
 cat Makefile.in | \
-sed -e 's/^PREFIX\s*=\s*.*$/PREFIX='"${prefix//\//\\/}"'/g' \
--e 's/^WORKINGDIR\s*=\s*.*$/WORKINGDIR='"${WORKINGDIR//\//\\/}"'/g' > Makefile
+sed \
+-e 's/^PREFIX\s*=\s*.*$/PREFIX='"$QPREFIX"'/g' \
+-e 's/^WORKINGDIR\s*=\s*.*$/WORKINGDIR='"$QWORKINGDIR"'/g' > Makefile
