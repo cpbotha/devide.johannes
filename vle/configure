@@ -15,14 +15,14 @@ usage()
 # default prefix
 prefix='/tmp/devide'
 
-set -- `getopt -n$0 -u --longoptions="prefix:,bindir:" -- "" "$@"` || usage
+set -- `getopt -n$0 -u --longoptions="prefix:,bindir:,sbindir:,sysconfdir:,datadir:,includedir:,libdir:,localstatedir:,mandir:,infodir:" -- "" "$@"` || usage
 [ $# -eq 1 ] && usage
 
 while [ $# -gt 0 ]
 do
     case "$1" in
        --prefix)   prefix=$2;shift;;
-       --exec-prefix) bindir=$2;shift;;
+       --bindir) bindir=$2;shift;;
        --sbindir) shift;; # eat up all options passed by vle
        --sysconfdir) shift;;
        --datadir) shift;;
