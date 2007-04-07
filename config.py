@@ -34,7 +34,7 @@ DEVIDE_REL = "2467" # check svn log devide for this...
 TUDVIS_REL = "203"
 
 # the following variables are written by various InstallPackages
-CMAKE = '' 
+CMAKE = 'cmake' 
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 
 DCMTK_INCLUDE = ''

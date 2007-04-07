@@ -38,6 +38,7 @@ Options are as follows:
                          'get_only'
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all
+--package-set          : preset collections of packages; vtkitk
 
 All of this ugliness is copyright 2006,2007 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
@@ -56,7 +57,7 @@ def main():
         try:
             optlist, args = getopt.getopt(
                 sys.argv[1:], 'hm:p:w:',
-                ['help', 'mode=', 'install-packages=', 'working-dir='])
+                ['help', 'mode=', 'install-packages=', 'package-set', 'working-dir='])
 
         except getopt.GetoptError,e:
             usage()
@@ -81,6 +82,13 @@ def main():
             elif o in ('--install-packages'):
                 # list of package name to perform the action on
                 install_packages = [i.strip().lower() for i in a.split(',')]
+
+            elif o in ('--package-set'):
+                if a in ('vtkitk'):
+                    install_packages = ['vtk', 'vtktud', 'vtkdevide',
+                                        'itk', 'itkvtkglue', 'itktud',
+                                        'installer', 'setupenvironment',
+                                        'devide']
 
             elif o in ('-w', '--working-dir'):
                 working_dir = a
