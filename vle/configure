@@ -23,11 +23,19 @@ do
     case "$1" in
        --prefix)   prefix=$2;shift;;
        --exec-prefix) bindir=$2;shift;;
-       --)        shift;break;;
-       -*)        usage;;
-       *)         break;;
+       --sbindir) shift;; # eat up all options passed by vle
+       --sysconfdir) shift;;
+       --datadir) shift;;
+       --includedir) shift;;
+       --libdir) shift;;
+       --localstatedir) shift;;
+       --mandir) shift;;
+       --infodir) shift;;
+       --)        shift;break;; # end of option processing, break out of while
+       -*)        usage;; # unrecognized -something
+       *)         break;; # anything that is not an option: break out of while
     esac
-    shift
+    shift # move on to the next argument
 done
 
 # we should have prefix now...
