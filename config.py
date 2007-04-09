@@ -30,7 +30,7 @@ MAKE = 'make -j2' # if you have more CPUS, up the -j parameter!
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
-DEVIDE_REL = "2467" # check svn log devide for this...
+DEVIDE_REL = "2472" # check svn log devide for this...
 TUDVIS_REL = "203"
 
 # the following variables are written by various InstallPackages
