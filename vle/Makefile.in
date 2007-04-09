@@ -37,6 +37,6 @@ check: build
 #    if the dest dir already exists, this will make a new
 #    SUBDIR of the destination dir...
 install: build
-        mkdirhier $(DESTDIR)/$(PREFIX)
-        rm -rf $(DESTDIR)/$(PREFIX)
-        cp -r $(WORKINGDIR)/inst/devide $(DESTDIR)/$(PREFIX)
+	mkdirhier $(DESTDIR)/$(PREFIX)
+	rm -rf $(DESTDIR)/$(PREFIX)
+	cp -r $(WORKINGDIR)/inst/devide $(DESTDIR)/$(PREFIX)
