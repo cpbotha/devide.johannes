@@ -1,3 +1,7 @@
+# Makefile.in, part of dummy configure/Makefile thingy
+# for devide to be included as VL-e POC contrib package
+# 2007, Charl P. Botha <http://cpbotha.net/>
+
 # prefix is e.g. /some/dir/devide-1.2.3
 PREFIX=
 # DESTDIR is a fakeroot, i.e. PREFIX is relative to DESTDIR
@@ -27,9 +31,12 @@ build:
 check: build
 	cd $(WORKINGDIR)/inst/devide && ./devide --test
 
-# we need to remove the destination directory and then copy
-# if the dest dir already exists, this will make a new
-# SUBDIR of the destination dir...
+# 1. first do non-destructive mkdirhier, incase this is the first install
+#    and there's nothing there yet.
+# 2. we need to remove the destination directory and then copy
+#    if the dest dir already exists, this will make a new
+#    SUBDIR of the destination dir...
 install: build
-	rm -rf $(DESTDIR)/$(PREFIX)
-	cp -r $(WORKINGDIR)/inst/devide $(DESTDIR)/$(PREFIX)
+        mkdirhier $(DESTDIR)/$(PREFIX)
+        rm -rf $(DESTDIR)/$(PREFIX)
+        cp -r $(WORKINGDIR)/inst/devide $(DESTDIR)/$(PREFIX)
