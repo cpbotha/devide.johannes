@@ -25,8 +25,7 @@ build:
 	./tempj.sh
 
 check: build
-	cd $(WORKINGDIR)/inst/devide
-	./devide --test
+	cd $(WORKINGDIR)/inst/devide && ./devide --test
 
 # we need to remove the destination directory and then copy
 # if the dest dir already exists, this will make a new
