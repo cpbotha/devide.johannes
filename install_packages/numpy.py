@@ -44,7 +44,9 @@ class NumPy(InstallPackage):
             utils.output('numpy already built.  Skipping step.')
 
         else:
-            ret = os.system('%s setup.py build' % (sys.executable,))
+            # the build_ext -lg2c is needed on the VLE Centos3 system, else
+            # we get lapack related (symbol not found) errors at import numpy
+            ret = os.system('%s setup.py build build_ext -lg2c' % (sys.executable,))
             
             if ret != 0:
                 utils.error('numpy build failed.  Please fix and try again.')
