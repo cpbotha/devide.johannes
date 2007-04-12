@@ -25,6 +25,9 @@ C. To make a fully self-contained vl-e compatible tarball:
   1. follow B
   2. cd workingdir/johannes/vle
   3. cp Makefile.in configure README.txt ../..
+  4. cd ../../..
+  5. mv workingdir devide-xxxx.yyyy.0
+  6. tar czvf devide-xxxx.yyyy.0.tar.gz devide-xxxx.yyyy.0
   
 
 -- 
