@@ -6,11 +6,17 @@ build DeVIDE and all of its prerequisites.  The package contains
 knows how to build DeVIDE from scratch.
 
 This software has been customised for the VL-e POC.  In order to build
-and install, do the following:
+and install from source, do the following:
 
-./configure --prefix=/some/directory/devide-abcd.wxyz
-make
-make install
+1. make sure the following dependencies are installed in your POC
+   environment (they aren't by default):
+   zlib-devel, bzip2-devel, ncurses-devel, gtk2-devel, libpng-devel
+2. ./configure --prefix=/some/directory/devide-abcd.wxyz
+3. make
+4. make install
+
+Preferably install the pre-built binaries from the POC contrib instead
+of building from source.
 
 For more information, you can make use of the following resources:
 mailto:c.p.botha@tudelft.nl
