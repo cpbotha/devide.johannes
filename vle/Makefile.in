@@ -31,12 +31,12 @@ build:
 check: build
 	cd $(WORKINGDIR)/inst/devide && ./devide --test
 
-# 1. first do non-destructive mkdirhier, incase this is the first install
+# 1. first do non-destructive mkdir -p, incase this is the first install
 #    and there's nothing there yet.
 # 2. we need to remove the destination directory and then copy
 #    if the dest dir already exists, this will make a new
 #    SUBDIR of the destination dir...
 install: build
-	mkdirhier $(DESTDIR)/$(PREFIX)
+	mkdir -p $(DESTDIR)/$(PREFIX)
 	rm -rf $(DESTDIR)/$(PREFIX)
 	cp -r $(WORKINGDIR)/inst/devide $(DESTDIR)/$(PREFIX)
