@@ -53,6 +53,10 @@ class Installer(InstallPackage):
             if ret != 0:
                 utils.error('Error creating make file.  Fix and try again.')
 
+            # on GCCs with ProPolice, the stupid thing thinks that the
+            # McMillan installer is trying to smash the stack.
+            utils.re_sub_filter_file([("^CFLAGS=(.*)$","CFLAGS=\\1 -fno-stack-protector")]
+
             ret = os.system('make')
             if ret != 0:
                 utils.error('Could not build stub.  Fix and try again.')
