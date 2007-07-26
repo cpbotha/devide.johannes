@@ -55,7 +55,9 @@ class Installer(InstallPackage):
 
             # on GCCs with ProPolice, the stupid thing thinks that the
             # McMillan installer is trying to smash the stack.
-            utils.re_sub_filter_file([("^CFLAGS=(.*)$","CFLAGS=\\1 -fno-stack-protector")]
+            utils.re_sub_filter_file([("^CFLAGS=(.*)$","CFLAGS=\\1 "
+                                       "-fno-stack-protector")],
+                                     'Makefile')
 
             ret = os.system('make')
             if ret != 0:
