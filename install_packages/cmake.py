@@ -62,6 +62,8 @@ class CMake(InstallPackage):
 
         # either way, we have to register our binary path with config
         config.CMAKE = '%s %s' % (cmake_binpath, config.CMAKE_DEFAULT_PARAMS)
+        if len(config.CMAKE_PRE_VARS):
+            config.CMAKE = config.CMAKE_PRE_VARS + ' ' + config.CMAKE
 
     def clean_build(self):
         utils.output("Removing build and install directories.")
