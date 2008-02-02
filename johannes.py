@@ -16,18 +16,11 @@ and installation system of them all.  It could save you a lot of time though.
 This instance of johannes will get, build and install the following: wxpython,
 cmake, dcmtk, vtk, vtktud, vtkdevide, itk, itktud, itkvtkglue, devide
 
-You need at least the following packages (or equivalents) on your system:
+Please read the included README.txt file NOW.
 
-gcc, g++, cvs, svn, chrpath
-bzip2-dev, ncurses-dev, gtk2-dev,
-libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
-libatlas-dev (*optional* for faster numpy)
-
-For a fast numeric python, you also need the libatlas-dev package.
-
-Before starting johannes.py, first run bootstrap_stage1.sh and
-bootstrap_stage2.sh to download and install python.  After that, run johannes
-as follows:
+Build method A (the default) is as follows: Before starting
+johannes.py, first run bootstrap_stage1.sh and bootstrap_stage2.sh to
+download and install python.  After that, run johannes as follows:
 
 /you/new/python johannes.py -w working_directory
 
