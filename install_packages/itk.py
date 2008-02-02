@@ -8,7 +8,7 @@ import sys
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-D 20061012" # wrapitk+itk fix by Gaetan
+CVS_VERSION = "-r ITK-3-4" # 
 
 CABLESWIG_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/CableSwig"
 CABLESWIG_VERSION = "-D 20061012" # wrapitk+itk fix by Gaetan
