@@ -78,8 +78,6 @@ class ITK(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DUSE_WRAP_ITK=ON " \
                        "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
-                       "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        "-DWRAP_ITK_PYTHON=ON " \
                        "-DWRAP_ITK_TCL=OFF " \
@@ -88,7 +86,6 @@ class ITK(InstallPackage):
                        "-DWRAP_signed_short=ON " \
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
-                          config.python_include_path, config.python_library,
                           sys.executable)
 
         ret = os.system("%s %s %s" %
