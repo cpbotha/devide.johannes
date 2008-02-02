@@ -9,7 +9,6 @@ exit;
 fi
 
 FLAG_FILE1=$1/flags/stage1_complete
-FLAG_FILE2=$1/flags/stage2_complete
 
 p=$1/inst/python/bin/python
 if [ -f $p ]; then
@@ -27,8 +26,8 @@ cd $1
 WD=`pwd`
 
 cd build
-tar xjvf ../archive/Python-2.4.4.tar.bz2
-cd Python-2.4.4
+tar xjvf ../archive/Python-2.5.1.tar.bz2
+cd Python-2.5.1
 ./configure --enable-shared --prefix=$WD/inst/python
 
 if [ "$?" -ne "0" ]; then
@@ -57,5 +56,5 @@ echo ". $WD/$ENV_FILE"
 echo "$WD/inst/python/bin/python johannes.py -w $WD"
 
 cd flags
-touch $FLAG_FILE2
+touch stage2_complete
 cd $WD

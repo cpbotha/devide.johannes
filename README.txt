@@ -2,11 +2,9 @@ This package contains johannes, a very scary build system for DeVIDE.
 
 You need at least the following packages (or equivalents) on your system:
 gcc, g++, cvs, svn, chrpath
-bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev,
+bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev | libgtk2.0-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (*optional* for faster numpy)
-
-For a fast numeric python, you also need the libatlas-dev package.
 
 A. For a normal full build, do the following:
   
