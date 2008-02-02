@@ -5,10 +5,10 @@ import shutil
 import sys
 import utils
 
-MPL_TARBALL = "matplotlib-0.87.6.tar.gz"
+MPL_TARBALL = "matplotlib-0.91.2.tar.gz"
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_TARBALL,)
-MPL_DIRBASE = "matplotlib-0.87.6"
+MPL_DIRBASE = "matplotlib-0.91.2"
 
 class matplotlib(InstallPackage):
 
