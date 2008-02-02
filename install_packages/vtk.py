@@ -5,72 +5,61 @@ import shutil
 import sys
 import utils
 
-VTK_TARBALL = "vtk-5.0.2.tar.gz"
-VTK_URL = "http://www.vtk.org/files/release/5.0/%s" % (VTK_TARBALL,)
-VTK_DIRBASE = "VTK"
-VTK_BASE_VERSION = "vtk-5.0"
+# cvs -d :pserver:anonymous@public.kitware.com:/cvsroot/VTK login 
+# password vtk
+#  cvs -d :pserver:anonymous@public.kitware.com:/cvsroot/VTK checkout
+#  VTK
+# cd VTK
+# cvs -z3 update -R blahblah
+
+BASENAME = "VTK"
+# password "vtk" integrated in CVS -d spec
+CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
+CVS_VERSION = "-r ParaView-3-2-1" # 
+
+VTK_BASE_VERSION = "vtk-5.1"
+
+PDIR1 = \
+"http://visualisation.tudelft.nl/~cpbotha/files/vtk_itk/patches/"
 
 # this patch does two things:
 # 1. adds try/catch blocks to all python method calls in order
 #    to trap bad_alloc exceptions
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
-EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20061006.diff"
-EXC_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
-                  EXC_PATCH
+EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20071106.diff"
+EXC_PATCH_URL = PDIR1 + EXC_PATCH
 
-# gcc 4.0 errors on some trivial assignment of const char * to char *
-# this patch fixes that so that VTK 5.0.2 builds on gcc 4 systems
-GCC40_PATCH = "vtk502_gcc40_pythonutil.diff"
-GCC40_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
-                  GCC40_PATCH
-
-# this applies all WXVTKRWI fixes from VTK CVS 200610 to the 5.0.2 source
-WXVTKRWI_PATCH = "wxvtkrwi_502_to_200610.diff"
-WXVTKRWI_PATCH_URL = "http://visualisation.tudelft.nl/~cpbotha/thingies/" + \
-                     WXVTKRWI_PATCH
+# fixes attributes in vtkproperty for shader use in python
+VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
+VTKPRPRTY_PATCH_URL = PDIR1 + VTKPRPRTY_PATCH
                   
 class VTK(InstallPackage):
     
     def __init__(self):
-        self.tbfilename = os.path.join(config.archive_dir, VTK_TARBALL)
-        self.source_dir = os.path.join(config.build_dir, VTK_DIRBASE)
+        self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
-                                      (VTK_DIRBASE,))
-        self.inst_dir = os.path.join(config.inst_dir, 'VTK')
+                                      (BASENAME,))
+        self.inst_dir = os.path.join(config.inst_dir, BASENAME)
         self.exc_patch_filename = os.path.join(config.archive_dir,
                                                EXC_PATCH)
-        self.gcc40_patch_filename = os.path.join(config.archive_dir,
-                                                 GCC40_PATCH)
-        self.wxvtkrwi_patch_filename = os.path.join(config.archive_dir,
-                                                    WXVTKRWI_PATCH)        
+        self.vtkprprty_patch_filename = os.path.join(config.archive_dir,
+                                                 VTKPRPRTY_PATCH)
 
     def get(self):
-        if os.path.exists(self.tbfilename):
-            utils.output("%s already present, not downloading." %
-                         (VTK_TARBALL,))
+        if os.path.exists(self.source_dir):
+            utils.output("VTK already checked out, skipping step.")
+
         else:
             utils.goto_archive()
-            utils.urlget(VTK_URL)
+            ret = os.system("%s -d %s co %s %s" %
+                            (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
+            if ret != 0:
+                utils.error("Could not CVS checkout.  Fix and try again.")
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
             utils.urlget(EXC_PATCH_URL)
-
-        if not os.path.exists(self.gcc40_patch_filename):
-            utils.goto_archive()
-            utils.urlget(GCC40_PATCH_URL)
-
-        if not os.path.exists(self.wxvtkrwi_patch_filename):
-            utils.goto_archive()
-            utils.urlget(WXVTKRWI_PATCH_URL)
-
-    def unpack(self):
-        if os.path.isdir(self.source_dir):
-            utils.output("VTK source already unpacked, not redoing.")
-        else:
-            utils.output("Unpacking VTK source.")
-            utils.unpack_build(self.tbfilename)
 
             # EXC PATCH
             utils.output("Applying EXC patch")
@@ -78,27 +67,25 @@ class VTK(InstallPackage):
             ret = os.system(
                 "%s -p0 < %s" % (config.PATCH, self.exc_patch_filename))
             if ret != 0:
-                utils.output(
+                utils.error(
                     "Could not apply EXC patch.  Fix and try again.")
 
-            # GCC40 patch
-            utils.output("Applying GCC40 patch")
-            os.chdir(self.source_dir)
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.gcc40_patch_filename))
-            if ret != 0:
-                utils.output(
-                    "Could not apply GCC40 patch.  Fix and try again.")
+        if not os.path.exists(self.vtkprprty_patch_filename):
+            utils.goto_archive()
+            utils.urlget(VTKPRPRTY_PATCH_URL)
 
-            # WXVTKRWI patch
-            utils.output("Applying WXVTKRWI patch")
-            os.chdir(self.source_dir)
+            # VTKPRPRTY PATCH
+            utils.output("Applying VTKPRPRTY patch")
+            os.chdir(os.path.join(self.source_dir, 'Rendering'))
             ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.wxvtkrwi_patch_filename))
+                "%s -p0 < %s" % (config.PATCH, self.vtkprprty_patch_filename))
             if ret != 0:
-                utils.output(
-                    "Could not apply WXVTKRWI patch.  Fix and try again.")
-                
+                utils.error(
+                    "Could not apply VTKPRPRTY patch.  Fix and try again.")
+
+ 
+    def unpack(self):
+        pass               
                 
     def configure(self):
         if os.path.exists(
@@ -114,15 +101,20 @@ class VTK(InstallPackage):
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
-		       "-DVTK_USE_TK=NO " \
-                       "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DPYTHON_LIBRARY=%s " \
+		               "-DVTK_USE_TK=NO " \
+                       "-DVTK_USE_METAIO=ON" \
+                       "-DVTK_USE_PARALLEL=ON" \
                        "-DPYTHON_EXECUTABLE=%s " \
                        "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
-                                                 config.python_include_path,
-                                                 config.python_library,
                                                  sys.executable)
-        
+
+        # TODO: remove these
+        #"-DPYTHON_INCLUDE_PATH=%s " \
+        #"-DPYTHON_LIBRARY=%s " \
+                       
+        #config.python_include_path,
+        #config.python_library,
+
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
 
