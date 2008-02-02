@@ -6,7 +6,7 @@ import shutil
 from install_package import InstallPackage
 import utils
 
-WXP_TARBALL = "wxPython-src-2.6.3.3.tar.bz2"
+WXP_TARBALL = "wxPython-src-2.8.7.1.tar.bz2"
 WXP_DIRBASE = WXP_TARBALL[0:WXP_TARBALL.find('tar.bz2')-1]
 WXP_URL = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s" % \
           (WXP_TARBALL,)
@@ -65,11 +65,6 @@ class WXPython(InstallPackage):
             raise RuntimeError(
                 '##### Error making wxWidgets.  Fix and try again.')
     
-        ret = os.system('make -C contrib/src/animate install')
-        if ret != 0:
-            raise RuntimeError(
-                '##### Error making wxWidgets ANIMATE.  Fix and try again.')
-    
         ret = os.system('make -C contrib/src/gizmos install')
         if ret != 0:
             raise RuntimeError(
@@ -97,18 +92,6 @@ class WXPython(InstallPackage):
         # find path to current python binary        
         exe = sys.executable
 
-        # fix problem in 2.6.3.3 setup.py
-        #inputfile = open('setup.py')
-        #outputfile = open('setup_new.py', 'w')
-        #for l in inputfile:
-        #    if not l.startswith("copy_file('build_options.py'"):
-        #        outputfile.write(l)
-
-        #inputfile.close()
-        #outputfile.close()
-        #shutil.copyfile('setup_new.py','setup.py')
-        
-        
         ret = os.system(
             '%s setup.py build_ext --inplace UNICODE=1 BUILD_GLCANVAS=1' %
             (exe,))
@@ -156,9 +139,9 @@ class WXPython(InstallPackage):
             # to self.inst_dir/include/wx-2.6/wx/wxPython
             # I'm not so happy about this, but python setup.py --root=
             # doesn't do what I want...
-            shutil.copytree(
-                os.path.join(wxp_build, 'include/wx/wxPython'),
-                os.path.join(self.inst_dir, 'include/wx-2.6/wx/wxPython'))
+            #shutil.copytree(
+            #    os.path.join(wxp_build, 'include/wx/wxPython'),
+            #    os.path.join(self.inst_dir, 'include/wx-2.6/wx/wxPython'))
 
         config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
         # this is where wx-config can be found
