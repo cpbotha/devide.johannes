@@ -4,9 +4,9 @@ import os
 import shutil
 import utils
 
-CMAKE_TARBALL = "cmake-2.4.6.tar.gz"
+CMAKE_TARBALL = "cmake-2.4.8.tar.gz"
 CMAKE_URL = "http://www.cmake.org/files/v2.4/%s" % (CMAKE_TARBALL,)
-CMAKE_DIRBASE = "cmake-2.4.6"
+CMAKE_DIRBASE = "cmake-2.4.8"
 
 class CMake(InstallPackage):
     
