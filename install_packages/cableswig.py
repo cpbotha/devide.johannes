@@ -1,3 +1,8 @@
+
+# since ITK 3.4 (perhaps earlier) you do NOT HAVE TO BUILD CABLESWIG
+# separately.  This install package is on ice.  DO NOT USE.
+
+
 import config
 from install_package import InstallPackage
 import os

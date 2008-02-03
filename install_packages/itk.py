@@ -10,9 +10,6 @@ BASENAME = "Insight"
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ITK-3-4" # 
 
-CABLESWIG_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/CableSwig"
-CABLESWIG_VERSION = "-D 20061012" # wrapitk+itk fix by Gaetan
-
 class ITK(InstallPackage):
     
     def __init__(self):
@@ -34,23 +31,6 @@ class ITK(InstallPackage):
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
 
-        utilities_dir = os.path.join(self.source_dir, 'Utilities')
-        cableswig_source_dir = os.path.join(utilities_dir,
-                                            'CableSwig')
-        
-        if os.path.exists(cableswig_source_dir):
-            utils.output("CableSwig already checked out, skipping step.")
-
-        else:
-            os.chdir(utilities_dir)
-            ret = os.system("%s -d %s co %s %s" %
-                            (config.CVS, CABLESWIG_REPO, CABLESWIG_VERSION,
-                             "CableSwig"))
-
-            if ret != 0:
-                utils.error(
-                    "Could not CVS checkout CableSwig.  Fix and try again.")
-
         # also the source dir for other installpackages that wish to build
         # WrapITK external projects
         # itkvtkglue needs this during its get() stage!
@@ -71,6 +51,9 @@ class ITK(InstallPackage):
 
         os.chdir(self.build_dir)
         # ITK_USE_REVIEW *must* be on for ItkVtkGlue to work!
+        # following types are wrapped:
+        # complex_float, float, signed_short, unsigned long,
+        # vector_float 
         cmake_params = "-DBUILD_EXAMPLES=OFF " \
                        "-DBUILD_SHARED_LIBS=ON " \
                        "-DBUILD_TESTING=OFF " \
@@ -82,8 +65,11 @@ class ITK(InstallPackage):
                        "-DWRAP_ITK_PYTHON=ON " \
                        "-DWRAP_ITK_TCL=OFF " \
                        "-DWRAP_ITK_JAVA=OFF " \
+                       "-DWRAP_covariant_vector_float=OFF " \
+                       "-DWRAP_rgb_unsigned_short=OFF " \
                        "-DWRAP_unsigned_short=OFF " \
                        "-DWRAP_signed_short=ON " \
+                       "-DWRAP_unsigned_long=ON " \
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           sys.executable)
