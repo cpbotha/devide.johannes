@@ -67,13 +67,10 @@ class ItkVtkGlue(InstallPackage):
                        "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
-                       "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        % \
                        (config.ITK_INSTALL_PREFIX,
                         config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
-                        config.python_include_path, config.python_library,
                         sys.executable)
 
         # first pass
@@ -99,10 +96,8 @@ class ItkVtkGlue(InstallPackage):
         
 
     def install(self):
-        #config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
-        #config.VTKTUD_PYTHON = os.path.join(
-        #    self.source_dir, 'Wrapping/Python')
-
+        # config.WRAPITK_LIB is something like:
+        # /inst/Insight/lib/InsightToolkit/WrapITK/lib
         if os.path.exists(
             os.path.join(config.WRAPITK_LIB, '_ItkVtkGluePython.so')):
             utils.output("ItkVtkGlue already installed.  Skipping step.")
