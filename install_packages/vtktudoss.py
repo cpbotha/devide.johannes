@@ -69,9 +69,9 @@ class VTKTUDOSS(InstallPackage):
         
 
     def install(self):
-        config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
-        config.VTKTUD_PYTHON = os.path.join(
-            self.source_dir, 'Wrapping/Python')
+        config.VTKTUDOSS_LIB = os.path.join(self.build_dir, 'bin')
+        config.VTKTUDOSS_PYTHON = os.path.join(
+            self.build_dir, 'Wrapping/Python')
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is

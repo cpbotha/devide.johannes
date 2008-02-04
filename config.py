@@ -50,7 +50,7 @@ DEVIDE_REL = JOHANNES_REL
 
 # 
 ITKTUDOSS_REL = "5"
-VTKTUDOSS_REL = "4"
+VTKTUDOSS_REL = "5"
 
 # the following variables are written by various InstallPackages
 CMAKE = '' # this one will be completed by the cmake install package 
