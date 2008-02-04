@@ -15,6 +15,10 @@ your DeVIDE build system going on Windows without johannes.  *sniff*
   path (for yourself, or for all users).
 * Get and unpack dcmtk 3.5.4 from [6].
 
+ITK can be configured with:
+python /path/to/johannes.py -w workingdir -p itk -m configure_only
+
+devenv is in Microsoft Visual Studio 8\Common7\ide\devenv.exe
 
 
 

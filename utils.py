@@ -20,6 +20,43 @@ def output(message, rpad=0, rpad_char='#'):
 def error(message):
     raise RuntimeError('!!!!! %s' % (message,))
 
+def file_exists(posix_file, nt_file):
+    """Used to perform platform-specific file existence check.
+    """
+
+    if os.name == 'posix':
+        fn = posix_file
+    else: # os.name == 'nt'
+        fn = nt_file
+
+    return os.path.exists(fn)
+
+def make_command(solution_file, install=False):
+    """Install packages can use this method to invoke the
+    platform-specific compile command.  This can only be run after
+    config.init() has run.
+
+    @param solution_file: only used on Windows, ignored on *ix.
+    @param install: if true, invokes the make command to install the
+    built project.
+    """
+
+    if os.name == 'posix':
+        if install:
+            make_command = '%s install' % (config.MAKE,)
+        else:
+            make_command = config.MAKE
+
+    else: # os.name == 'nt'
+        if install:
+            prj = 'INSTALL'
+        else:
+            prj = 'ALL_BUILD'
+
+        make_command = config.MAKE % (solution_file, prj)
+
+    return os.system(make_command)
+
 def urlget(url):
     """Simple method to retrieve URL.  It will get the file in the current
     directory.

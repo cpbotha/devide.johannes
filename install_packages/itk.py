@@ -92,13 +92,19 @@ class ITK(InstallPackage):
             utils.error("Could not configure ITK.  Fix and try again.")
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'bin/_RegistrationPython.so')):
+        
+        posix_file = os.path.join(self.build_dir,
+                'bin/_RegistrationPython.so')
+
+        nt_file = os.path.join(self.build_dir, 'bin',
+                config.BUILD_TARGET, '_RegistrationPython.dll')
+
+        if utils.file_exists(posix_file, nt_file):
             utils.output("ITK already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('ITK.sln')
             if ret != 0:
                 utils.error("Error building ITK.  Fix and try again.")
 
@@ -116,7 +122,8 @@ class ITK(InstallPackage):
 
         
         if os.path.exists(
-            os.path.join(config.WRAPITK_LIB, '_UnaryPixelMathPython.so')):
+            os.path.join(config.WRAPITK_LIB, 
+                '_UnaryPixelMathPython' + config.SO_EXT)):
             utils.output("ITK already installed.  Skipping step.")
 
         else:

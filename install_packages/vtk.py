@@ -108,13 +108,6 @@ class VTK(InstallPackage):
                        "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
                                                  sys.executable)
 
-        # TODO: remove these
-        #"-DPYTHON_INCLUDE_PATH=%s " \
-        #"-DPYTHON_LIBRARY=%s " \
-                       
-        #config.python_include_path,
-        #config.python_library,
-
         ret = os.system("%s %s %s" %
                         (config.CMAKE, cmake_params, self.source_dir))
 

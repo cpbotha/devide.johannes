@@ -29,8 +29,8 @@ download and install python.  After that, run johannes as follows:
 Options are as follows:
 -w, --working-dir      : specify working directory [REQUIRED]
 -h, --help             : show this help
--m, --mode             : working mode, 'build' (default), 'clean_build' or
-                         'get_only'
+-m, --mode             : working mode, 'everything' (default),
+                         'clean_build', 'get_only' or 'configure_only'
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all
 --package-set          : preset collections of packages; vtkitk
@@ -58,7 +58,7 @@ def main():
             usage()
             return
 
-        mode = 'build'
+        mode = 'everything'
         install_packages = None
         working_dir = None
         profile = 'default'
@@ -72,6 +72,8 @@ def main():
                 if a in ('clean', 'clean_build'):
                     mode = 'clean_build'
                 elif a == 'get_only':
+                    mode = a
+                elif a == 'configure_only':
                     mode = a
 
             elif o in ('--install-packages'):
@@ -125,17 +127,27 @@ def main():
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()
-        
-        def unpack_to_install_stage(ip, n):
-            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
-            ip.unpack()
+
+        def configure_stage(ip, n):
             utils.output("%s :: configure()" % (n,), rpad, rpad_char)
             ip.configure()
+
+        def build_stage(ip, n):
             utils.output("%s :: build()" % (n,), rpad, rpad_char)
             ip.build()
+
+        def all_stages(ip, n):
+            get_stage(ip, n)
+
+            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
+            ip.unpack()
+
+            configure_stage(ip, n)            
+
+            build_stage(ip, n)
+            
             utils.output("%s :: install()" % (n,), rpad, rpad_char)
             ip.install()
-            
             
         
         for ip in ip_instance_list:
@@ -147,10 +159,14 @@ def main():
                     utils.output("%s" % (n,), 70, '#')
                     get_stage(ip, n)
 
-                elif mode == 'build':
+                elif mode == 'configure_only':
+                    utils.output("%s CONFIGURE_ONLY" % (n,), 70, '#')
                     utils.output("%s" % (n,), 70, '#')
-                    get_stage(ip, n)
-                    unpack_to_install_stage(ip, n)
+                    configure_stage(ip, n)
+
+                elif mode == 'everything':
+                    utils.output("%s" % (n,), 70, '#')
+                    all_stages(ip, n)
 
                 elif mode == 'clean_build':
                     utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
