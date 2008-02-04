@@ -53,7 +53,11 @@ ITKTUDOSS_REL = "5"
 VTKTUDOSS_REL = "5"
 
 # the following variables are written by various InstallPackages
-CMAKE = '' # this one will be completed by the cmake install package 
+####################################################################
+
+# this one will be set by the cmake install package, but we set it to
+# a sane default in case the cmake install package is not executed.
+CMAKE = 'cmake' 
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 
 DCMTK_INCLUDE = ''
