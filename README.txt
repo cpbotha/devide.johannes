@@ -47,4 +47,8 @@ I did have a look at porting johannes to Windows.  At the time
 the major problems was getting the basic stuff (python, numpy,
 wxpython, matplotlib) in a *localised* and automatic build.
 
+Please see WINDOWS.txt for instructions on getting your DeVIDE build
+system up and running on that platform.
+
+
 
