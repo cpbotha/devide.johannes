@@ -10,6 +10,11 @@ BASENAME = "Insight"
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ITK-3-4" # 
 
+CS_BASENAME = "CableSwig"
+# password part of REPO spec
+CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
+
+
 class ITK(InstallPackage):
     
     def __init__(self):
@@ -28,8 +33,14 @@ class ITK(InstallPackage):
                             (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
             
             if ret != 0:
-                utils.error("Could not CVS checkout.  Fix and try again.")
+                utils.error("Could not CVS checkout ITK.  Fix and try again.")
 
+	    os.chdir(os.path.join(self.source_dir, 'Utilities'))
+            ret = os.system("%s -d %s co %s %s" %
+                            (config.CVS, CS_CVS_REPO, CVS_VERSION, CS_BASENAME))
+            
+            if ret != 0:
+                utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
 
         # also the source dir for other installpackages that wish to build
         # WrapITK external projects
