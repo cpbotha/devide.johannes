@@ -100,5 +100,5 @@ def init(wd, the_profile):
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
 
     elif os.name == 'nt':
-        CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 7 .NET 2003"'
+        CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 8 2005"'
 
