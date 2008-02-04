@@ -3,8 +3,8 @@ import getopt
 from install_packages import numpy, matplotlib
 from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
-from install_packages import vtktud, vtkdevide
-from install_packages import itk, itkvtkglue, itktud
+from install_packages import vtktudoss, vtkdevide
+from install_packages import itk, itkvtkglue, itktudoss
 from install_packages import installer, setupenvironment, devide
 import sys
 import utils
@@ -78,8 +78,9 @@ def main():
 
             elif o in ('--package-set'):
                 if a in ('vtkitk'):
-                    install_packages = ['vtk', 'vtktud', 'vtkdevide',
-                                        'itk', 'itkvtkglue', 'itktud',
+                    install_packages = ['vtk', 'vtktudoss', 'vtkdevide',
+                                        'itk', 'itkvtkglue',
+                                        'itktudoss',
                                         'installer', 'setupenvironment',
                                         'devide']
 
@@ -103,11 +104,11 @@ def main():
                             cmake.CMake(),
                             dcmtk.DCMTK(),
                             vtk.VTK(),
-                            vtktud.VTKTUD(),
+                            vtktudoss.VTKTUDOSS(),
                             vtkdevide.VTKDEVIDE(),
                             itk.ITK(),
                             itkvtkglue.ItkVtkGlue(),
-                            itktud.ITKTUD(),
+                            itktudoss.ITKTUDOSS(),
                             installer.Installer(),
                             setupenvironment.SetupEnvironment(),
                             devide.DeVIDE()]

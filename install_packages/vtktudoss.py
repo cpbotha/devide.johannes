@@ -4,11 +4,11 @@ import os
 import shutil
 import utils
 
-BASENAME = "vtktud"
-SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
-SVN_REL = config.TUDVIS_REL
+BASENAME = "vtktudoss"
+SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
+SVN_REL = config.VTKTUDOSS_REL
 
-class VTKTUD(InstallPackage):
+class VTKTUDOSS(InstallPackage):
     
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
@@ -18,11 +18,13 @@ class VTKTUD(InstallPackage):
 
     def get(self):
         if os.path.exists(self.source_dir):
-            utils.output("vtktud already checked out, skipping step.")
+            utils.output("vtktudoss already checked out, skipping step.")
 
         else:
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
+            # checkout trunk into directory vtktudoss
+            ret = os.system("%s co %s %s -r%s" % (config.SVN,
+                SVN_REPO, BASENAME, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
@@ -33,7 +35,7 @@ class VTKTUD(InstallPackage):
     def configure(self):
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
-            utils.output("vtktud build already configured.")
+            utils.output("vtktudoss build already configured.")
             return
         
         if not os.path.exists(self.build_dir):
@@ -50,20 +52,20 @@ class VTKTUD(InstallPackage):
                         (config.CMAKE, cmake_params, self.source_dir))
 
         if ret != 0:
-            utils.error("Could not configure vtktud.  Fix and try again.")
+            utils.error("Could not configure vtktudoss.  Fix and try again.")
         
 
     def build(self):
         if os.path.exists(
-            os.path.join(self.build_dir, 'bin/libvtktudImagingPython.so')):
+            os.path.join(self.build_dir, 'bin/libvtktudossGraphicsPython.so')):
 
-            utils.output("vtktud already built.  Skipping build step.")
+            utils.output("vtktudoss already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s" % (config.MAKE,))
             if ret != 0:
-                utils.error("Could not build vtktud.  Fix and try again.")
+                utils.error("Could not build vtktudoss.  Fix and try again.")
         
 
     def install(self):

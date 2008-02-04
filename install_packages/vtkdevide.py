@@ -5,7 +5,8 @@ import shutil
 import utils
 
 BASENAME = "vtkdevide"
-SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
+SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
+# this should be the same release as johannes and the rest of devide
 SVN_REL = config.DEVIDE_REL
 
 class VTKDEVIDE(InstallPackage):

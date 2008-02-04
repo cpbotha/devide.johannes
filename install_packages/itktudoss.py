@@ -9,11 +9,11 @@ import utils
 #     ITK_USE_REVIEW=ON (until the itkFlatStructuringElement moves OUT of the
 #     review directory, that is)
 
-BASENAME = "itktud"
-SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/tudvis/trunk/" + BASENAME
-SVN_REL = config.TUDVIS_REL
+BASENAME = "itktudoss"
+SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
+SVN_REL = config.ITKTUDOSS_REL
 
-class ITKTUD(InstallPackage):
+class ITKTUDOSS(InstallPackage):
     
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
@@ -22,11 +22,12 @@ class ITKTUD(InstallPackage):
 
     def get(self):
         if os.path.exists(self.source_dir):
-            utils.output("itktud already checked out, skipping step.")
+            utils.output("itktudoss already checked out, skipping step.")
 
         else:
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
+            ret = os.system("%s co %s %s -r%s" % (config.SVN,
+                SVN_REPO, BASENAME, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
@@ -37,7 +38,7 @@ class ITKTUD(InstallPackage):
     def configure(self):
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
-            utils.output("itktud build already configured.")
+            utils.output("itktudoss build already configured.")
             return
         
         if not os.path.exists(self.build_dir):
@@ -53,13 +54,10 @@ class ITKTUD(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
-                       "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        % \
                        (config.ITK_INSTALL_PREFIX,
                         config.ITK_DIR, config.WRAPITK_DIR,
-                        config.python_include_path, config.python_library,
                         sys.executable)
 
         # first pass
@@ -68,20 +66,20 @@ class ITKTUD(InstallPackage):
 
         if ret != 0:
             utils.error(
-                "Could not configure itktud.  Fix and try again.")
+                "Could not configure itktudoss.  Fix and try again.")
 
 
     def build(self):
         if os.path.exists(
-            os.path.join(self.build_dir, 'lib/_itktudPython.so')):
+            os.path.join(self.build_dir, 'lib/_itktudossPython.so')):
 
-            utils.output("itktud already built.  Skipping build step.")
+            utils.output("itktudoss already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s" % (config.MAKE,))
             if ret != 0:
-                utils.error("Could not build itktud.  Fix and try again.")
+                utils.error("Could not build itktudoss.  Fix and try again.")
         
 
     def install(self):
@@ -90,15 +88,15 @@ class ITKTUD(InstallPackage):
         #    self.source_dir, 'Wrapping/Python')
 
         if os.path.exists(
-            os.path.join(config.WRAPITK_LIB, '_itktudPython.so')):
-            utils.output("itktud already installed.  Skipping step.")
+            os.path.join(config.WRAPITK_LIB, '_itktudossPython.so')):
+            utils.output("itktudoss already installed.  Skipping step.")
 
         else:
             os.chdir(self.build_dir)
             ret = os.system("%s install" % (config.MAKE,))
             if ret != 0:
                 utils.error(
-                    "Could not install itktud.  Fix and try again.")
+                    "Could not install itktudoss.  Fix and try again.")
 
  
     def clean_build(self):
@@ -108,7 +106,7 @@ class ITKTUD(InstallPackage):
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
 
-        inst_so = os.path.join(config.WRAPITK_LIB, '_itktudPython.so')
+        inst_so = os.path.join(config.WRAPITK_LIB, '_itktudossPython.so')
         if os.path.exists(inst_so):
             os.remove(inst_so)
 

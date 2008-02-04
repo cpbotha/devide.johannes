@@ -41,7 +41,10 @@ JOHANNES_REL = JOHANNES_REV.split()[1]
 #DEVIDE_REL = "2482" # check svn log devide for this...
 # same repo, current johannes should be able to build current devide
 DEVIDE_REL = JOHANNES_REL
-TUDVIS_REL = "203"
+
+# 
+ITKTUDOSS_REL = "5"
+VTKTUDOSS_REL = "4"
 
 # the following variables are written by various InstallPackages
 CMAKE = '' # this one will be completed by the cmake install package 
