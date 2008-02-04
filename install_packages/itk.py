@@ -128,7 +128,8 @@ class ITK(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s install" % (config.MAKE,))
+            ret = utils.make_command('ITK.sln', install=True) 
+
             if ret != 0:
                 utils.error("Could not install ITK.  Fix and try again.")
 

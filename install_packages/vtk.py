@@ -116,25 +116,31 @@ class VTK(InstallPackage):
                        
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'bin/libvtkWidgetsPython.so')):
+        posix_file = os.path.join(self.build_dir,
+            'bin/libvtkWidgetsPython.so')
+        nt_file = os.path.join(self.build_dir, 'bin', config.BUILD_TARGET, 
+                'vtkWidgetsPythonD.dll')
 
+        if utils.file_exists(posix_file, nt_file):
             utils.output("VTK already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('VTK.sln')
             if ret != 0:
                 utils.error("Error building VTK.  Fix and try again.")
 
     def install(self):
-        if os.path.exists(
-            os.path.join(self.inst_dir, 'bin/vtkpython')):
+        posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
+        nt_file = os.path.join(self.inst_dir, 'bin',
+                config.BUILD_TARGET, 'vtkpython.exe')
+
+        if utils.file_exists(posix_file, nt_file):    
             utils.output("VTK already installed.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s install" % (config.MAKE,))
+            ret = utils.make_command('VTK.sln', install=True)
             if ret != 0:
                 utils.error("Could not install VTK.  Fix and try again.")
 
