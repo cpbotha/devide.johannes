@@ -11,10 +11,12 @@ import utils
 
 def usage():
     message = """
-Welcome to johannes, the ugliest downloading/unpacking/configuring/building
-and installation system of them all.  It could save you a lot of time though.
-This instance of johannes will get, build and install the following: wxpython,
-cmake, dcmtk, vtk, vtktud, vtkdevide, itk, itktud, itkvtkglue, devide
+Welcome to johannes, the ugliest
+downloading/unpacking/configuring/building and installation system of
+them all.  It could save you a lot of time though.  This instance of
+johannes will get, build and install the following: python, numpy,
+wxpython, matplotlib, cmake, dcmtk, vtk, vtktudoss, vtkdevide, itk,
+itktudoss, itkvtkglue, devide
 
 Please read the included README.txt file NOW.
 

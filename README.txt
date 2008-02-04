@@ -1,6 +1,10 @@
-This package contains johannes, a very scary build system for DeVIDE.
+This package contains johannes, a very scary *ix build system for DeVIDE.
 
-You need at least the following packages (or equivalents) on your system:
+johannes is copyright 2007,2008 Charl P. Botha <c.p.botha@tudelft.nl>
+and is made available under the New BSD License.
+
+Before starting, you need at least the following packages (or
+equivalents) on your system:
 gcc, g++, cvs, svn, chrpath
 bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev | libgtk2.0-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
@@ -35,7 +39,12 @@ C. To make a fully self-contained vl-e compatible tarball:
   5. mv workingdir devide-xxxx.yyyy.0
   6. tar czvf devide-xxxx.yyyy.0.tar.gz devide-xxxx.yyyy.0
   
+Note on Windows
+---------------
 
--- 
-March 2007
-Charl P. Botha <c.p.botha@tudelft.nl>
+I did have a look at porting johannes to Windows.  At the time
+(February 2008), the porting effort outweighed the advantages.  One of
+the major problems was getting the basic stuff (python, numpy,
+wxpython, matplotlib) in a *localised* and automatic build.
+
+
