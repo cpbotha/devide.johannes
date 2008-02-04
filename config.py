@@ -27,6 +27,12 @@ else:
     MAKE = 'make'
     CMAKE_PRE_VARS = ''
 
+# Set to True if you want to build redistributable DeVIDE binaries
+# with PyInstaller as part of the johannes build process.
+# If False, you can still run directly from its build directory, and
+# you can also create redistributable binaries at a later stage.
+BUILD_DEVIDE_DISTRIBUTABLES = False
+
 # nothing for you to edit below this line
 #######################################################################
 

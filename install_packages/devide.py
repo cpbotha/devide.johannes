@@ -5,7 +5,8 @@ import utils
 import shutil
 
 BASENAME = "devide"
-SVN_REPO = "https://stockholm.twi.tudelft.nl/svn/devide/trunk/" + BASENAME
+SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
+# this should be the same release as johannes and the rest of devide
 SVN_REL = config.DEVIDE_REL
 
 class DeVIDE(InstallPackage):
@@ -63,6 +64,7 @@ class DeVIDE(InstallPackage):
 echo "Did you remember to run \". setup_env.sh\"?"
 echo "Starting up DeVIDE..."
 python %s $*
+
         """ % (config.DEVIDE_PY,)
 
         invoking_script_fn = os.path.join(config.working_dir, 'devide.sh')
@@ -81,6 +83,7 @@ python %s $*
 echo "Did you remember to run \". setup_env.sh\"?"
 export PYINSTALLER_SCRIPT=%s
 sh %s package_only
+
         """ % (PYINSTALLER_SCRIPT, config.DEVIDE_MAKERELEASE_SH)
 
         ps_fn = os.path.join(config.working_dir, 'make_devide_package.sh')
@@ -90,42 +93,44 @@ sh %s package_only
 
         utils.output('Wrote %s.' % (ps_fn,))
 
-        # and then build the packages
+        # and then build the packages if the config says so
         ##################################################################
-        ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
-                            'distdevide')
-        if os.path.isdir(ddir):
-            utils.output('DeVIDE packages already built, skipping...')
-            return
-        
-        ret = os.system(". %s && sh %s" %
-                        (os.path.join(config.working_dir, 'setup_env.sh'),
-                         ps_fn))
-        
-        if ret != 0:
-            utils.error("Could not build DeVIDE installer packages.")
-            return
-        
+        if config.BUILD_DEVIDE_DISTRIBUTABLES:
+            ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
+                                'distdevide')
+            if os.path.isdir(ddir):
+                utils.output('DeVIDE packages already built, skipping...')
+                return
+            
+            ret = os.system(". %s && sh %s" %
+                            (os.path.join(config.working_dir, 'setup_env.sh'),
+                             ps_fn))
+            
+            if ret != 0:
+                utils.error("Could not build DeVIDE installer packages.")
+                return
+            
 
     def install(self):
-        # check if devide has already been installed.
-        if os.path.isdir(self.inst_dir):
-            utils.output('DeVIDE already installed.  Skipping step.')
-            return
+        if config.BUILD_DEVIDE_DISTRIBUTABLES:
+            # check if devide has already been installed.
+            if os.path.isdir(self.inst_dir):
+                utils.output('DeVIDE already installed.  Skipping step.')
+                return
 
-        # we should have complete DeVIDE tarballs in devide/installer
-        # and a complete (including ITK) installation in distdevide
-        # copy binaries in distdevide to wd/inst/devide
-        ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
-                            'distdevide')
+            # we should have complete DeVIDE tarballs in devide/installer
+            # and a complete (including ITK) installation in distdevide
+            # copy binaries in distdevide to wd/inst/devide
+            ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
+                                'distdevide')
 
-        # we have to delete the destination path first
-        # copytree doesn't work if the destination doesn't exist
-        if os.path.isdir(self.inst_dir):
-            shutil.rmtree(self.inst_dir)
-            
-        shutil.copytree(ddir, self.inst_dir)
-               
+            # we have to delete the destination path first
+            # copytree doesn't work if the destination doesn't exist
+            if os.path.isdir(self.inst_dir):
+                shutil.rmtree(self.inst_dir)
+                
+            shutil.copytree(ddir, self.inst_dir)
+                   
     def clean_build(self):
         utils.output("Removing build and installation directories.")
 
