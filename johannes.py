@@ -71,9 +71,8 @@ def main():
             elif o in ('-m', '--mode'):
                 if a in ('clean', 'clean_build'):
                     mode = 'clean_build'
-                elif a == 'get_only':
-                    mode = a
-                elif a == 'configure_only':
+                elif a in ['get_only', 'unpack_only',
+                        'configure_only']:
                     mode = a
 
             elif o in ('--install-packages'):
@@ -128,6 +127,10 @@ def main():
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()
 
+        def unpack_stage(ip, n):
+            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
+            ip.unpack()
+
         def configure_stage(ip, n):
             utils.output("%s :: configure()" % (n,), rpad, rpad_char)
             ip.configure()
@@ -139,8 +142,7 @@ def main():
         def all_stages(ip, n):
             get_stage(ip, n)
 
-            utils.output("%s :: unpack()" % (n,), rpad, rpad_char)
-            ip.unpack()
+            unpack_stage(ip, n)
 
             configure_stage(ip, n)            
 
@@ -158,6 +160,11 @@ def main():
                     utils.output("%s GET_ONLY" % (n,), 70, '#')
                     utils.output("%s" % (n,), 70, '#')
                     get_stage(ip, n)
+
+                elif mode == 'unpack_only':
+                    utils.output("%s UNPACK_ONLY" % (n,), 70, '#')
+                    utils.output("%s" % (n,), 70, '#')
+                    unpack_stage(ip, n)
 
                 elif mode == 'configure_only':
                     utils.output("%s CONFIGURE_ONLY" % (n,), 70, '#')
