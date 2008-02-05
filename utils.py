@@ -163,8 +163,6 @@ def unpack_build(archive_filename):
 
     else:
         for zipinfo in zip.infolist():
-            print "%s - %s" % (zipinfo.filename, \
-                               human_size(zipinfo.file_size))
 
             # first check if we need to create the directory housing
             # the file
@@ -173,7 +171,9 @@ def unpack_build(archive_filename):
                 os.makedirs(dn)
 
             # we only extract the file if it's not purely a directory
-            if not os.path.isdir(dn):
+            if not os.path.isdir(zipinfo.filename):
+                print "%s - %s" % (zipinfo.filename, \
+                                   human_size(zipinfo.file_size))
                 f = open(zipinfo.filename, 'w')
                 f.write(zip.read(zipinfo.filename))
                 f.close()
