@@ -73,7 +73,7 @@ def human_size(num):
             return "%3.1f%s" % (num, x)
         num /= 1024.0
 
-def make_command(solution_file, install=False):
+def make_command(solution_file, install=False, project=None):
     """Install packages can use this method to invoke the
     platform-specific compile command.  This can only be run after
     config.init() has run.
@@ -81,6 +81,8 @@ def make_command(solution_file, install=False):
     @param solution_file: only used on Windows, ignored on *ix.
     @param install: if true, invokes the make command to install the
     built project.
+    @param project: Only build the named project on Windows.  This
+    overrides the install setting!  
     """
 
     if os.name == 'posix':
@@ -94,6 +96,9 @@ def make_command(solution_file, install=False):
             prj = 'INSTALL'
         else:
             prj = 'ALL_BUILD'
+
+        if project:
+            prj = project
 
         make_command = config.MAKE % (solution_file, prj)
 
