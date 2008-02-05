@@ -56,7 +56,6 @@ class ItkVtkGlue(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
-        os.chdir(self.build_dir)
         # we need the PATH types for VTK_DIR and for WrapITK_DIR, else
         # these variables are NOT stored.  That's just weird.
         # we also need to pass the same instal prefix as for ITK, so
@@ -73,9 +72,8 @@ class ItkVtkGlue(InstallPackage):
                         config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
                         sys.executable)
 
-        # first pass
-        ret = os.system("%s %s %s" %
-                        (config.CMAKE, cmake_params, self.source_dir))
+        ret = utils.cmake_command(self.build_dir, self.source_dir,
+                cmake_params)
 
         if ret != 0:
             utils.error(

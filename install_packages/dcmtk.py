@@ -37,7 +37,7 @@ class DCMTK(InstallPackage):
             utils.output("Unpacking DCMTK source.")
             utils.unpack_build(self.tbfilename)
 
-    def configure(self):
+    def configure_posix(self):
         os.chdir(self.build_dir)
         
         if os.path.exists("dcmdata/config.log"):
@@ -64,6 +64,15 @@ class DCMTK(InstallPackage):
 
             utils.re_sub_filter_file(repls, 'config/Makefile.def')
 
+
+    def configure_nt(self):
+        pass
+
+    def configure(self):
+        if os.name == 'nt':
+            configure_nt()
+        else:
+            configure_posix()
 
     def build(self):
         os.chdir(self.build_dir)

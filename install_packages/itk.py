@@ -60,7 +60,6 @@ class ITK(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
-        os.chdir(self.build_dir)
         # ITK_USE_REVIEW *must* be on for ItkVtkGlue to work!
         # following types are wrapped:
         # complex_float, float, signed_short, unsigned long,
@@ -85,8 +84,8 @@ class ITK(InstallPackage):
                        % (self.inst_dir,
                           sys.executable)
 
-        ret = os.system("%s %s %s" %
-                        (config.CMAKE, cmake_params, self.source_dir))
+        ret = utils.cmake_command(self.build_dir, self.source_dir,
+                cmake_params)
 
         if ret != 0:
             utils.error("Could not configure ITK.  Fix and try again.")

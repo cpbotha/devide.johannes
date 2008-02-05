@@ -6,6 +6,37 @@ import shutil
 import tarfile
 import zipfile
 
+def cmake_command(build_dir, source_dir, cmake_params):
+    """Invoke correct cmake commands to configure a build directory.
+
+    @param build_dir: out-of-source build directory.  method will
+    chdir there before invoking cmake
+    @param source_dir: location of the source that will be built
+    @cmake_params: string of "-Dparam=blaat -Dparam2=blaat" specifying
+    cmake parameters
+    """
+
+    # first create correct cmake invocation
+    cmake = '%s %s' % (config.CMAKE_BINPATH, config.CMAKE_DEFAULT_PARAMS)
+    if len(config.CMAKE_PRE_VARS):
+        cmake = config.CMAKE_PRE_VARS + ' ' + cmake
+
+    # then go to build_dir
+    os.chdir(build_dir)
+
+    # then invoke cmake
+    ret = os.system("%s %s %s" %
+                    (cmake, cmake_params, source_dir))
+
+    # on windows, we have to do this a second time (first time
+    # configures, second time generates)
+    if os.name == 'nt':
+        ret = os.system("%s %s %s" %
+                        (cmake, cmake_params, source_dir))
+
+    return ret
+
+
 def output(message, rpad=0, rpad_char='#'):
     s = "#####J> %s" % (message,)
     pn = rpad - len(s)

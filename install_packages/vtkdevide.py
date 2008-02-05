@@ -40,7 +40,6 @@ class VTKDEVIDE(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
-        os.chdir(self.build_dir)
         cmake_params = "-DBUILD_SHARED_LIBS=ON " \
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
@@ -51,8 +50,8 @@ class VTKDEVIDE(InstallPackage):
                        (self.inst_dir, config.VTK_DIR,
                         config.DCMTK_INCLUDE, config.DCMTK_LIB)
 
-        ret = os.system("%s %s %s" %
-                        (config.CMAKE, cmake_params, self.source_dir))
+        ret = utils.cmake_command(self.build_dir, self.source_dir,
+                cmake_params)
 
         if ret != 0:
             utils.error("Could not configure vtkdevide.  Fix and try again.")

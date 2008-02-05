@@ -50,8 +50,9 @@ SO_EXT = ''
 
 # this one will be set by the cmake install package, but we set it to
 # a sane default in case the cmake install package is not executed.
-CMAKE = 'cmake' 
+CMAKE_BINPATH = 'cmake' 
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
+CMAKE_PRE_VARS = ''
 
 DCMTK_INCLUDE = ''
 DCMTK_LIB = ''
