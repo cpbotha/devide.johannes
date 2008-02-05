@@ -68,30 +68,32 @@ class ITKTUDOSS(InstallPackage):
 
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'lib/_itktudossPython.so')):
+        posix_file = os.path.join(self.build_dir, 
+                'bin/_itktudossPython.so')
+        nt_file = os.path.join(self.build_dir, 'lib',
+                config.BUILD_TARGET, '_itktudossPython.dll')
 
+        if utils.file_exists(posix_file, nt_file):    
             utils.output("itktudoss already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('ITKTUDOSS.sln')
+
             if ret != 0:
                 utils.error("Could not build itktudoss.  Fix and try again.")
         
 
     def install(self):
-        #config.VTKTUD_LIB = os.path.join(self.build_dir, 'bin')
-        #config.VTKTUD_PYTHON = os.path.join(
-        #    self.source_dir, 'Wrapping/Python')
-
         if os.path.exists(
-            os.path.join(config.WRAPITK_LIB, '_itktudossPython.so')):
+            os.path.join(config.WRAPITK_LIB, 
+                '_itktudossPython' + config.SO_EXT)):
             utils.output("itktudoss already installed.  Skipping step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s install" % (config.MAKE,))
+            ret = utils.make_command('itktudoss.sln', install=True)
+
             if ret != 0:
                 utils.error(
                     "Could not install itktudoss.  Fix and try again.")

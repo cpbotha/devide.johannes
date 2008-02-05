@@ -58,14 +58,17 @@ class VTKDEVIDE(InstallPackage):
         
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'bin/libvtkdevideExternalPython.so')):
+        posix_file = os.path.join(self.build_dir, 
+                'bin/libvtkdevideExternalPython.so')
+        nt_file = os.path.join(self.build_dir, 'bin',
+                config.BUILD_TARGET, 'vtkdevideExternalPython.dll')
 
+        if utils.file_exists(posix_file, nt_file):    
             utils.output("vtkdevide already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('VTKDEVIDE.sln')
             if ret != 0:
                 utils.error("Could not build vtkdevide.  Fix and try again.")
         

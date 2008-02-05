@@ -66,6 +66,8 @@ class DCMTK(InstallPackage):
 
 
     def configure_nt(self):
+        # modify CMakeLists, changing occurrences of /MT into /MD and
+        # /MTd into /MDd
         pass
 
     def configure(self):

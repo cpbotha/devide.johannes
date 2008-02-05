@@ -55,14 +55,18 @@ class VTKTUDOSS(InstallPackage):
         
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'bin/libvtktudossGraphicsPython.so')):
+        posix_file = os.path.join(self.build_dir, 
+                'bin/libvtktudossGraphicsPython.so')
+        nt_file = os.path.join(self.build_dir, 'bin',
+                config.BUILD_TARGET, 'vtktudossGraphicsPythonD.dll')
 
+        if utils.file_exists(posix_file, nt_file):    
             utils.output("vtktudoss already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('VTKTUDOSS.sln')
+
             if ret != 0:
                 utils.error("Could not build vtktudoss.  Fix and try again.")
         

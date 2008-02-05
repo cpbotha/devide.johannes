@@ -81,14 +81,16 @@ class ItkVtkGlue(InstallPackage):
 
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'lib/_ItkVtkGluePython.so')):
+        posix_file = os.path.join(self.build_dir, 'lib/_ItkVtkGluePython.so')
+        nt_file = os.path.join(self.build_dir, 'lib',
+                config.BUILD_TARGET, '_ItkVtkGluePython.dll')
 
+        if utils.file_exists(posix_file, nt_file):
             utils.output("ItkVtkGlue already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('ItkVtkGlue.sln')
             if ret != 0:
                 utils.error("Could not build ItkVtkGlue.  Fix and try again.")
         
@@ -97,12 +99,14 @@ class ItkVtkGlue(InstallPackage):
         # config.WRAPITK_LIB is something like:
         # /inst/Insight/lib/InsightToolkit/WrapITK/lib
         if os.path.exists(
-            os.path.join(config.WRAPITK_LIB, '_ItkVtkGluePython.so')):
+            os.path.join(config.WRAPITK_LIB, 
+                '_ItkVtkGluePython' + config.SO_EXT)):
             utils.output("ItkVtkGlue already installed.  Skipping step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s install" % (config.MAKE,))
+            ret = utils.make_command('ItkVtkGlue.sln', install=True)
+
             if ret != 0:
                 utils.error(
                     "Could not install ItkVtkGlue.  Fix and try again.")

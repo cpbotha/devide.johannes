@@ -131,14 +131,16 @@ class VTK(InstallPackage):
 
     def install(self):
         posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
-        nt_file = os.path.join(self.inst_dir, 'bin',
-                config.BUILD_TARGET, 'vtkpython.exe')
+        nt_file = os.path.join(self.inst_dir, 'bin', 'vtkpython.exe')
 
         if utils.file_exists(posix_file, nt_file):    
             utils.output("VTK already installed.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
+            # with VTK ParaView-3-2-1 on Windows, I had to run the
+            # installer twice.  The first time, it quit (without
+            # detectable errors) whilst copying vtkBYUReader.h!
             ret = utils.make_command('VTK.sln', install=True)
             if ret != 0:
                 utils.error("Could not install VTK.  Fix and try again.")

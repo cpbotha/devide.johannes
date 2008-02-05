@@ -119,10 +119,12 @@ class ITK(InstallPackage):
         # contains itk.py
         config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
 
-        
-        if os.path.exists(
-            os.path.join(config.WRAPITK_LIB, 
-                '_UnaryPixelMathPython' + config.SO_EXT)):
+       
+        filename = os.path.join(config.WRAPITK_LIB, 
+                '_UnaryPixelMathPython' + config.SO_EXT)
+        print filename
+
+        if os.path.exists(filename):
             utils.output("ITK already installed.  Skipping step.")
 
         else:
