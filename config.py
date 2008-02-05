@@ -92,7 +92,7 @@ def init(wd, the_profile):
     # use conditionals based on os.name (posix, nt) and sys.platform (linux2,
     # win32)
 
-    global MAKE, CMAKE_DEFAULT_PARAMS
+    global MAKE, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS, SO_EXT
 
     if os.name == 'posix':
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
