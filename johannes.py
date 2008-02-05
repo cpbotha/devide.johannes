@@ -6,6 +6,7 @@ from install_packages import vtk
 from install_packages import vtktudoss, vtkdevide
 from install_packages import itk, itkvtkglue, itktudoss
 from install_packages import installer, setupenvironment, devide
+import os
 import sys
 import utils
 
@@ -122,6 +123,13 @@ def main():
             # ONLY w.r.t. case
             install_packages = [i.__class__.__name__.lower()
                                 for i in ip_instance_list]
+
+        # if we're on windows, remove a number of packages regardless
+        # of user preferences.  Sorry user!
+        if os.name == 'nt':
+            nogo = ['numpy', 'wxpython', 'matplotlib', 'cmake']
+            install_packages = [i for i in install_packages if i not
+                    in nogo]
 
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
