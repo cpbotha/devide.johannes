@@ -5,22 +5,27 @@ import re
 import shutil
 import utils
 
-DCMTK_TARBALL = "dcmtk-3.5.4.tar.gz"
+if os.name == 'nt':
+    DCMTK_ARCHIVE = "dcmtk-3.5.4.zip"
+else:
+    DCMTK_ARCHIVE = "dcmtk-3.5.4.tar.gz"
+
 DCMTK_URL = "ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/" \
-            "dcmtk354/%s" % (DCMTK_TARBALL,)
+            "dcmtk354/%s" % (DCMTK_ARCHIVE,)
 DCMTK_DIRBASE = "dcmtk-3.5.4"
 
 class DCMTK(InstallPackage):
     
     def __init__(self):
-        self.tbfilename = os.path.join(config.archive_dir, DCMTK_TARBALL)
+        self.tbfilename = os.path.join(config.archive_dir,
+                DCMTK_ARCHIVE)
         self.build_dir = os.path.join(config.build_dir, DCMTK_DIRBASE)
         self.inst_dir = os.path.join(config.inst_dir, 'dcmtk')
 
     def get(self):
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
-                         (DCMTK_TARBALL,))
+                         (DCMTK_ARCHIVE,))
         else:
             utils.goto_archive()
             utils.urlget(DCMTK_URL)

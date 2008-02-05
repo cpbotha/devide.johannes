@@ -128,6 +128,8 @@ class ITK(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
+            # really sad, ITK 3.4 on Windows rebuilds the whole ITK
+            # when I request an INSTALL
             ret = utils.make_command('ITK.sln', install=True) 
 
             if ret != 0:
