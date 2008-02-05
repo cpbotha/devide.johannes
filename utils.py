@@ -4,6 +4,7 @@ import re
 import sys, urllib
 import shutil
 import tarfile
+import zipfile
 
 def output(message, rpad=0, rpad_char='#'):
     s = "#####J> %s" % (message,)
@@ -30,6 +31,16 @@ def file_exists(posix_file, nt_file):
         fn = nt_file
 
     return os.path.exists(fn)
+
+def human_size(num):
+    """Method to convert number of bytes to human-readable version.
+    Code from http://blogmag.net/blog/read/38/Print_human_readable_file_size
+    """
+
+    for x in ['bytes','KB','MB','GB','TB']:
+        if num < 1024.0:
+            return "%3.1f%s" % (num, x)
+        num /= 1024.0
 
 def make_command(solution_file, install=False):
     """Install packages can use this method to invoke the
@@ -92,23 +103,51 @@ def goto_build():
 def unpack_build(archive_filename):
     """Unpack given archive_filename in build directory.
     """
+
     goto_build()
+
+    tar = None
+    zip = None
 
     if archive_filename.lower().endswith('bz2'):
         m = 'r|bz2'
-    else:
-        m = 'r|gz'
-        
-    tar = tarfile.open(archive_filename, m)
+        tar = tarfile.open(archive_filename, m)
 
-    # extractall is from python 2.5 onwards
-    # tar.extractall()
-    # we use a form that works on previous versions as well
-    for tarinfo in tar:
-        print tarinfo.name
-        tar.extract(tarinfo)
-        
-    tar.close()
+    elif archive_filename.lower().endswith('gz'):
+        m = 'r|gz'
+        tar = tarfile.open(archive_filename, m)
+
+    else:
+        zip = zipfile.ZipFile(archive_filename)
+
+    if tar:
+        # extractall is from python 2.5 onwards
+        # tar.extractall()
+        # we use a form that works on previous versions as well
+        for tarinfo in tar:
+            print tarinfo.name
+            tar.extract(tarinfo)
+            
+        tar.close()
+
+    else:
+        for zipinfo in zip.infolist():
+            print "%s - %s" % (zipinfo.filename, \
+                               human_size(zipinfo.file_size))
+
+            # first check if we need to create the directory housing
+            # the file
+            dn = os.path.dirname(zipinfo.filename)
+            if dn and not os.path.isdir(dn):
+                os.makedirs(dn)
+
+            # we only extract the file if it's not purely a directory
+            if not os.path.isdir(dn):
+                f = open(zipinfo.filename, 'w')
+                f.write(zip.read(zipinfo.filename))
+                f.close()
+
+        zip.close()
 
 def re_sub_filter_file(repls, filename):
     """Given a list of repls (tuples with regular expresions and
