@@ -75,6 +75,10 @@ class VTKDEVIDE(InstallPackage):
 
     def install(self):
         config.VTKDEVIDE_LIB = os.path.join(self.build_dir, 'bin')
+        if os.name == 'nt':
+            config.VTKDEVIDE_LIB = os.path.join(
+                    config.VTKDEVIDE_LIB, config.BUILD_TARGET)
+
         config.VTKDEVIDE_PYTHON = os.path.join(
             self.source_dir, 'Wrapping/Python')
 

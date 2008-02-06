@@ -73,6 +73,10 @@ class VTKTUDOSS(InstallPackage):
 
     def install(self):
         config.VTKTUDOSS_LIB = os.path.join(self.build_dir, 'bin')
+        if os.name == 'nt':
+            config.VTKTUDOSS_LIB = os.path.join(
+                    config.VTKTUDOSS_LIB, config.BUILD_TARGET)
+
         config.VTKTUDOSS_PYTHON = os.path.join(
             self.build_dir, 'Wrapping/Python')
  
