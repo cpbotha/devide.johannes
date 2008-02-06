@@ -36,7 +36,7 @@ DEVIDE_REL = JOHANNES_REL
 
 # 
 ITKTUDOSS_REL = "5"
-VTKTUDOSS_REL = "5"
+VTKTUDOSS_REL = "6"
 
 BUILD_TARGET = 'RelWithDebInfo'
 
@@ -59,6 +59,7 @@ DCMTK_LIB = ''
 
 VTK_DIR = ''
 VTK_LIB = ''
+VTK_SODIR = ''
 VTK_PYTHON = ''
 
 WX_LIB_PATH = ''
