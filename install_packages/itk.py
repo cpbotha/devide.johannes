@@ -35,7 +35,19 @@ class ITK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout ITK.  Fix and try again.")
 
-	    os.chdir(os.path.join(self.source_dir, 'Utilities'))
+            # now we need to update one file so that PYDs are
+            # correctly generated on Windows
+            if os.name == 'nt':
+                os.chdir(os.path.join(
+                    self.source_dir, 'Wrapping', 'WrapITK'))
+                ret = os.system(
+                    "%s update -r 1.6 CreateWrapperLibrary.cmake" %
+                    (config.CVS,))
+                if ret != 0:
+                    utils.error(
+                        "Could not update CreateWrapperLibrary.cmake.")
+
+            os.chdir(os.path.join(self.source_dir, 'Utilities'))
             ret = os.system("%s -d %s co %s %s" %
                             (config.CVS, CS_CVS_REPO, CVS_VERSION, CS_BASENAME))
             
