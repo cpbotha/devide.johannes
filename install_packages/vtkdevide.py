@@ -61,7 +61,8 @@ class VTKDEVIDE(InstallPackage):
         posix_file = os.path.join(self.build_dir, 
                 'bin/libvtkdevideExternalPython.so')
         nt_file = os.path.join(self.build_dir, 'bin',
-                config.BUILD_TARGET, 'vtkdevideExternalPython.dll')
+                config.BUILD_TARGET, 
+                'vtkdevideExternalPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):    
             utils.output("vtkdevide already built.  Skipping build step.")

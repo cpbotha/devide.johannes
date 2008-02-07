@@ -71,7 +71,8 @@ class ITKTUDOSS(InstallPackage):
         posix_file = os.path.join(self.build_dir, 
                 'bin/_itktudossPython.so')
         nt_file = os.path.join(self.build_dir, 'lib',
-                config.BUILD_TARGET, '_itktudossPython.dll')
+                config.BUILD_TARGET, 
+                '_itktudossPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):    
             utils.output("itktudoss already built.  Skipping build step.")
@@ -87,7 +88,7 @@ class ITKTUDOSS(InstallPackage):
     def install(self):
         if os.path.exists(
             os.path.join(config.WRAPITK_LIB, 
-                '_itktudossPython' + config.SO_EXT)):
+                '_itktudossPython' + config.PYE_EXT)):
             utils.output("itktudoss already installed.  Skipping step.")
 
         else:

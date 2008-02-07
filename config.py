@@ -47,6 +47,7 @@ BUILD_TARGET = 'RelWithDebInfo'
 # will be written by init()
 MAKE = ''
 SO_EXT = ''
+PYE_EXT = ''
 
 # this one will be set by the cmake install package, but we set it to
 # a sane default in case the cmake install package is not executed.
@@ -93,7 +94,7 @@ def init(wd, the_profile):
     # use conditionals based on os.name (posix, nt) and sys.platform (linux2,
     # win32)
 
-    global MAKE, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS, SO_EXT
+    global MAKE, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS, SO_EXT, PYE_EXT
 
     if os.name == 'posix':
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
@@ -105,6 +106,7 @@ def init(wd, the_profile):
             CMAKE_PRE_VARS = ''
 
         SO_EXT = '.so'
+        PYE_EXT = SO_EXT
 
     elif os.name == 'nt':
         CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 8 2005"'
@@ -114,5 +116,6 @@ def init(wd, the_profile):
             '/projectconfig "RelWithDebInfo|Win32" /build RelWithDebInfo'
 
         SO_EXT = '.dll'
+        PYE_EXT = '.pyd'
 
 

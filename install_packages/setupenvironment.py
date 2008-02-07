@@ -64,7 +64,7 @@ nt_script = """
 @set PYTHONPATH=%(vtktudoss_python)s;%(vtktudoss_lib)s;%%PYTHONPATH%%
 
 @rem ITK
-@set PATH=%(itk_lib)s;%(wrapitk_lib)s;%%PATH%%
+@set PATH=%(itk_bin)s;%(wrapitk_lib)s;%%PATH%%
 @set PYTHONPATH=%(wrapitk_python)s;%(wrapitk_lib)s;%%PYTHONPATH%%
 """
 
@@ -82,6 +82,7 @@ class SetupEnvironment(InstallPackage):
                    'vtkdevide_python' : config.VTKDEVIDE_PYTHON,
                    'vtktudoss_lib' : config.VTKTUDOSS_LIB,
                    'vtktudoss_python' : config.VTKTUDOSS_PYTHON,
+                   'itk_bin' : config.ITK_BIN,
                    'itk_lib' : config.ITK_DIR,
                    'wrapitk_lib' : config.WRAPITK_LIB,
                    'wrapitk_python' : config.WRAPITK_PYTHON}

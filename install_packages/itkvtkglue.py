@@ -83,7 +83,8 @@ class ItkVtkGlue(InstallPackage):
     def build(self):
         posix_file = os.path.join(self.build_dir, 'lib/_ItkVtkGluePython.so')
         nt_file = os.path.join(self.build_dir, 'lib',
-                config.BUILD_TARGET, '_ItkVtkGluePython.dll')
+                config.BUILD_TARGET, 
+                '_ItkVtkGluePython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):
             utils.output("ItkVtkGlue already built.  Skipping build step.")
@@ -100,7 +101,7 @@ class ItkVtkGlue(InstallPackage):
         # /inst/Insight/lib/InsightToolkit/WrapITK/lib
         if os.path.exists(
             os.path.join(config.WRAPITK_LIB, 
-                '_ItkVtkGluePython' + config.SO_EXT)):
+                '_ItkVtkGluePython' + config.PYE_EXT)):
             utils.output("ItkVtkGlue already installed.  Skipping step.")
 
         else:

@@ -96,7 +96,8 @@ class ITK(InstallPackage):
                 'bin/_RegistrationPython.so')
 
         nt_file = os.path.join(self.build_dir, 'bin',
-                config.BUILD_TARGET, '_RegistrationPython.dll')
+                config.BUILD_TARGET, 
+                '_RegistrationPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):
             utils.output("ITK already built.  Skipping build step.")
@@ -110,7 +111,10 @@ class ITK(InstallPackage):
     def install(self):
         # ITK external packages will need this
         config.ITK_INSTALL_PREFIX = os.path.join(self.inst_dir)
-        # this is the dir with the cmake config as well as all binaries
+        # on Windows, contains the main ITK dlls
+        config.ITK_BIN = os.path.join(self.inst_dir, 'bin')
+        # this is the dir with the cmake config and on *ix the main
+        # SOs (on Win these are in ITK_BIN)
         config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
         # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)
         config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
@@ -121,8 +125,7 @@ class ITK(InstallPackage):
 
        
         filename = os.path.join(config.WRAPITK_LIB, 
-                '_UnaryPixelMathPython' + config.SO_EXT)
-        print filename
+                '_UnaryPixelMathPython' + config.PYE_EXT)
 
         if os.path.exists(filename):
             utils.output("ITK already installed.  Skipping step.")
