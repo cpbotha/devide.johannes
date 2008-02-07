@@ -40,6 +40,37 @@ def cmake_command(build_dir, source_dir, cmake_params):
 
     return ret
 
+def find_command_with_ver(name, command, ver_re):
+    retval = False
+    s,o = get_status_output(command)
+
+    if s:
+        msg2 = 'NOT FOUND!'
+
+    else:
+        mo = re.search(ver_re, o, re.MULTILINE) 
+        if mo:
+            msg2 = 'version %s found.' % (mo.groups()[0],)
+            retval = True
+        else:
+            msg2 = 'could not extract version.'
+
+
+    output("%s: %s" % (name, msg2))
+
+    return retval
+
+def get_status_output(command):
+    """Run command, return output of command and exit code in status.
+    In general, status is None for success and 1 for command not
+    found.
+    """
+
+    ph = os.popen(command)
+    output = ph.read()
+    status = ph.close()
+    return (status, output)
+
 
 def output(message, rpad=0, rpad_char='#'):
     s = "#####J> %s" % (message,)

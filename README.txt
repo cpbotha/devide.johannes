@@ -42,13 +42,16 @@ C. To make a fully self-contained vl-e compatible tarball:
 Note on Windows
 ---------------
 
-I did have a look at porting johannes to Windows.  At the time
-(February 2008), the porting effort outweighed the advantages.  One of
-the major problems was getting the basic stuff (python, numpy,
-wxpython, matplotlib) in a *localised* and automatic build.
+Due to certain issues on Windows (primarily the difficulty of building
+Python extensions automatically if you don't have the exact same
+compiler as Python), johannes can NOT build the basic stuff on
+Windows.
 
-Please see WINDOWS.txt for instructions on getting your DeVIDE build
-system up and running on that platform.
+However, it IS able to build the more complex stuff, such as dcmtk,
+itk, vtk and all the other high-level dependencies of DeVIDE.
+Please see WINDOWS.txt for more details on what johannes can do for
+you on Windows.
+
 
 
 

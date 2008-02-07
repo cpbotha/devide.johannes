@@ -40,13 +40,56 @@ Options are as follows:
                          default all
 --package-set          : preset collections of packages; vtkitk
 
-All of this ugliness is copyright 2006,2007 Charl P. Botha http://cpbotha.net/
+All of this ugliness is copyright 2006-2008 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
 """
 
     print message
 
+def windows_prereq_check(working_dir):
+    """Perform Windows system check for prerequisite software and
+    directory structure.
+    """
+
+    utils.output("Windows prerequisites check", 70, '#')
+
+    v = utils.find_command_with_ver(
+            'MS Visual Studio', '%s /?' % (config.DEVENV,), 
+            'Visual Studio Version (.*)\.$')
+
+    v = v and utils.find_command_with_ver(
+            'CMake', '%s --version' % (config.CMAKE_BINPATH,),
+            '^cmake version\s+(.*)$')
+
+    v = v and utils.find_command_with_ver(
+            'CVS', '%s -v' % (config.CVS,),
+            '\(CVS\)\s+(.*)\s+')
+
+    v = v and utils.find_command_with_ver(
+            'Subversion (SVN)', '%s --version' % (config.SVN,),
+            'version\s+(.*)$')
+
+    v = v and utils.find_command_with_ver(
+            'patch', '%s -v' % (config.PATCH,),
+            '^patch\s+(.*)$')
+
+    # now check that working_dir contains the required subdirs
+    dv = True
+    for wsub in ['archive', 'build', 'inst']:
+        cdir = os.path.join(working_dir, wsub)
+        if os.path.isdir(cdir):
+            msg = '%s exists.' % (cdir,)
+        else:
+            msg = '%s does not exist.' % (cdir,)
+            dv = False
+
+        utils.output(msg)
+
+    return v and dv
+
+
 def main():
+
     if len(sys.argv) < 2:
         usage()
 
@@ -57,7 +100,9 @@ def main():
         try:
             optlist, args = getopt.getopt(
                 sys.argv[1:], 'hm:p:w:',
-                ['help', 'mode=', 'install-packages=', 'package-set', 'working-dir='])
+                ['help', 'mode=', 'install-packages=', 
+                    'package-set', 'working-dir=',
+                    'no-win-prereq'])
 
         except getopt.GetoptError,e:
             usage()
@@ -67,6 +112,7 @@ def main():
         install_packages = None
         working_dir = None
         profile = 'default'
+        no_win_prereq = False
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -98,6 +144,9 @@ def main():
             elif o in ('--profile'):
                 profile = a
 
+            elif o in ('--no-win-prereq'):
+                no_win_prereq = True
+
         # we need at LEAST a working directory
         if not working_dir:
             usage()
@@ -105,6 +154,19 @@ def main():
 
         # init config (DURR)
         config.init(working_dir, profile)
+
+        if os.name == 'nt' and not no_win_prereq:
+            if not windows_prereq_check(working_dir):
+                utils.output(
+                     'Windows prerequisites do not check out.  '
+                     'Fix and try again.', 70, '-')
+                return
+            else:
+                utils.output(
+                        'Windows prerequisites all good.', 70, '-')
+
+
+
 
         ip_instance_list = [numpy.NumPy(),
                             wxpython.WXPython(),

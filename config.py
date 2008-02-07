@@ -3,12 +3,19 @@
 # See COPYRIGHT for details.
 
 
-# for binaries not on your PATH, you should specify the complete path here,
+# for binaries NOT on your PATH, you should specify the complete path here,
 # e.g. SVN = '/usr/bin/svn'.  For binaries ON your path, only the binary name
 # e.g. SVN = 'svn'
+
 SVN = 'svn'
 CVS = 'cvs -z3'
 PATCH = 'patch'
+# only required on Windows
+DEVENV = 'devenv' 
+# on windows, cmake should be on your path, or you should specify the
+# full path here.  On *ix, you don't have to touch this (johannes
+# builds and configures its own cmake)
+CMAKE_BINPATH = 'cmake' 
 
 # set to True if you want to use distcc on *ix, False otherwise
 HAVE_DISTCC = False 
@@ -54,9 +61,8 @@ MAKE = ''
 SO_EXT = ''
 PYE_EXT = ''
 
-# this one will be set by the cmake install package, but we set it to
-# a sane default in case the cmake install package is not executed.
-CMAKE_BINPATH = 'cmake' 
+# together with CMAKE_BIN_PATH, these will be used by the utils
+# modules to build up a cmake command.
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
 CMAKE_PRE_VARS = ''
 
@@ -99,7 +105,8 @@ def init(wd, the_profile):
     # use conditionals based on os.name (posix, nt) and sys.platform (linux2,
     # win32)
 
-    global MAKE, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS, SO_EXT, PYE_EXT
+    global MAKE, DEVENV, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS
+    global SO_EXT, PYE_EXT
 
     if os.name == 'posix':
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
@@ -117,7 +124,7 @@ def init(wd, the_profile):
         CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 8 2005"'
         # where the %s substitution is the SLN file
         # important that devenv is run, and NOT devenv.exe!
-        MAKE = 'devenv %s /project %s ' \
+        MAKE = DEVENV + ' %s /project %s ' \
             '/projectconfig "RelWithDebInfo|Win32" /build RelWithDebInfo'
 
         SO_EXT = '.dll'

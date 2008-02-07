@@ -1,10 +1,10 @@
 As explained in the johannes README.txt, porting the first stages of
 johannes (python, numpy, wxpython, matplotlib) to Windows is probably
-not going to happen.  I am considering porting the later stages
-(cmake, vtk, itk, etc.).
+not going to happen.   However, johannes CAN build the difficult
+stuff, also automatically and nicely localised in a folder.
 
-Until then, this file contains detailed instructions on how to get
-your DeVIDE build system going on Windows without johannes.  *sniff*
+1. First get and install all the prerequisites:
+-----------------------------------------------
 
 * Get and install Python 2.5 from [1].  If you have win64, you should
   rather install python-2.5.1.amd64.msi.
@@ -13,14 +13,6 @@ your DeVIDE build system going on Windows without johannes.  *sniff*
 * Get and install matplotlib 0.91.2 [4]
 * Get and install cmake 2.4.8 [5] and choose to add it to the system
   path (for yourself, or for all users).
-* Get and unpack dcmtk 3.5.4 from [6].
-
-ITK can be configured with:
-python /path/to/johannes.py -w workingdir -p itk -m configure_only
-
-devenv is in Microsoft Visual Studio 8\Common7\ide\devenv.exe
-
-
 
 [1] http://www.python.org/ftp/python/2.5.1/python-2.5.1.msi
 [2] http://surfnet.dl.sourceforge.net/sourceforge/numpy/numpy-1.0.4.win32-py2.5.msi
@@ -28,3 +20,7 @@ devenv is in Microsoft Visual Studio 8\Common7\ide\devenv.exe
 [4] http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/matplotlib-0.91.2.win32-py2.5.exe
 [5] http://www.cmake.org/files/v2.4/cmake-2.4.8-win32-x86.exe
 [6] ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/dcmtk354/dcmtk-3.5.4.zip
+
+2. Now let johannes do its magic:
+---------------------------------
+
