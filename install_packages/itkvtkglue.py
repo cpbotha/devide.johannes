@@ -1,3 +1,7 @@
+# Copyright (c) Charl P. Botha, TU Delft.
+# All rights reserved.
+# See COPYRIGHT for details.
+
 import config
 from install_package import InstallPackage
 import os

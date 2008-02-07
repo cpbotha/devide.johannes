@@ -1,3 +1,8 @@
+# Copyright (c) Charl P. Botha, TU Delft.
+# All rights reserved.
+# See COPYRIGHT for details.
+
+
 # for binaries not on your PATH, you should specify the complete path here,
 # e.g. SVN = '/usr/bin/svn'.  For binaries ON your path, only the binary name
 # e.g. SVN = 'svn'

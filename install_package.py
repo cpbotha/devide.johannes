@@ -1,3 +1,8 @@
+# Copyright (c) Charl P. Botha, TU Delft.
+# All rights reserved.
+# See COPYRIGHT for details.
+
+
 class InstallPackage:
 
     """All libraries that should be installed by johannes have to have

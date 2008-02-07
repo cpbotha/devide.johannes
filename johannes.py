@@ -1,3 +1,7 @@
+# Copyright (c) Charl P. Botha, TU Delft.
+# All rights reserved.
+# See COPYRIGHT for details.
+
 import config
 import getopt
 from install_packages import numpy, matplotlib

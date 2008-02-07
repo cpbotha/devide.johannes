@@ -1,3 +1,6 @@
+# Copyright (c) Charl P. Botha, TU Delft.
+# All rights reserved.
+# See COPYRIGHT for details.
 
 # since ITK 3.4 (perhaps earlier) you do NOT HAVE TO BUILD CABLESWIG
 # separately.  This install package is on ice.  DO NOT USE.
