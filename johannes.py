@@ -39,6 +39,7 @@ Options are as follows:
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all
 --package-set          : preset collections of packages; vtkitk
+--no-win-prereq        : do NOT do Windows prerequisites check.
 
 All of this ugliness is copyright 2006-2008 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
