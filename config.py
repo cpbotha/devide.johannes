@@ -18,7 +18,7 @@ DEVENV = 'devenv'
 CMAKE_BINPATH = 'cmake' 
 
 # set to True if you want to use distcc on *ix, False otherwise
-HAVE_DISTCC = True
+HAVE_DISTCC = False
 # on *ix, use this many parallel make processes
 NUM_MAKE_PROCESSES = 6
 
@@ -38,6 +38,7 @@ import sys
 # modify the devide version to include the johannes version used to
 # build it, so it is important that you change this file (config.py)
 # when you prepare a johannes-based release.
+
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
