@@ -18,9 +18,9 @@ DEVENV = 'devenv'
 CMAKE_BINPATH = 'cmake' 
 
 # set to True if you want to use distcc on *ix, False otherwise
-HAVE_DISTCC = False 
+HAVE_DISTCC = True
 # on *ix, use this many parallel make processes
-NUM_MAKE_PROCESSES = 2
+NUM_MAKE_PROCESSES = 6
 
 # Set to True if you want to build redistributable DeVIDE binaries
 # with PyInstaller as part of the johannes build process.  If False,
@@ -73,10 +73,17 @@ VTK_LIB = ''
 VTK_SODIR = ''
 VTK_PYTHON = ''
 
+VTKDEVIDE_LIB = ''
+VTKDEVIDE_PYTHON = ''
+
+VTKTUDOSS_LIB = ''
+VTKTUDOSS_PYTHON =''
+
 WX_LIB_PATH = ''
 WXP_PYTHONPATH = ''
 
 ITK_DIR = ''
+ITK_BIN = ''
 WRAPITK_LIB = ''
 WRAPITK_PYTHON = ''
 
