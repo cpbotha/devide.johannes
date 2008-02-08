@@ -52,10 +52,14 @@ class DeVIDE(InstallPackage):
         shutil.copytree(self.source_dir, self.build_dir)
 
         # now modify the version unpacked devide.py
+        utils.output("Modifying DeVIDE version")
         devide_py = os.path.join(self.build_dir, 'devide.py')
+        # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
+        # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
+        # "$JOHANNES_REL") 
         utils.re_sub_filter_file(
-            [('(DEVIDE_VERSION\s*=\s*).*$', '\\1"%s.%s"' %
-              (SVN_REL, config.JOHANNES_REL))],
+            [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
+              (config.JOHANNES_REL,))],
             devide_py)
 
     def build(self):
