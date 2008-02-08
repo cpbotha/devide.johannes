@@ -3,6 +3,11 @@
 # this will build and install python in the johannes working directory
 # copyright cpbotha.net
 
+
+# change this to 0 if you DON'T want this script to do its
+# rudimentary dependency checking.
+TEST_DEPS=1
+
 if [ -z $1 ]; then
 echo "Specify working directory as first parameter."
 exit;
@@ -22,8 +27,50 @@ echo "You have to run bootstrap_stage1.sh before you run stage2."
 exit
 fi
 
+
 cd $1
 WD=`pwd`
+
+if [ "$TEST_DEPS" -ne 0 ]; then
+
+echo "JOHANNES ##### testing dependencies.  Edit this script and "
+echo "               set TEST_DEPS to 0 to disable this."
+
+# test whether gcc and bz2 are available
+DEPS_TEST_FN=dtest.c
+echo "#include <bzlib.h>" > $DEPS_TEST_FN
+echo "#include <ncurses.h>" >> $DEPS_TEST_FN
+echo "#include <gtk/gtkversion.h>" >> $DEPS_TEST_FN
+echo "#include <ft2build.h>" >> $DEPS_TEST_FN
+echo "#include <png.h>" >> $DEPS_TEST_FN
+echo "#include <zlib.h>" >> $DEPS_TEST_FN
+echo "int main(void) {}" >> $DEPS_TEST_FN
+cc -I/usr/include/gtk-2.0 -I/usr/include/freetype2 -o dtest $DEPS_TEST_FN
+
+if [ "$?" -ne "0" ]; then
+    rm -f dtest*
+    echo "JOHANNES ##### cc (compiler) or necessary headers not found."
+    echo "See error above.  Please fix and try again."
+    exit
+fi
+
+# test whether g++ is available
+echo "int main(void) {}" > cpptest.cc 
+c++ -o cpptest cpptest.cc
+if [ "$?" -ne "0" ]; then
+    rm -f cpptest*
+    echo "JOHANNES ##### c++ (compiler) not found."
+    echo "Please fix and try again."
+    exit
+fi
+
+echo ">>>>> Dependency checking successful."
+
+# end of if [ "$TEST_DEPS" ...
+fi
+
+exit
+
 
 cd build
 tar xjvf ../archive/Python-2.5.1.tar.bz2
