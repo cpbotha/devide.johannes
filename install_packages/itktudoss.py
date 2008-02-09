@@ -73,7 +73,7 @@ class ITKTUDOSS(InstallPackage):
 
     def build(self):
         posix_file = os.path.join(self.build_dir, 
-                'bin/_itktudossPython.so')
+                'lib/_itktudossPython.so')
         nt_file = os.path.join(self.build_dir, 'lib',
                 config.BUILD_TARGET, 
                 '_itktudossPython' + config.PYE_EXT)
