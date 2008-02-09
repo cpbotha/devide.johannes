@@ -69,8 +69,6 @@ echo ">>>>> Dependency checking successful."
 # end of if [ "$TEST_DEPS" ...
 fi
 
-exit
-
 
 cd build
 tar xjvf ../archive/Python-2.5.1.tar.bz2
