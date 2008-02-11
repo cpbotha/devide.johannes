@@ -39,7 +39,6 @@ import sys
 # modify the devide version to include the johannes version used to
 # build it, so it is important that you change this file (config.py)
 # when you prepare a johannes-based release.
-
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
