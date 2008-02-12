@@ -39,7 +39,7 @@ echo "               set TEST_DEPS to 0 to disable this."
 # test whether gcc and bz2 are available
 DEPS_TEST_FN=dtest.c
 echo "#include <bzlib.h>" > $DEPS_TEST_FN
-echo "#include <sqlite.h>" > $DEPS_TEST_FN
+echo "#include <sqlite3.h>" > $DEPS_TEST_FN
 echo "#include <ncurses.h>" >> $DEPS_TEST_FN
 echo "#include <gtk/gtkversion.h>" >> $DEPS_TEST_FN
 echo "#include <ft2build.h>" >> $DEPS_TEST_FN
