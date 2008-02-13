@@ -201,7 +201,7 @@ def main():
                 utils.output(
                         'Windows prerequisites all good.', 70, '-')
 
-        else:
+        elif os.name == 'posix' and not no_prereq_check:
             if not posix_prereq_check(working_dir):
                 utils.output(
                      'Posix prerequisites do not check out.  '
