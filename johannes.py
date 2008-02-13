@@ -47,6 +47,41 @@ and is hereby put under a BSD license.
 
     print message
 
+def posix_prereq_check(working_dir):
+    """Perform posix system check for prerequisite software.
+
+    Largest part of this checking is done in the second bootstrap
+    shell script (executed before this file).  Here we check for basic
+    stuff like cvs, svn and patch.
+    """
+
+    v = utils.find_command_with_ver(
+            'CVS', '%s -v' % (config.CVS,),
+            '\(CVS\)\s+(.*)\s+')
+
+    v = v and utils.find_command_with_ver(
+            'Subversion (SVN)', '%s --version' % (config.SVN,),
+            'version\s+(.*)$')
+
+    v = v and utils.find_command_with_ver(
+            'patch', '%s -v' % (config.PATCH,),
+            '^patch\s+(.*)$')
+
+    # now check that working_dir contains the required subdirs
+    dv = True
+    for wsub in ['archive', 'build', 'inst']:
+        cdir = os.path.join(working_dir, wsub)
+        if os.path.isdir(cdir):
+            msg = '%s exists.' % (cdir,)
+        else:
+            msg = '%s does not exist.' % (cdir,)
+            dv = False
+
+        utils.output(msg)
+
+    return v and dv
+
+
 def windows_prereq_check(working_dir):
     """Perform Windows system check for prerequisite software and
     directory structure.
@@ -103,7 +138,7 @@ def main():
                 sys.argv[1:], 'hm:p:w:',
                 ['help', 'mode=', 'install-packages=', 
                     'package-set', 'working-dir=',
-                    'no-win-prereq'])
+                    'no-prereq-check'])
 
         except getopt.GetoptError,e:
             usage()
@@ -113,7 +148,7 @@ def main():
         install_packages = None
         working_dir = None
         profile = 'default'
-        no_win_prereq = False
+        no_prereq_check = False
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -145,8 +180,8 @@ def main():
             elif o in ('--profile'):
                 profile = a
 
-            elif o in ('--no-win-prereq'):
-                no_win_prereq = True
+            elif o in ('--no-prereq-check'):
+                no_prereq_check = True
 
         # we need at LEAST a working directory
         if not working_dir:
@@ -156,7 +191,7 @@ def main():
         # init config (DURR)
         config.init(working_dir, profile)
 
-        if os.name == 'nt' and not no_win_prereq:
+        if os.name == 'nt' and not no_prereq_check:
             if not windows_prereq_check(working_dir):
                 utils.output(
                      'Windows prerequisites do not check out.  '
@@ -166,7 +201,15 @@ def main():
                 utils.output(
                         'Windows prerequisites all good.', 70, '-')
 
-
+        else:
+            if not posix_prereq_check(working_dir):
+                utils.output(
+                     'Posix prerequisites do not check out.  '
+                     'Fix and try again.', 70, '-')
+                return
+            else:
+                utils.output(
+                        'Posix prerequisites all good.', 70, '-')
 
 
         ip_instance_list = [numpy.NumPy(),
