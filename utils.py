@@ -214,7 +214,9 @@ def unpack_build(archive_filename):
             if not os.path.isdir(zipinfo.filename):
                 print "%s - %s" % (zipinfo.filename, \
                                    human_size(zipinfo.file_size))
-                f = open(zipinfo.filename, 'w')
+                # have to write this in binary mode, else we screw up
+                # binaries (EXEs and such) quite badly. :)
+                f = open(zipinfo.filename, 'wb')
                 f.write(zip.read(zipinfo.filename))
                 f.close()
 
