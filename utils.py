@@ -41,6 +41,14 @@ def cmake_command(build_dir, source_dir, cmake_params):
     return ret
 
 def find_command_with_ver(name, command, ver_re):
+    """Try to run command, use ver_re regular expression to parse for
+    the version string.  This will print for example:
+    CVS: version 2.11 found.
+
+    @return: True if command found, False if not or if version could
+    not be parsed. 
+    """
+
     retval = False
     s,o = get_status_output(command)
 
