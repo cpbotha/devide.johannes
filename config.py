@@ -133,7 +133,7 @@ def init(wd, the_profile):
         # where the %s substitution is the SLN file
         # important that devenv is run, and NOT devenv.exe!
         MAKE = DEVENV + ' %s /project %s ' \
-            '/projectconfig "RelWithDebInfo|Win32" /build RelWithDebInfo'
+            '/projectconfig "%s|Win32" /build %s'
 
         SO_EXT = '.dll'
         PYE_EXT = '.pyd'

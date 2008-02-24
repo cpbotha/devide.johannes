@@ -84,8 +84,14 @@ class DCMTK(InstallPackage):
             utils.output("DCMTK build already configured.")
             return
 
-        # modify CMakeLists, changing occurrences of /MT into /MD and
-        # /MTd into /MDd
+        # modify CMakeLists, changing occurrences of /MT
+        # (multithreaded runtime options) into /MD (multithreaded DLL
+        # runtime options) and /MTd into /MDd
+        # we need to change this to match what we have in VTK
+        # furthermore, note that we build with 'Release', which
+        # results in '/MD /O2'.  'RelWithDebInfo' builds with /MDd,
+        # which then links to the debug runtimes.  VTK and ITK don't
+        # do that if you select RelWithDebInfo.
         os.chdir(self.build_dir)
         repls = [('\/MT', '/MD')]
         utils.re_sub_filter_file(repls, 'CMakeLists.txt') 
@@ -113,8 +119,10 @@ class DCMTK(InstallPackage):
             utils.output('dcmtk::dcmdata already built.  Skipping.')
 
         else:
+            # Release buildtype (vs RelWithDebInfo) so we build with
+            # /MD and not /MDd
             ret = utils.make_command('dcmtk.sln', install=False,
-                    project='dcmdata')
+                    project='dcmdata', win_buildtype='Release')
 
             if ret != 0:
                 utils.error('Could not build dcmtk::dcmdata.')
@@ -124,8 +132,10 @@ class DCMTK(InstallPackage):
             utils.output('dcmtk::ofstd already built.  Skipping.')
 
         else:
+            # Release buildtype (vs RelWithDebInfo) so we build with
+            # /MD and not /MDd
             ret = utils.make_command('dcmtk.sln', install=False,
-                    project='ofstd')
+                    project='ofstd', win_buildtype='Release')
 
             if ret != 0:
                 utils.error('Could not build dcmtk::ofstd.')

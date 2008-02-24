@@ -116,7 +116,8 @@ def human_size(num):
             return "%3.1f%s" % (num, x)
         num /= 1024.0
 
-def make_command(solution_file, install=False, project=None):
+def make_command(solution_file, install=False, project=None,
+        win_buildtype=None):
     """Install packages can use this method to invoke the
     platform-specific compile command.  This can only be run after
     config.init() has run.
@@ -126,6 +127,8 @@ def make_command(solution_file, install=False, project=None):
     built project.
     @param project: Only build the named project on Windows.  This
     overrides the install setting!  
+    @param win_buildtype: change the buildtype on windows, default
+    value is None, which gets translated to 'RelWithDebInfo'
     """
 
     if os.name == 'posix':
@@ -143,7 +146,13 @@ def make_command(solution_file, install=False, project=None):
         if project:
             prj = project
 
-        make_command = config.MAKE % (solution_file, prj)
+        if win_buildtype:
+            buildtype = win_buildtype
+        else:
+            buildtype = 'RelWithDebInfo'
+
+        make_command = config.MAKE % \
+            (solution_file, prj, buildtype, buildtype)
 
     return os.system(make_command)
 
