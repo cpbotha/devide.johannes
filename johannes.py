@@ -297,5 +297,7 @@ def main():
                     utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
                     ip.clean_build()
 
+        utils.output("Now please read the RESULTS section of README.txt!")
+
 if __name__ == '__main__':
     main()

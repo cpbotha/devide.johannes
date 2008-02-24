@@ -19,8 +19,24 @@ stuff, also automatically and nicely localised in a folder.
 [3] http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.7.1-py25.exe
 [4] http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/matplotlib-0.91.2.win32-py2.5.exe
 [5] http://www.cmake.org/files/v2.4/cmake-2.4.8-win32-x86.exe
-[6] ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/dcmtk354/dcmtk-3.5.4.zip
 
 2. Now let johannes do its magic:
 ---------------------------------
+
+python \where\you\put\it\johannes.py -w your_working_dir
+
+Wait a few hours.  When the build is done, results are as explained in
+the RESULTS section of the main johannes README.txt file.
+
+APPENDIX:
+---------
+
+Let's say you don't really want DeVIDE, but you'd like to use johannes
+to build for example just VTK and/or ITK.  You can!
+
+Follow all instructions under 1., then do for example:
+
+python \where\you\put\it\johannes.py -w your_working_dir -p itk,vtk
+
+See johannes --help for clues to package names.
 

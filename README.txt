@@ -10,7 +10,7 @@ bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev | libgtk2.0-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (*optional* for faster numpy)
 
-A. For a normal full build, do the following:
+A. For a NORMAL full build (the default), do the following:
   
   1. sh bootstrap_stage1.sh workingdir
   2. sh bootstrap_stage2.sh workingdir
@@ -18,7 +18,7 @@ A. For a normal full build, do the following:
   4. python johannes.py -w workingdir
 
 B. To make a fully self-contained source tarball that can be built
-  later, do the following:
+  later, do the following (not often used):
 
   1. sh bootstrap_stage1.sh workingdir
   2. python johannes.py -w workingdir -m get_only
@@ -30,7 +30,8 @@ B. To make a fully self-contained source tarball that can be built
   3. . workingdir/python_setup_env.sh
   4. python workingdir/johannes/johannes.py -w workingdir
   
-C. To make a fully self-contained vl-e compatible tarball:
+C. To make a fully self-contained vl-e compatible tarball (not often
+   used):
   
   1. follow B
   2. cd workingdir/johannes/vle
@@ -38,6 +39,30 @@ C. To make a fully self-contained vl-e compatible tarball:
   4. cd ../../..
   5. mv workingdir devide-xxxx.yyyy.0
   6. tar czvf devide-xxxx.yyyy.0.tar.gz devide-xxxx.yyyy.0
+
+RESULTS
+-------
+
+After following strategy A above (or its Windows equivalent as
+explained in WINDOWS.txt), you will have three batch files / shell
+scripts in your working directory:
+
+* setup_env.sh/cmd: This sets up your environment so that you can work
+  with everything you have built.  This has to be run ONCE for every
+  console in which you want to make use of the development
+  environment.
+
+* devide.sh/cmd: AFTER having run setup_env, use this to invoke DeVIDE
+  directly from its build directory.  This is useful if you're doing
+  development on the core DeVIDE sources or any of the libraries it
+  uses.
+
+* make_devide_package.sh/cmd: AFTER having run setup_env, use this to
+  build redistributable, self-contained binaries. These will be
+  generated in workingdir/build/devide/installer/distdevide and an
+  installer exe or binary tarball will be waiting in
+  workingdir/build/devide/installer.  You can send this to your
+  friends!
   
 Note on Windows
 ---------------
