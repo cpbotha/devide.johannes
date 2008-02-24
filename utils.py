@@ -128,7 +128,8 @@ def make_command(solution_file, install=False, project=None,
     @param project: Only build the named project on Windows.  This
     overrides the install setting!  
     @param win_buildtype: change the buildtype on windows, default
-    value is None, which gets translated to 'RelWithDebInfo'
+    value is None, which gets translated to the value of
+    config.BUILD_TARGET. 
     """
 
     if os.name == 'posix':
@@ -149,7 +150,7 @@ def make_command(solution_file, install=False, project=None,
         if win_buildtype:
             buildtype = win_buildtype
         else:
-            buildtype = 'RelWithDebInfo'
+            buildtype = config.BUILD_TARGET
 
         make_command = config.MAKE % \
             (solution_file, prj, buildtype, buildtype)

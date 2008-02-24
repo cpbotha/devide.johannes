@@ -18,6 +18,12 @@ DCMTK_URL = "ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/" \
             "dcmtk354/%s" % (DCMTK_ARCHIVE,)
 DCMTK_DIRBASE = "dcmtk-3.5.4"
 
+# DCMTKs build target / type on Windows deviates from everything else
+# this is because DCMTK RelWithDebInfo (johannes-wide default) implies
+# /MDd (and not just /MD), thus linking with the debug runtime.  Hence
+# we build dcmtk with Release, i.e. only /MD and no debug runtime.
+BUILD_TARGET = 'Release'
+
 class DCMTK(InstallPackage):
     """This is not the best example of a johannes install package.  In
     fact, it's probably the worst example, mostly because DCMTK builds
@@ -88,10 +94,6 @@ class DCMTK(InstallPackage):
         # (multithreaded runtime options) into /MD (multithreaded DLL
         # runtime options) and /MTd into /MDd
         # we need to change this to match what we have in VTK
-        # furthermore, note that we build with 'Release', which
-        # results in '/MD /O2'.  'RelWithDebInfo' builds with /MDd,
-        # which then links to the debug runtimes.  VTK and ITK don't
-        # do that if you select RelWithDebInfo.
         os.chdir(self.build_dir)
         repls = [('\/MT', '/MD')]
         utils.re_sub_filter_file(repls, 'CMakeLists.txt') 
@@ -115,27 +117,27 @@ class DCMTK(InstallPackage):
         # do check for some file
 
         if os.path.exists(os.path.join('dcmdata/libsrc',
-            config.BUILD_TARGET, 'dcmdata.lib')):
+            BUILD_TARGET, 'dcmdata.lib')):
             utils.output('dcmtk::dcmdata already built.  Skipping.')
 
         else:
             # Release buildtype (vs RelWithDebInfo) so we build with
             # /MD and not /MDd
             ret = utils.make_command('dcmtk.sln', install=False,
-                    project='dcmdata', win_buildtype='Release')
+                    project='dcmdata', win_buildtype=BUILD_TARGET)
 
             if ret != 0:
                 utils.error('Could not build dcmtk::dcmdata.')
 
         if os.path.exists(os.path.join('ofstd/libsrc',
-            config.BUILD_TARGET, 'ofstd.lib')):
+            BUILD_TARGET, 'ofstd.lib')):
             utils.output('dcmtk::ofstd already built.  Skipping.')
 
         else:
             # Release buildtype (vs RelWithDebInfo) so we build with
             # /MD and not /MDd
             ret = utils.make_command('dcmtk.sln', install=False,
-                    project='ofstd', win_buildtype='Release')
+                    project='ofstd', win_buildtype=BUILD_TARGET)
 
             if ret != 0:
                 utils.error('Could not build dcmtk::ofstd.')
@@ -177,7 +179,7 @@ class DCMTK(InstallPackage):
 
             for modname in ['dcmdata', 'ofstd']:
                 lib_src_fn = os.path.join('%s/libsrc' % (modname,), 
-                    config.BUILD_TARGET, '%s.lib' % (modname,))
+                    BUILD_TARGET, '%s.lib' % (modname,))
                 lib_dst_fn = os.path.join(lib_dir, 
                         '%s.lib' % (modname,))
 
