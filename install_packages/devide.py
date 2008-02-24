@@ -7,6 +7,7 @@ from install_package import InstallPackage
 import os
 import utils
 import shutil
+import sys
 
 BASENAME = "devide"
 SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
@@ -66,18 +67,30 @@ class DeVIDE(InstallPackage):
         # first make script for starting DeVIDE right from the build dir
         # if the user wants to do so...
         ##################################################################
-        script = """
+
+        if os.name == 'nt':
+            edfb_script = """
+@rem invokes DeVIDE directly from build directory
+@echo Did you remember to run setup_env.cmd?
+%s %s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %%9 
+
+            """ % (sys.executable, config.DEVIDE_PY,)
+            edfb_fn = 'devide.cmd'
+
+        else:
+            edfb_script = """
 #!/bin/bash
-# invoke DeVIDE ###########################################
+# invokes DeVIDE directly from build directory
 echo "Did you remember to run \". setup_env.sh\"?"
 echo "Starting up DeVIDE..."
-python %s $*
+%s %s $*
 
-        """ % (config.DEVIDE_PY,)
+            """ % (sys.executable, config.DEVIDE_PY,)
+            edfb_fn = 'devide.sh'
 
-        invoking_script_fn = os.path.join(config.working_dir, 'devide.sh')
+        invoking_script_fn = os.path.join(config.working_dir, edfb_fn)
         isf = file(invoking_script_fn, 'w')
-        isf.write(script)
+        isf.write(edfb_script)
         isf.close()
 
         utils.output('Wrote %s.' % (invoking_script_fn,))
@@ -85,16 +98,30 @@ python %s $*
         # now also create script with which packages can be built
         #################################################################
         PYINSTALLER_SCRIPT = os.path.join(config.INSTALLER_DIR, 'Build.py')
+        IDIR = os.path.join(self.build_dir, 'installer')
+        MAKEDIST_SCRIPT = os.path.join(IDIR, 'make_dist.py')
+        SPECFILE = os.path.join(IDIR, 'devide.spec')
 
-        package_script = """
+        if os.name == 'nt':
+            package_script = """
+@rem build DeVIDE redistributable binary packages.            
+@echo Did you remember to run setup_env.cmd?
+%s %s -s %s -i %s 
+
+            """ % (sys.executable, MAKEDIST_SCRIPT, SPECFILE, PYINSTALLER_SCRIPT)
+            ps_fn1 = 'make_devide_package.cmd'
+
+        else:
+            package_script = """
 #!/bin/bash
+# build DeVIDE redistributable binary packages.
 echo "Did you remember to run \". setup_env.sh\"?"
-export PYINSTALLER_SCRIPT=%s
-sh %s package_only
+%s %s -s %s -i %s 
 
-        """ % (PYINSTALLER_SCRIPT, config.DEVIDE_MAKERELEASE_SH)
+            """ % (sys.executable, MAKEDIST_SCRIPT, SPECFILE, PYINSTALLER_SCRIPT)
+            ps_fn1 = 'make_devide_package.sh'
 
-        ps_fn = os.path.join(config.working_dir, 'make_devide_package.sh')
+        ps_fn = os.path.join(config.working_dir, ps_fn1)
         psf = file(ps_fn, 'w')
         psf.write(package_script)
         psf.close()
@@ -109,10 +136,17 @@ sh %s package_only
             if os.path.isdir(ddir):
                 utils.output('DeVIDE packages already built, skipping...')
                 return
-            
-            ret = os.system(". %s && sh %s" %
-                            (os.path.join(config.working_dir, 'setup_env.sh'),
-                             ps_fn))
+           
+            if os.name == 'nt':
+                setup_script = os.path.join(
+                        config.working_dir, 'setup_env.cmd')
+
+                ret = os.system("%s & %s" % (setup_script, ps_fn))
+
+            else:
+                ret = os.system(". %s && sh %s" %
+                                (os.path.join(config.working_dir, 'setup_env.sh'),
+                                 ps_fn))
             
             if ret != 0:
                 utils.error("Could not build DeVIDE installer packages.")
