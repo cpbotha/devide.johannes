@@ -37,6 +37,11 @@ EXC_PATCH_URL = PDIR1 + EXC_PATCH
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 VTKPRPRTY_PATCH_URL = PDIR1 + VTKPRPRTY_PATCH
+
+# fixes mouse capture brokenness in ParaView-3-2-1 VTK
+# will commit this to VTK head with the week (20080229)
+WXRWI_CAPTURE_PATCH = "wxVTKRWI_mouse_capture.diff"
+WXRWI_CAPTURE_PATCH_URL = PDIR1 + WXRWI_CAPTURE_PATCH
                   
 class VTK(InstallPackage):
     
@@ -49,6 +54,8 @@ class VTK(InstallPackage):
                                                EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.archive_dir,
                                                  VTKPRPRTY_PATCH)
+        self.wxrwi_capture_patch_filename = os.path.join(
+                config.archive_dir, WXRWI_CAPTURE_PATCH)
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -86,6 +93,20 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply VTKPRPRTY patch.  Fix and try again.")
+
+        if not os.path.exists(self.wxrwi_capture_patch_filename):
+            utils.goto_archive()
+            utils.urlget(WXRWI_CAPTURE_PATCH_URL)
+
+            # WXRWI_CAPTURE PATCH
+            utils.output("Applying WXRWI_CAPTURE patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % \
+                        (config.PATCH, self.wxrwi_capture_patch_filename))
+            if ret != 0:
+                utils.error(
+                    "Could not apply WXRWI_CAPTURE patch.  Fix and try again.")
 
  
     def unpack(self):
