@@ -37,13 +37,13 @@ import sys
 
 # currently, this is only being used by the devide InstallPackage to
 # modify the devide version to include the johannes version used to
-# build it, so it is important that you change this file (config.py)
-# when you prepare a johannes-based release.
-
+# build it, so it is important that you change this timestamp so that
+# config.py gets updated with a new revision keyword when you are
+# shipping a new devide.
+STAMP = "20080302-21:52"
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
-#DEVIDE_REL = "2482" # check svn log devide for this...
 # same repo, current johannes should be able to build current devide
 DEVIDE_REL = JOHANNES_REL
 
