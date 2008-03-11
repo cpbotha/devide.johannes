@@ -38,14 +38,18 @@ echo "               set TEST_DEPS to 0 to disable this."
 
 # test whether gcc and bz2 are available
 DEPS_TEST_FN=dtest.c
-echo "#include <bzlib.h>" > $DEPS_TEST_FN
-echo "#include <sqlite3.h>" > $DEPS_TEST_FN
-echo "#include <ncurses.h>" >> $DEPS_TEST_FN
-echo "#include <gtk/gtkversion.h>" >> $DEPS_TEST_FN
-echo "#include <ft2build.h>" >> $DEPS_TEST_FN
-echo "#include <png.h>" >> $DEPS_TEST_FN
-echo "#include <zlib.h>" >> $DEPS_TEST_FN
-echo "int main(void) {}" >> $DEPS_TEST_FN
+
+cat > $DEPS_TEST_FN << EOF
+#include <bzlib.h>
+#include <sqlite3.h>
+#include <ncurses.h>
+#include <gtk/gtkversion.h>
+#include <ft2build.h>
+#include <png.h>
+#include <zlib.h>
+int main(void) {}
+EOF
+
 cc -I/usr/include/gtk-2.0 -I/usr/include/freetype2 -o dtest $DEPS_TEST_FN
 
 if [ "$?" -ne "0" ]; then
