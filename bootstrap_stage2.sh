@@ -54,8 +54,14 @@ cc -I/usr/include/gtk-2.0 -I/usr/include/freetype2 -o dtest $DEPS_TEST_FN
 
 if [ "$?" -ne "0" ]; then
     rm -f dtest*
-    echo "JOHANNES ##### cc (compiler) or necessary headers not found."
-    echo "See error above.  Please fix and try again."
+cat << EOF
+JOHANNES ##### cc (compiler) or necessary headers not found.
+See error above.  Please fix and try again.
+
+* On Ubuntu / Debian, the following will install all necessary packages:
+  sudo apt-get install libsqlite3-dev libncurses-dev libgtk2.0-dev \
+  libfreetype6-dev libpng12-dev libz-dev libbz2-dev
+EOF
     exit
 fi
 
