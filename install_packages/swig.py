@@ -18,7 +18,7 @@ if os.name == "nt":
     ARCHIVE_NAME = "%s.zip" % (ARCHIVE_BASENAME,)
 else:
     ARCHIVE_BASENAME = "%s-%s" % (BASENAME, SWIG_VER)
-    ARCHIVE_NAME = "%s.tar.gz" % (ARCHIVE_NAME,)
+    ARCHIVE_NAME = "%s.tar.gz" % (ARCHIVE_BASENAME,)
 
 SWIG_URL = BASE_URL + ARCHIVE_NAME
 
