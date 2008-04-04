@@ -57,7 +57,10 @@ class GDCM(InstallPackage):
                 "-DGDCM_USE_ITK=OFF " \
                 "-DGDCM_USE_WXWIDGETS=OFF " \
                 "-DSWIG_DIR=%s " \
-                "-DVTK_DIR=%s " % (self.inst_dir, config.SWIG_DIR, config.VTK_DIR)
+                "-DSWIG_EXECUTABLE=%s " \
+                "-DVTK_DIR=%s " % \
+                (self.inst_dir, config.SWIG_DIR,
+                        config.SWIG_EXECUTABLE, config.VTK_DIR)
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)

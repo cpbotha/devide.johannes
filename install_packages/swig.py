@@ -86,6 +86,12 @@ class SWIG(InstallPackage):
 
     def install(self):
         config.SWIG_DIR = self.build_dir
+        if os.name == 'nt':
+            ENAME = 'swig.exe'
+        else:
+            ENAME = 'swig'
+
+        config.SWIG_EXECUTABLE = os.path.join(self.build_dir, ENAME)
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is

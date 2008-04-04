@@ -25,6 +25,9 @@ PYTHONPATH=%(wxp_pythonpath)s:$PYTHONPATH
 # VTK
 LD_LIBRARY_PATH=%(vtk_sodir)s:$LD_LIBRARY_PATH
 PYTHONPATH=%(vtk_python)s:%(vtk_sodir)s:$PYTHONPATH
+# GDCM
+LD_LIBRARY_PATH=%(gdcm_lib)s:$LD_LIBRARY_PATH
+PYTHONPATH=%(gdcm_python)s:%(gdcm_lib)s:$PYTHONPATH
 # vtkdevide
 LD_LIBRARY_PATH=%(vtkdevide_lib)s:$LD_LIBRARY_PATH
 PYTHONPATH=%(vtkdevide_python)s:%(vtkdevide_lib)s:$PYTHONPATH
@@ -59,6 +62,10 @@ nt_script = """
 @set PATH=%(vtk_sodir)s;%%PATH%%
 @set PYTHONPATH=%(vtk_python)s;%(vtk_sodir)s;%%PYTHONPATH%%
 
+@rem GDCM
+@set PATH=%(gdcm_lib)s;%%PATH%%
+@set PYTHONPATH=%(gdcm_python)s;%(gdcm_lib)s;%%PYTHONPATH%%
+
 @rem vtkdevide
 @set PATH=%(vtkdevide_lib)s;%%PATH%%
 @set PYTHONPATH=%(vtkdevide_python)s;%(vtkdevide_lib)s;%%PYTHONPATH%%
@@ -82,6 +89,8 @@ class SetupEnvironment(InstallPackage):
                    'wxp_pythonpath' : config.WXP_PYTHONPATH,
                    'vtk_sodir' : config.VTK_SODIR,
                    'vtk_python' : config.VTK_PYTHON,
+                   'gdcm_lib' : config.GDCM_LIB,
+                   'gdcm_python' : config.GDCM_PYTHON,
                    'vtkdevide_lib' : config.VTKDEVIDE_LIB,
                    'vtkdevide_python' : config.VTKDEVIDE_PYTHON,
                    'vtktudoss_lib' : config.VTKTUDOSS_LIB,
