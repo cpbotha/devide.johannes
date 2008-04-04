@@ -7,6 +7,7 @@ from install_package import InstallPackage
 import os
 import shutil
 import utils
+import sys
 
 SWIG_VER = "1.3.34"
 BASENAME = "swig"
@@ -53,6 +54,10 @@ class SWIG(InstallPackage):
     def configure(self):
         if os.name == 'posix':
             os.chdir(self.build_dir)
+            if os.path.exists('config.status'):
+                utils.output('SWIG already configured, skipping step.')
+                return
+
             configure_command = \
                     "./configure --prefix=%s " \
                     "--with-python=%s " \
@@ -71,6 +76,10 @@ class SWIG(InstallPackage):
     def build(self):
         if os.name == 'posix':
             os.chdir(self.build_dir)
+            if os.path.exists('swig'):
+                utils.output('SWIG already built.  Skipping step.')
+                return
+
             ret = utils.make_command(None)
             if ret != 0:
                 utils.error("Could not build SWIG.  Fix and try again.")
