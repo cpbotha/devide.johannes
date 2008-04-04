@@ -47,17 +47,17 @@ class GDCM(InstallPackage):
             os.mkdir(self.build_dir)
 
         cmake_params = \
-                "-DBUILD_EXAMPLES=OFF" \
+                "-DBUILD_EXAMPLES=OFF " \
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                 "-DCMAKE_INSTALL_PREFIX=%s " \
                 "-DGDCM_BUILD_SHARED_LIBS=ON " \
                 "-DGDCM_BUILD_TESTING=OFF " \
-                "-DGDCM_BUILD_WRAPPING=ON" \
-                "-DGDCM_USE_VTK=ON" \
-                "-DGDCM_USE_ITK=OFF" \
-                "-DGDCM_USE_WXWIDGETS=OFF" \
-                "-DSWIG_DIR=%s" \
-                "-DVTK_DIR=%s" % (self.inst_dir, config.SWIG_DIR, config.VTK_DIR)
+                "-DGDCM_BUILD_WRAPPING=ON " \
+                "-DGDCM_USE_VTK=ON " \
+                "-DGDCM_USE_ITK=OFF " \
+                "-DGDCM_USE_WXWIDGETS=OFF " \
+                "-DSWIG_DIR=%s " \
+                "-DVTK_DIR=%s " % (self.inst_dir, config.SWIG_DIR, config.VTK_DIR)
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
