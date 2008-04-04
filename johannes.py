@@ -9,6 +9,7 @@ from install_packages import wxpython, cmake, dcmtk
 from install_packages import vtk
 from install_packages import vtktudoss, vtkdevide
 from install_packages import itk, itkvtkglue, itktudoss
+from install_packages import swig
 from install_packages import installer, setupenvironment, devide
 import os
 import sys
@@ -171,6 +172,7 @@ def main():
                     install_packages = ['vtk', 'vtktudoss', 'vtkdevide',
                                         'itk', 'itkvtkglue',
                                         'itktudoss',
+                                        'swig',
                                         'installer', 'setupenvironment',
                                         'devide']
 
@@ -223,6 +225,7 @@ def main():
                             itk.ITK(),
                             itkvtkglue.ItkVtkGlue(),
                             itktudoss.ITKTUDOSS(),
+                            swig.SWIG(),
                             installer.Installer(),
                             setupenvironment.SetupEnvironment(),
                             devide.DeVIDE()]
