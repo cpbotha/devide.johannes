@@ -31,7 +31,7 @@ class SWIG(InstallPackage):
         self.build_dir = os.path.join(
                 config.build_dir, ARCHIVE_BASENAME)
 
-        self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+        self.inst_dir = os.path.join(config.inst_dir, ARCHIVE_BASENAME)
 
     def get(self):
         if os.path.exists(self.archive_path):
@@ -51,12 +51,29 @@ class SWIG(InstallPackage):
             utils.unpack_build(self.archive_path)
 
     def configure(self):
-        pass
+        if os.name == 'posix':
+            os.chdir(self.build_dir)
+            configure_command = \
+                    "./configure --prefix=%s " \
+                    "--with-python=%s " \
+                    "--without-tcl --without-perl5 --without-java " \
+                    "--without-gcj --without-guile --without-mzscheme " \
+                    "--without-ruby --without-php4 --without-ocaml " \
+                    "--without-pike --without-chicken --without-csharp " \
+                    "--without-lua --without-allegrocl --without-clisp " \
+                    "--without-r" % (self.inst_dir, sys.executable)
+
+            ret = os.system(configure_command) 
+            if ret != 0:
+                utils.error("Could not configure SWIG.  Fix and try again.")
         
 
     def build(self):
-        pass
-        
+        if os.name == 'posix':
+            os.chdir(self.build_dir)
+            ret = utils.make_command(None)
+            if ret != 0:
+                utils.error("Could not build SWIG.  Fix and try again.")
 
     def install(self):
         config.SWIG_DIR = self.build_dir
