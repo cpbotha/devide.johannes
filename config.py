@@ -47,6 +47,8 @@ JOHANNES_REL = JOHANNES_REV.split()[1]
 # same repo, current johannes should be able to build current devide
 DEVIDE_REL = JOHANNES_REL
 
+GDCM_REL = "2905"
+
 # 
 ITKTUDOSS_REL = "5"
 VTKTUDOSS_REL = "7"
@@ -74,6 +76,9 @@ VTK_DIR = ''
 VTK_LIB = ''
 VTK_SODIR = ''
 VTK_PYTHON = ''
+
+GDCM_LIB = ''
+GDCM_PYTHON = ''
 
 VTKDEVIDE_LIB = ''
 VTKDEVIDE_PYTHON = ''
