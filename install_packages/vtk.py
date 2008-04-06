@@ -67,6 +67,26 @@ class VTK(InstallPackage):
                             (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
+            
+            # we have to update two files to specific versions for
+            # GDCM2 VTK support ##################################
+            utils.output("Updating vtkMedicalImageProperties.")
+
+            utils.goto_archive()
+            os.chdir(os.path.join(BASENAME, 'IO'))
+
+            ret1 = os.system(
+            "%s -z3 update -r 1.29 vtkMedicalImageProperties.cxx" %
+            (config.CVS,))
+
+            ret2 = os.system(
+            "%s -z3 update -r 1.23 vtkMedicalImageProperties.h" %
+            (config.CVS,))
+
+            if ret1 != 0 or ret2 != 0:
+                utils.error("Error updating vtkMedicalImageProperties.")
+
+            # end of vtkMedicalImageProperties update #############
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
