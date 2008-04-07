@@ -15,6 +15,8 @@ import utils
 
 BASENAME = "ItkVtkGlue"
 
+dependencies = ['itk', 'vtk']
+
 class ItkVtkGlue(InstallPackage):
     
     def __init__(self):

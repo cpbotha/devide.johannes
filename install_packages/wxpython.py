@@ -15,6 +15,8 @@ WXP_DIRBASE = WXP_TARBALL[0:WXP_TARBALL.find('tar.bz2')-1]
 WXP_URL = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s" % \
           (WXP_TARBALL,)
 
+dependencies = []
+
 class WXPython(InstallPackage):
 
     def __init__(self):

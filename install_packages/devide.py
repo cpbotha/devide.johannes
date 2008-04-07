@@ -14,6 +14,8 @@ SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
 # this should be the same release as johannes and the rest of devide
 SVN_REL = config.DEVIDE_REL
 
+dependencies = []
+
 class DeVIDE(InstallPackage):
     
     def __init__(self):

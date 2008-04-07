@@ -12,6 +12,8 @@ CMAKE_TARBALL = "cmake-2.4.8.tar.gz"
 CMAKE_URL = "http://www.cmake.org/files/v2.4/%s" % (CMAKE_TARBALL,)
 CMAKE_DIRBASE = "cmake-2.4.8"
 
+dependencies = []
+
 class CMake(InstallPackage):
     
     def __init__(self):

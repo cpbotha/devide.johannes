@@ -7,6 +7,8 @@ from install_package import InstallPackage
 import os
 import utils
 
+dependencies = []
+
 posix_script = """
 #!/bin/bash
 

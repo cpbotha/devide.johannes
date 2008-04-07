@@ -18,6 +18,8 @@ CS_BASENAME = "CableSwig"
 # password part of REPO spec
 CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
 
+dependencies = []
+
 
 class ITK(InstallPackage):
     

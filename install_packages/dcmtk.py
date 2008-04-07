@@ -24,6 +24,8 @@ DCMTK_DIRBASE = "dcmtk-3.5.4"
 # we build dcmtk with Release, i.e. only /MD and no debug runtime.
 BUILD_TARGET = 'Release'
 
+dependencies = []
+
 class DCMTK(InstallPackage):
     """This is not the best example of a johannes install package.  In
     fact, it's probably the worst example, mostly because DCMTK builds

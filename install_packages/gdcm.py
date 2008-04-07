@@ -13,6 +13,8 @@ SVN_REPO = \
         "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
 SVN_REL = config.GDCM_REL
 
+dependencies = ['swig', 'vtk']
+
 class GDCM(InstallPackage):
     
     def __init__(self):

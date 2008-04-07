@@ -14,6 +14,8 @@ NUMPY_URL = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s" % \
             (NUMPY_TARBALL,)
 NUMPY_DIRBASE = "numpy-1.0.4"
 
+dependencies = []
+
 class NumPy(InstallPackage):
 
     def __init__(self):

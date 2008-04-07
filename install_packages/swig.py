@@ -23,6 +23,8 @@ else:
 
 SWIG_URL = BASE_URL + ARCHIVE_NAME
 
+dependencies = []
+
 class SWIG(InstallPackage):
     
     def __init__(self):

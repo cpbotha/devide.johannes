@@ -42,6 +42,8 @@ VTKPRPRTY_PATCH_URL = PDIR1 + VTKPRPRTY_PATCH
 # will commit this to VTK head with the week (20080229)
 WXRWI_CAPTURE_PATCH = "wxVTKRWI_mouse_capture.diff"
 WXRWI_CAPTURE_PATCH_URL = PDIR1 + WXRWI_CAPTURE_PATCH
+
+dependencies = []
                   
 class VTK(InstallPackage):
     

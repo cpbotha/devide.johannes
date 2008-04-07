@@ -14,6 +14,10 @@ MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_TARBALL,)
 MPL_DIRBASE = "matplotlib-0.91.2"
 
+# I prefer that this be built with numpy, but it is not a dependency
+# per se
+dependencies = []
+
 class matplotlib(InstallPackage):
 
     def __init__(self):

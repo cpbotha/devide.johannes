@@ -17,6 +17,8 @@ BASENAME = "itktudoss"
 SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
 SVN_REL = config.ITKTUDOSS_REL
 
+dependencies = ['itk']
+
 class ITKTUDOSS(InstallPackage):
     
     def __init__(self):
