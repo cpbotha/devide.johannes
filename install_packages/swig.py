@@ -43,13 +43,16 @@ class SWIG(InstallPackage):
             utils.urlget(SWIG_URL)
 
     def unpack(self):
-        # no unpack step
-        if os.path.isdir(self.build_dir):
-            utils.output("SWIG already unpacked, skipping step.")
+        # on posix, we have to unpack in the build directory as we're
+        # actually going to compile.  On Windows, we unpack binaries
+        # in the install step.
+        if os.name == "posix":
+            if os.path.isdir(self.build_dir):
+                utils.output("SWIG already unpacked, skipping step.")
 
-        else:
-            utils.output("Unpacking SWIG.")
-            utils.unpack_build(self.archive_path)
+            else:
+                utils.output("Unpacking SWIG.")
+                utils.unpack_build(self.archive_path)
 
     def configure(self):
         if os.name == 'posix':
@@ -85,14 +88,30 @@ class SWIG(InstallPackage):
                 utils.error("Could not build SWIG.  Fix and try again.")
 
     def install(self):
-        config.SWIG_DIR = self.build_dir
+        # these always have to be set, no matter what
+        config.SWIG_DIR = self.inst_dir
         if os.name == 'nt':
             ENAME = 'swig.exe'
         else:
-            ENAME = 'swig'
+            ENAME = 'bin/swig'
 
-        config.SWIG_EXECUTABLE = os.path.join(self.build_dir, ENAME)
- 
+        config.SWIG_EXECUTABLE = os.path.join(self.inst_dir, ENAME)
+
+        # now check if the installation needs to be done
+        if os.path.exists(self.inst_dir):
+            utils.output(
+            'SWIG installation directory exists.  Skipping step.')
+            return
+
+        if os.name == 'nt':
+            # on windows, we simply unpack into the installation dir
+            utils.unpack_inst(self.archive_path)
+        else:
+            # on posix, we have to do a make install
+            os.chdir(self.build_dir)
+            ret = utils.make_command(None, install=True) 
+
+
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
         # no installation

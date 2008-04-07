@@ -92,7 +92,7 @@ class GDCM(InstallPackage):
             config.GDCM_LIB = os.path.join(
                     config.GDCM_LIB, config.BUILD_TARGET)
 
-        config.GDCM_PYTHON = os.path.join(self.build_dir, bin)
+        config.GDCM_PYTHON = os.path.join(self.build_dir, 'bin')
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is

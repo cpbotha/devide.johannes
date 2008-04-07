@@ -189,11 +189,17 @@ def goto_archive():
 def goto_build():
     os.chdir(config.build_dir)
 
-def unpack_build(archive_filename):
-    """Unpack given archive_filename in build directory.
-    """
+def goto_inst():
+    os.chdir(config.inst_dir)
 
-    goto_build()
+def unpack(archive_filename):
+    """Unpacks given archive_filename in the current directory.  It is
+    the caller's responsibility to make sure the current directory is
+    the desired destination.
+
+    It's preferable to make use of wrapper methods such as
+    unpack_build and unpack_install.
+    """
 
     tar = None
     zip = None
@@ -239,6 +245,20 @@ def unpack_build(archive_filename):
                 f.close()
 
         zip.close()
+
+def unpack_build(archive_filename):
+    """Unpack given archive_filename in build directory.
+    """
+
+    goto_build()
+    unpack(archive_filename)
+
+def unpack_inst(archive_filename):
+    """Unpack given archive_filename in installation directory.
+    """
+
+    goto_inst()
+    unpack(archive_filename)
 
 def re_sub_filter_file(repls, filename):
     """Given a list of repls (tuples with regular expresions and
