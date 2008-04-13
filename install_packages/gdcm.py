@@ -49,15 +49,18 @@ class GDCM(InstallPackage):
             os.mkdir(self.build_dir)
 
         cmake_params = \
-                "-DBUILD_EXAMPLES=OFF " \
-                "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
-                "-DCMAKE_INSTALL_PREFIX=%s " \
+                "-DGDCM_BUILD_APPLICATIONS=OFF " \
+                "-DGDCM_BUILD_EXAMPLES=OFF " \
                 "-DGDCM_BUILD_SHARED_LIBS=ON " \
                 "-DGDCM_BUILD_TESTING=OFF " \
-                "-DGDCM_BUILD_WRAPPING=ON " \
-                "-DGDCM_USE_VTK=ON " \
                 "-DGDCM_USE_ITK=OFF " \
+                "-DGDCM_USE_VTK=ON " \
                 "-DGDCM_USE_WXWIDGETS=OFF " \
+                "-DGDCM_WRAP_JAVA=OFF " \
+                "-DGDCM_WRAP_PHP=OFF " \
+                "-DGDCM_WRAP_PYTHON=ON " \
+                "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
+                "-DCMAKE_INSTALL_PREFIX=%s " \
                 "-DSWIG_DIR=%s " \
                 "-DSWIG_EXECUTABLE=%s " \
                 "-DVTK_DIR=%s " % \
