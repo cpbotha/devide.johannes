@@ -8,10 +8,12 @@ import os
 import shutil
 import utils
 
+GDCM_REL = "2943"
+
 BASENAME = "gdcm"
 SVN_REPO = \
         "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
-SVN_REL = config.GDCM_REL
+SVN_REL = GDCM_REL
 
 dependencies = ['swig', 'vtk']
 

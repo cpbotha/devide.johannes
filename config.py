@@ -47,8 +47,6 @@ JOHANNES_REL = JOHANNES_REV.split()[1]
 # same repo, current johannes should be able to build current devide
 DEVIDE_REL = JOHANNES_REL
 
-GDCM_REL = "2939"
-
 # 
 ITKTUDOSS_REL = "5"
 VTKTUDOSS_REL = "7"
