@@ -8,7 +8,7 @@ import os
 import shutil
 import utils
 
-GDCM_REL = "2943"
+GDCM_REL = "2947"
 
 BASENAME = "gdcm"
 SVN_REPO = \
