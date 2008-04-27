@@ -20,6 +20,8 @@ BASENAME = "VTK"
 # password "vtk" integrated in CVS -d spec
 CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ParaView-3-2-1" # 
+# for this tag of VTK, you also need to update wxVTKRWI.py to 1.28
+# (fix should be in VTK-5-2 when it gets branched)
 
 VTK_BASE_VERSION = "vtk-5.1"
 
