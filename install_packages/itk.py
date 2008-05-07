@@ -12,7 +12,7 @@ import sys
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ITK-3-4" # 
+CVS_VERSION = "-r ITK-3-6" # 
 
 CS_BASENAME = "CableSwig"
 # password part of REPO spec
@@ -43,7 +43,8 @@ class ITK(InstallPackage):
 
             # now we need to update one file so that PYDs are
             # correctly generated on Windows
-            if os.name == 'nt':
+            #if os.name == 'nt':
+            if False:
                 os.chdir(os.path.join(
                     self.source_dir, 'Wrapping', 'WrapITK'))
                 ret = os.system(
@@ -98,6 +99,8 @@ class ITK(InstallPackage):
                        "-DWRAP_unsigned_short=OFF " \
                        "-DWRAP_signed_short=ON " \
                        "-DWRAP_unsigned_long=ON " \
+                       "-DWRAP_Iterators=ON " \
+                       "-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=ON "\
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           sys.executable)
