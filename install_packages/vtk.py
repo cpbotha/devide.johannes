@@ -179,22 +179,6 @@ class VTK(InstallPackage):
                 utils.error("Error building VTK.  Fix and try again.")
 
     def install(self):
-        posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
-        nt_file = os.path.join(self.inst_dir, 'bin', 'vtkpython.exe')
-
-        if utils.file_exists(posix_file, nt_file):    
-            utils.output("VTK already installed.  Skipping build step.")
-
-        else:
-            os.chdir(self.build_dir)
-            # with VTK ParaView-3-2-1 on Windows, I had to run the
-            # installer twice.  The first time, it quit (without
-            # detectable errors) whilst copying vtkBYUReader.h!
-            ret = utils.make_command('VTK.sln', install=True)
-            if ret != 0:
-                utils.error("Could not install VTK.  Fix and try again.")
-
-
         config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
 
         # whatever the case may be, we have to register VTK variables
@@ -217,6 +201,35 @@ class VTK(InstallPackage):
 
         # this contains the VTK cmake config (same on *ix and Win)
         config.VTK_DIR = os.path.join(config.VTK_LIB, VTK_BASE_VERSION)
+
+
+        posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
+        nt_file = os.path.join(self.inst_dir, 'bin', 'vtkpython.exe')
+
+        if utils.file_exists(posix_file, nt_file):    
+            utils.output("VTK already installed.  Skipping build step.")
+
+        else:
+            # python 2.5.2 setup.py complains that this does not exist
+            # with VTK PV-3-2-1.  This is only on installations with
+            # EasyInstall / Python Eggs, then the VTK setup.py uses
+            # EasyInstall and not standard distutils.  gah!
+            if not os.path.exists(config.VTK_PYTHON):
+                os.makedirs(config.VTK_PYTHON)
+
+            os.chdir(self.build_dir)
+
+            # we save, set and restore the PP env variable, else
+            # stupid setuptools complains
+            save_env = os.environ.get('PYTHONPATH', '')
+            os.environ['PYTHONPATH'] = config.VTK_PYTHON
+            ret = utils.make_command('VTK.sln', install=True)
+            os.environ['PYTHONPATH'] = save_env
+
+            if ret != 0:
+                utils.error("Could not install VTK.  Fix and try again.")
+
+
         
     def clean_build(self):
         utils.output("Removing build and installation directories.")
