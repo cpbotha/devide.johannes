@@ -2,6 +2,10 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+# NB NB NB:
+# Rendering/vtkTextActor3D.{h,cxx} should be updated to 1.4 and 1.8
+# respectively for the extent fix (and the GetBoundingBox)
+
 import config
 from install_package import InstallPackage
 import os
