@@ -2,10 +2,6 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
-# NB NB NB:
-# Rendering/vtkTextActor3D.{h,cxx} should be updated to 1.4 and 1.8
-# respectively for the extent fix (and the GetBoundingBox)
-
 import config
 from install_package import InstallPackage
 import os
@@ -65,6 +61,69 @@ class VTK(InstallPackage):
         self.wxrwi_capture_patch_filename = os.path.join(
                 config.archive_dir, WXRWI_CAPTURE_PATCH)
 
+    def update_mip(self):
+        """Update vtkMedicalImageProperties files to GDCM2-compatible
+        versions.
+        """
+        # we have to update two files to specific versions for
+        # GDCM2 VTK support ##################################
+        utils.output("Updating vtkMedicalImageProperties.")
+
+        utils.goto_archive()
+        os.chdir(os.path.join(BASENAME, 'IO'))
+
+        ret1 = os.system(
+        "%s -z3 update -r 1.29 vtkMedicalImageProperties.cxx" %
+        (config.CVS,))
+
+        ret2 = os.system(
+        "%s -z3 update -r 1.23 vtkMedicalImageProperties.h" %
+        (config.CVS,))
+
+        if ret1 != 0 or ret2 != 0:
+            utils.error("Error updating vtkMedicalImageProperties.")
+
+        # end of vtkMedicalImageProperties update #############
+
+    def update_ta3d(self):
+        """Update vtkTextActor3D to DeVIDE-compatible versions (fixed
+        by yours truly in VTK CVS).
+        """
+
+        utils.output("Updating vtkTextActor3D.")
+
+        utils.goto_archive()
+        os.chdir(os.path.join(BASENAME, 'Rendering'))
+
+        ret1 = os.system(
+        "%s -z3 update -r 1.9 vtkTextActor3D.cxx" %
+        (config.CVS,))
+
+        ret2 = os.system(
+        "%s -z3 update -r 1.4 vtkTextActor3D.h" %
+        (config.CVS,))
+
+        if ret1 != 0 or ret2 != 0:
+            utils.error("Error updating vtkTextActor3D.")
+
+        # end of vtkTextActor3D update #############
+
+    def update_wxvtkrwi(self):
+        """Update wxVTKRenderWindowInteractor to latest fixed version.
+        """
+
+        utils.output("Updating wxVTKRenderWindowInteractor.")
+
+        utils.goto_archive()
+        os.chdir(os.path.join(BASENAME, 'Wrapping','Python','vtk','wx'))
+
+        ret1 = os.system(
+        "%s -z3 update -r 1.28 wxVTKRenderWindowInteractor.py" %
+        (config.CVS,))
+
+        if ret1 != 0:
+            utils.error("Error updating wxVTKRenderWindowInteractor.")
+
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("VTK already checked out, skipping step.")
@@ -75,26 +134,9 @@ class VTK(InstallPackage):
                             (config.CVS, CVS_REPO, CVS_VERSION, BASENAME))
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
-            
-            # we have to update two files to specific versions for
-            # GDCM2 VTK support ##################################
-            utils.output("Updating vtkMedicalImageProperties.")
 
-            utils.goto_archive()
-            os.chdir(os.path.join(BASENAME, 'IO'))
-
-            ret1 = os.system(
-            "%s -z3 update -r 1.29 vtkMedicalImageProperties.cxx" %
-            (config.CVS,))
-
-            ret2 = os.system(
-            "%s -z3 update -r 1.23 vtkMedicalImageProperties.h" %
-            (config.CVS,))
-
-            if ret1 != 0 or ret2 != 0:
-                utils.error("Error updating vtkMedicalImageProperties.")
-
-            # end of vtkMedicalImageProperties update #############
+        update_mip()    
+        update_ta3d()
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
