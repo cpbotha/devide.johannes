@@ -135,8 +135,9 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
-        update_mip()    
-        update_ta3d()
+        self.update_mip()    
+        self.update_ta3d()
+        self.update_wxvtkrwi()
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
@@ -164,21 +165,6 @@ class VTK(InstallPackage):
                 utils.error(
                     "Could not apply VTKPRPRTY patch.  Fix and try again.")
 
-        if not os.path.exists(self.wxrwi_capture_patch_filename):
-            utils.goto_archive()
-            utils.urlget(WXRWI_CAPTURE_PATCH_URL)
-
-            # WXRWI_CAPTURE PATCH
-            utils.output("Applying WXRWI_CAPTURE patch")
-            os.chdir(self.source_dir)
-            ret = os.system(
-                "%s -p0 < %s" % \
-                        (config.PATCH, self.wxrwi_capture_patch_filename))
-            if ret != 0:
-                utils.error(
-                    "Could not apply WXRWI_CAPTURE patch.  Fix and try again.")
-
- 
     def unpack(self):
         pass               
                 
