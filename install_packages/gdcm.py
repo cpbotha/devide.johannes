@@ -8,13 +8,13 @@ import os
 import shutil
 import utils
 
-GDCM_REL = "3127"
+GDCM_REL = "3452"
 
 BASENAME = "gdcm"
-#SVN_REPO = \
-#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
 SVN_REPO = \
-        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
+        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
+#SVN_REPO = \
+#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
 
 SVN_REL = GDCM_REL
 
