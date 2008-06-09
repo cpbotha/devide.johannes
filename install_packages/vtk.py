@@ -124,6 +124,23 @@ class VTK(InstallPackage):
         if ret1 != 0:
             utils.error("Error updating wxVTKRenderWindowInteractor.")
 
+    def update_vtkoglprop(self):
+        """Update vtkOpenGLProperty to DeVIDE-compatible versions (fixed
+        by yours truly in VTK CVS).
+        """
+
+        utils.output("Updating vtkOpenGLProperty.")
+
+        utils.goto_archive()
+        os.chdir(os.path.join(BASENAME, 'Rendering'))
+
+        ret1 = os.system(
+        "%s -z3 update -r 1.42 vtkOpenGLProperty.cxx" %
+        (config.CVS,))
+
+        if ret1 != 0:
+            utils.error("Error updating vtkOpenGLProperty.")
+
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("VTK already checked out, skipping step.")
@@ -135,9 +152,10 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
-        self.update_mip()    
-        self.update_ta3d()
-        self.update_wxvtkrwi()
+            self.update_mip()    
+            self.update_ta3d()
+            self.update_vtkoglprop()
+            self.update_wxvtkrwi()
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
