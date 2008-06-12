@@ -110,6 +110,27 @@ def windows_prereq_check(working_dir):
             'patch', '%s -v' % (config.PATCH,),
             '^patch\s+(.*)$')
 
+    # now check that setuptools is NOT installed (it screws up
+    # everything on Windows)
+    try:
+        import setuptools
+    except ImportError:
+        # this is what we want
+        utils.output(
+                'setuptools not found. Good!')
+        sut_v = True
+    else:
+        utils.output(
+                """setuptools is installed.  
+                This will break the complete DeVIDE build.  
+                Please uninstall by doing:
+                \Python25\Scripts\easy_install -m setuptools
+                del \Python25\Lib\site-packages\setuptools*.*
+                You can reinstall later by using ez_setup.py again.
+                """)
+        sut_v = False
+
+
     # now check that working_dir contains the required subdirs
     dv = True
     for wsub in ['archive', 'build', 'inst']:
@@ -122,7 +143,7 @@ def windows_prereq_check(working_dir):
 
         utils.output(msg)
 
-    return v and dv
+    return v and sut_v and dv
 
 
 def main():
