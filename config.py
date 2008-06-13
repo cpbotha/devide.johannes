@@ -21,7 +21,7 @@ CMAKE_BINPATH = 'cmake'
 HAVE_DISTCC = False
 # on *ix, use this many parallel make processes
 # if you're using distcc, this should be even higher.
-NUM_MAKE_PROCESSES = 8
+NUM_MAKE_PROCESSES = 4
 
 # Set to True if you want to build redistributable DeVIDE binaries
 # with PyInstaller as part of the johannes build process.  If False,
@@ -40,7 +40,7 @@ import sys
 # build it, so it is important that you change this timestamp so that
 # config.py gets updated with a new revision keyword when you are
 # shipping a new devide.
-STAMP = "20080612-1840"
+STAMP = "20080613-0940"
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
