@@ -72,12 +72,11 @@ class ItkVtkGlue(InstallPackage):
                        "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
-                       "-DPYTHON_EXECUTABLE=%s " \
                        % \
                        (config.ITK_INSTALL_PREFIX,
-                        config.VTK_DIR, config.ITK_DIR, config.WRAPITK_DIR,
-                        sys.executable)
-
+                        config.VTK_DIR, config.ITK_DIR,
+                        config.WRAPITK_DIR)
+ 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
 

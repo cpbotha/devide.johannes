@@ -91,6 +91,8 @@ class ITK(InstallPackage):
                        "-DUSE_WRAP_ITK=ON " \
                        "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
                        "-DPYTHON_EXECUTABLE=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DWRAP_ITK_PYTHON=ON " \
                        "-DWRAP_ITK_TCL=OFF " \
                        "-DWRAP_ITK_JAVA=OFF " \
@@ -103,7 +105,9 @@ class ITK(InstallPackage):
                        "-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=ON "\
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
-                          sys.executable)
+                          config.PYTHON_EXECUTABLE,
+                          config.PYTHON_LIBRARY,
+                          config.PYTHON_INCLUDE_PATH)
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)

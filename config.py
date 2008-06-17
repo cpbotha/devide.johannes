@@ -94,6 +94,10 @@ WRAPITK_PYTHON = ''
 
 DEVIDE_PY = ''
 
+PYTHON_EXECUTABLE = ''
+PYTHON_INCLUDE_PATH = ''
+PYTHON_LIBRARY = ''
+
 #######################################################################
 
 
@@ -140,5 +144,39 @@ def init(wd, the_profile):
 
         SO_EXT = '.dll'
         PYE_EXT = '.pyd'
+
+
+    # now setup some python stuff
+    global PYTHON_EXECUTABLE
+    global PYTHON_INCLUDE_PATH
+    global PYTHON_LIBRARY
+    from distutils import sysconfig
+    PYTHON_EXECUTABLE = sys.executable 
+    PYTHON_INCLUDE_PATH = sysconfig.get_python_inc()
+
+    # PYTHON_LIBRARY:
+    if os.name == 'posix':
+        # under linux, we want the location of libpython2.5.so, under a
+        # self-built installation, that's python-inst/lib/libpython2.5.so
+        # system installation is /usr/lib/libpython2.5.so
+        ldl = sysconfig.get_config_var('LDLIBRARY') # gives the SO name
+        ll = os.path.join(sysconfig.get_config_var('prefix'), 'lib')
+        PYTHON_LIBRARY = os.path.join(ll, ldl)
+
+    elif os.name == 'nt':
+        # under windows, we want Python25\libs\python25.lib (the link
+        # stub for the DLL)
+        # first derive python25.lib 
+        ldl = 'python%s%s.lib' % \
+                tuple(sysconfig.get_python_version().split('.')) 
+        # then figure out python25\libs
+        ll = os.path.join(sysconfig.get_config_var('prefix'), 'libs')
+        PYTHON_LIBRARY = os.path.join(ll, ldl)
+
+    if not os.path.exists(PYTHON_LIBRARY):
+        raise RuntimeError('!!!!! %s does not exist.' %
+                (PYTHON_LIBRARY,))
+
+
 
 

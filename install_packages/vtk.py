@@ -203,8 +203,12 @@ class VTK(InstallPackage):
                        "-DVTK_USE_METAIO=ON" \
                        "-DVTK_USE_PARALLEL=ON" \
                        "-DPYTHON_EXECUTABLE=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_INCLUDE_PATH=%s " \
                        "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
-                                                 sys.executable)
+                                                 config.PYTHON_EXECUTABLE,
+                                                 config.PYTHON_LIBRARY,
+                                                 config.PYTHON_INCLUDE_PATH)
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
