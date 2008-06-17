@@ -59,9 +59,16 @@ class ITKTUDOSS(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_DIR=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
-                       % \
+                       "-DPYTHON_EXECUTABLE=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_INCLUDE_PATH=%s " \
+                        % \
                        (config.ITK_INSTALL_PREFIX,
-                        config.ITK_DIR, config.WRAPITK_DIR)
+                        config.ITK_DIR, config.WRAPITK_DIR,
+                        config.PYTHON_EXECUTABLE,
+                        config.PYTHON_LIBRARY,
+                        config.PYTHON_INCLUDE_PATH)
+ 
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)

@@ -21,7 +21,7 @@ CMAKE_BINPATH = 'cmake'
 HAVE_DISTCC = False
 # on *ix, use this many parallel make processes
 # if you're using distcc, this should be even higher.
-NUM_MAKE_PROCESSES = 4
+NUM_MAKE_PROCESSES = 8
 
 # Set to True if you want to build redistributable DeVIDE binaries
 # with PyInstaller as part of the johannes build process.  If False,
