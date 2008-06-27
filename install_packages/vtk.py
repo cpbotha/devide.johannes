@@ -61,6 +61,24 @@ class VTK(InstallPackage):
         self.wxrwi_capture_patch_filename = os.path.join(
                 config.archive_dir, WXRWI_CAPTURE_PATCH)
 
+    def update_wpvi(self):
+        """Update Wrapping/Python/vtk/__init__.py to fix nasty DL bug
+        on AMD64.  Thanks to Mathieu Malaterre for finding this!
+        """
+
+        utils.output("Updating Wrapping/Python/vtk/__init__.py.")
+
+        utils.goto_archive()
+        os.chdir(os.path.join(BASENAME, 'Wrapping', 'Python', 'vtk'))
+
+        ret1 = os.system(
+        "%s -z3 update -r 1.14 __init__.py" %
+        (config.CVS,))
+
+        if ret1 != 0:
+            utils.error("Error updating W/P/v/__init__.py.")
+
+
     def update_mip(self):
         """Update vtkMedicalImageProperties files to GDCM2-compatible
         versions.
@@ -152,6 +170,7 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
+            self.update_wpvi()
             self.update_mip()    
             self.update_ta3d()
             self.update_vtkoglprop()
