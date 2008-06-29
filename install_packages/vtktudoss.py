@@ -10,7 +10,7 @@ import utils
 
 BASENAME = "vtktudoss"
 SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
-SVN_REL = config.VTKTUDOSS_REL
+SVN_REL = 8 
 
 dependencies = ['vtk']
 
