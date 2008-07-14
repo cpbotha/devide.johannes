@@ -219,12 +219,12 @@ class VTK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
 		               "-DVTK_USE_TK=NO " \
-                       "-DVTK_USE_METAIO=ON" \
-                       "-DVTK_USE_PARALLEL=ON" \
+                       "-DVTK_USE_METAIO=ON " \
+                       "-DVTK_USE_PARALLEL=ON " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DVTK_WRAP_PYTHON=ON" % (self.inst_dir,
+                       "-DVTK_WRAP_PYTHON=ON " % (self.inst_dir,
                                                  config.PYTHON_EXECUTABLE,
                                                  config.PYTHON_LIBRARY,
                                                  config.PYTHON_INCLUDE_PATH)
