@@ -10,7 +10,7 @@ import shutil
 from install_package import InstallPackage
 import utils
 
-WXP_TARBALL = "wxPython-src-2.8.7.1.tar.bz2"
+WXP_TARBALL = "wxPython-src-2.8.8.1.tar.bz2"
 WXP_DIRBASE = WXP_TARBALL[0:WXP_TARBALL.find('tar.bz2')-1]
 WXP_URL = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s" % \
           (WXP_TARBALL,)
