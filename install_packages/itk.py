@@ -12,7 +12,7 @@ import sys
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ITK-3-6" # 
+CVS_VERSION = "-r ITK-3-8" # 
 
 CS_BASENAME = "CableSwig"
 # password part of REPO spec
