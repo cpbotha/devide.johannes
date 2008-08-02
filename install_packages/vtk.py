@@ -19,11 +19,9 @@ import utils
 BASENAME = "VTK"
 # password "vtk" integrated in CVS -d spec
 CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ParaView-3-2-1" # 
-# for this tag of VTK, you also need to update wxVTKRWI.py to 1.28
-# (fix should be in VTK-5-2 when it gets branched)
+CVS_VERSION = "-r VTK-5-2"
 
-VTK_BASE_VERSION = "vtk-5.1"
+VTK_BASE_VERSION = "vtk-5.2"
 
 PDIR1 = \
 "http://visualisation.tudelft.nl/~cpbotha/files/vtk_itk/patches/"
@@ -33,19 +31,15 @@ PDIR1 = \
 #    to trap bad_alloc exceptions
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
-EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20071106.diff"
+#EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20071106.diff"
+EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20080802_vtk-5-2.diff"
 EXC_PATCH_URL = PDIR1 + EXC_PATCH
 
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 VTKPRPRTY_PATCH_URL = PDIR1 + VTKPRPRTY_PATCH
 
-# fixes mouse capture brokenness in ParaView-3-2-1 VTK
-# will commit this to VTK head with the week (20080229)
-WXRWI_CAPTURE_PATCH = "wxVTKRWI_mouse_capture.diff"
-WXRWI_CAPTURE_PATCH_URL = PDIR1 + WXRWI_CAPTURE_PATCH
-
-dependencies = []
+dependencies = ['cmake']
                   
 class VTK(InstallPackage):
     
@@ -58,12 +52,11 @@ class VTK(InstallPackage):
                                                EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.archive_dir,
                                                  VTKPRPRTY_PATCH)
-        self.wxrwi_capture_patch_filename = os.path.join(
-                config.archive_dir, WXRWI_CAPTURE_PATCH)
-
     def update_wpvi(self):
         """Update Wrapping/Python/vtk/__init__.py to fix nasty DL bug
         on AMD64.  Thanks to Mathieu Malaterre for finding this!
+
+        Not necessary on VTK-5-2 20080802.
         """
 
         utils.output("Updating Wrapping/Python/vtk/__init__.py.")
@@ -82,6 +75,8 @@ class VTK(InstallPackage):
     def update_mip(self):
         """Update vtkMedicalImageProperties files to GDCM2-compatible
         versions.
+
+        Not necessary on VTK-5-2 20080802.
         """
         # we have to update two files to specific versions for
         # GDCM2 VTK support ##################################
@@ -106,6 +101,8 @@ class VTK(InstallPackage):
     def update_ta3d(self):
         """Update vtkTextActor3D to DeVIDE-compatible versions (fixed
         by yours truly in VTK CVS).
+
+        Not necessary on VTK-5-2 20080802.
         """
 
         utils.output("Updating vtkTextActor3D.")
@@ -128,6 +125,8 @@ class VTK(InstallPackage):
 
     def update_wxvtkrwi(self):
         """Update wxVTKRenderWindowInteractor to latest fixed version.
+
+        Not necessary on VTK-5-2 20080802.
         """
 
         utils.output("Updating wxVTKRenderWindowInteractor.")
@@ -144,7 +143,9 @@ class VTK(InstallPackage):
 
     def update_vtkoglprop(self):
         """Update vtkOpenGLProperty to DeVIDE-compatible versions (fixed
-        by yours truly in VTK CVS).
+        by yours truly in VTK CVS - stippling problem).
+
+        Not necessary on VTK-5-2 20080802.
         """
 
         utils.output("Updating vtkOpenGLProperty.")
@@ -170,11 +171,11 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
-            self.update_wpvi()
-            self.update_mip()    
-            self.update_ta3d()
-            self.update_vtkoglprop()
-            self.update_wxvtkrwi()
+            #self.update_wpvi()
+            #self.update_mip()    
+            #self.update_ta3d()
+            #self.update_vtkoglprop()
+            #self.update_wxvtkrwi()
 
         if not os.path.exists(self.exc_patch_filename):
             utils.goto_archive()
@@ -264,7 +265,8 @@ class VTK(InstallPackage):
 
         else:
             # on *ix, inst/VTK/lib contains DLLs
-            config.VTK_SODIR = config.VTK_LIB
+            config.VTK_SODIR = os.path.join(
+                    config.VTK_LIB, VTK_BASE_VERSION)
             # on *ix, inst/lib/python2.5/site-packages contains the
             # VTK python package
             # sys.version is (2, 5, 0, 'final', 0)
