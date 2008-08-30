@@ -19,7 +19,7 @@ import utils
 BASENAME = "VTK"
 # password "vtk" integrated in CVS -d spec
 CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
-CVS_VERSION = "-r VTK-5-2"
+CVS_VERSION = "-r VTK-5-2-0"
 
 VTK_BASE_VERSION = "vtk-5.2"
 
@@ -31,8 +31,7 @@ PDIR1 = \
 #    to trap bad_alloc exceptions
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
-#EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20071106.diff"
-EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20080802_vtk-5-2.diff"
+EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20080830_vtk-5-2-0.diff"
 EXC_PATCH_URL = PDIR1 + EXC_PATCH
 
 # fixes attributes in vtkproperty for shader use in python
