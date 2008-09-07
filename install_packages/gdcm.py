@@ -49,14 +49,14 @@ class GDCM(InstallPackage):
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
-        if not os.path.exists(self.xml_patch_filename):
+        if not os.path.exists(self.xml_patch_name):
             utils.goto_archive()
             utils.urlget(XML_PATCH_URL)
 
             utils.output("Applying XML patch")
             os.chdir(self.source_dir)
             ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.xml_patch_filename))
+                "%s -p0 < %s" % (config.PATCH, self.xml_patch_name))
             if ret != 0:
                 utils.error(
                     "Could not apply XML patch.  Fix and try again.")
