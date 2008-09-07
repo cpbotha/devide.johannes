@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "itktudoss"
 SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
-SVN_REL = config.ITKTUDOSS_REL
+SVN_REL = 5
 
 dependencies = ['itk']
 
