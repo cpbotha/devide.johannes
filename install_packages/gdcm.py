@@ -21,6 +21,11 @@ SVN_REL = GDCM_REL
 
 PDIR1 = \
 "http://visualisation.tudelft.nl/~cpbotha/files/vtk_itk/patches/"
+
+# this patch is for gdcm 2.0.8. ONLY until Mathieu comes with a better
+# way to indicate location of Part3.xml.  When you change any of this,
+# remember to check devide.spec (it includes Part3.xml) and gdcm_kit
+# (it sets up everything so that this file can be found)
 XML_PATCH = "gdcm208_gdcmDefs_findxml.diff"
 XML_PATCH_URL = PDIR1 + XML_PATCH
 
