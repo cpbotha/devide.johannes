@@ -96,5 +96,6 @@ class VTKTUDOSS(InstallPackage):
             shutil.rmtree(self.build_dir)
 
     def get_installed_version(self):
-        return "NA"
+        import vtktudoss
+        return vtktudoss.version
 

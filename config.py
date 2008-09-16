@@ -101,10 +101,6 @@ PYTHON_LIBRARY = ''
 def init(wd, the_profile):
     global working_dir, archive_dir, build_dir, inst_dir
 
-    # wd will be none if the user asks for a version check
-    if wd is None:
-        wd = ''
-
     working_dir = os.path.abspath(wd)
     archive_dir = os.path.join(working_dir, 'archive')
     build_dir = os.path.join(working_dir, 'build')

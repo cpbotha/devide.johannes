@@ -210,9 +210,8 @@ def main():
             elif o in ('-v', '--versions'):
                 mode = 'show_versions'
 
-        # we need at LEAST a working directory if the user is not
-        # querying versions
-        if mode != 'show_versions' and not working_dir:
+        # we need at LEAST a working directory
+        if not working_dir:
             usage()
             return
 
