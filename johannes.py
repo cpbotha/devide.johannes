@@ -168,7 +168,7 @@ def main():
             return
 
         mode = 'everything'
-        install_packages = None
+        ip_names = None
         working_dir = None
         profile = 'default'
         no_prereq_check = False
@@ -187,11 +187,11 @@ def main():
 
             elif o in ('--install-packages'):
                 # list of package name to perform the action on
-                install_packages = [i.strip().lower() for i in a.split(',')]
+                ip_names = [i.strip().lower() for i in a.split(',')]
 
             elif o in ('--package-set'):
                 if a in ('vtkitk'):
-                    install_packages = ['vtk', 'vtktudoss', 'vtkdevide',
+                    ip_names = ['vtk', 'vtktudoss', 'vtkdevide',
                                         'itk', 'itkvtkglue',
                                         'itktudoss',
                                         'swig', 'gdcm',
@@ -262,18 +262,18 @@ def main():
                             setupenvironment.SetupEnvironment(),
                             devide.DeVIDE()]
 
-        if install_packages is None:
+        if ip_names is None:
             # iow the user didn't touch this
             # this only works because module and class names differ
             # ONLY w.r.t. case
-            install_packages = [i.__class__.__name__.lower()
-                                for i in ip_instance_list]
+            ip_names = [i.__class__.__name__.lower()
+                        for i in ip_instance_list]
 
         # if we're on windows, remove a number of packages regardless
         # of user preferences.  Sorry user!
         if (mode != 'show_versions') and os.name == 'nt':
             nogo = ['numpy', 'wxpython', 'matplotlib', 'cmake']
-            install_packages = [i for i in install_packages if i not
+            ip_names = [i for i in ip_names if i not
                     in nogo]
 
         def get_stage(ip, n):
@@ -307,7 +307,7 @@ def main():
         
         for ip in ip_instance_list:
             n = ip.__class__.__name__.lower()
-            if n in install_packages:
+            if n in ip_names:
 
                 if mode == 'get_only':
                     utils.output("%s GET_ONLY" % (n,), 70, '#')
