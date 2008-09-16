@@ -21,7 +21,7 @@ CMAKE_BINPATH = 'cmake'
 HAVE_DISTCC = False
 # on *ix, use this many parallel make processes
 # if you're using distcc, this should be even higher.
-NUM_MAKE_PROCESSES = 8
+NUM_MAKE_PROCESSES = 2
 
 # Set to True if you want to build redistributable DeVIDE binaries
 # with PyInstaller as part of the johannes build process.  If False,
@@ -100,6 +100,11 @@ PYTHON_LIBRARY = ''
 
 def init(wd, the_profile):
     global working_dir, archive_dir, build_dir, inst_dir
+
+    # wd will be none if the user asks for a version check
+    if wd is None:
+        wd = ''
+
     working_dir = os.path.abspath(wd)
     archive_dir = os.path.join(working_dir, 'archive')
     build_dir = os.path.join(working_dir, 'build')

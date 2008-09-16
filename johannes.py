@@ -303,6 +303,13 @@ def main():
             
             utils.output("%s :: install()" % (n,), rpad, rpad_char)
             ip.install()
+
+        if mode == 'show_versions':
+            utils.output('Extracting all install_package versions.')
+            print "python: %d.%d.%d (%s)" % \
+                    (sys.version_info[0:3] +
+                            (config.PYTHON_EXECUTABLE,))
+
             
         
         for ip in ip_instance_list:
@@ -333,10 +340,10 @@ def main():
                     ip.clean_build()
 
                 elif mode == 'show_versions':
-                    utils.output('%s: %s' % (n,
-                        ip.get_installed_version()))
+                    print '%s: %s' % (n, ip.get_installed_version())
 
-        utils.output("Now please read the RESULTS section of README.txt!")
+        if mode != 'show_versions':
+            utils.output("Now please read the RESULTS section of README.txt!")
 
 if __name__ == '__main__':
     main()

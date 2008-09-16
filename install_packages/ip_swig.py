@@ -145,12 +145,12 @@ class SWIG(InstallPackage):
 
             if status is None:
                 version = get_version_from_output(output)
-                return 'Locally installed version %s' % (version.strip(),)
+                return '%s (local)' % (version.strip(),)
 
         status,output = utils.get_status_output('swig -version')
         if status is None:
             version = get_version_from_output(output)
-            return 'System installed version %s' % (version.strip(),)
+            return '%s (system)' % (version.strip(),)
 
         return 'Not found.'
 

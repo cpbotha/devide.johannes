@@ -82,15 +82,15 @@ class CMake(InstallPackage):
 
         local_cmake_path = os.path.join(self.inst_dir, 'bin', 'cmake')
         if os.path.exists(local_cmake_path):
-            status,output = utils.get_status_output('%s --version',
+            status,output = utils.get_status_output('%s --version' %
                     (local_cmake_path,))
 
             if status is None:
-                return 'Locally installed %s' % (output.strip(),)
+                return '%s (local)' % (output.strip(),)
 
         status,output = utils.get_status_output('cmake --version')
         if status is None:
-            return 'System installed %s' % (output.strip(),)
+            return '%s (system)' % (output.strip(),)
 
         return 'Not found.'
 
