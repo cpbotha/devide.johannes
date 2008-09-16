@@ -41,6 +41,7 @@ Options are as follows:
                          default all
 --package-set          : preset collections of packages; vtkitk
 --no-win-prereq        : do NOT do Windows prerequisites check.
+-v, --versions         : display installed versions of all packages.
 
 All of this ugliness is copyright 2006-2008 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
@@ -157,10 +158,10 @@ def main():
 
         try:
             optlist, args = getopt.getopt(
-                sys.argv[1:], 'hm:p:w:',
+                sys.argv[1:], 'hm:p:w:v',
                 ['help', 'mode=', 'install-packages=', 
                     'package-set', 'working-dir=',
-                    'no-prereq-check'])
+                    'no-prereq-check', 'versions'])
 
         except getopt.GetoptError,e:
             usage()
@@ -206,13 +207,22 @@ def main():
             elif o in ('--no-prereq-check'):
                 no_prereq_check = True
 
-        # we need at LEAST a working directory
-        if not working_dir:
+            elif o in ('-v', '--versions'):
+                mode = 'show_versions'
+
+        # we need at LEAST a working directory if the user is not
+        # querying versions
+        if mode != 'show_versions' and not working_dir:
             usage()
             return
 
         # init config (DURR)
         config.init(working_dir, profile)
+
+        # if user is asking for versions, we don't do the
+        # prerequisites check as we're not going to build anything
+        if mode == 'show_versions':
+            no_prereq_check = True
 
         if os.name == 'nt' and not no_prereq_check:
             if not windows_prereq_check(working_dir):
@@ -261,7 +271,7 @@ def main():
 
         # if we're on windows, remove a number of packages regardless
         # of user preferences.  Sorry user!
-        if os.name == 'nt':
+        if (mode != 'show_versions') and os.name == 'nt':
             nogo = ['numpy', 'wxpython', 'matplotlib', 'cmake']
             install_packages = [i for i in install_packages if i not
                     in nogo]
@@ -321,6 +331,10 @@ def main():
                 elif mode == 'clean_build':
                     utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
                     ip.clean_build()
+
+                elif mode == 'show_versions':
+                    utils.output('%s: %s' % (n,
+                        ip.get_installed_version()))
 
         utils.output("Now please read the RESULTS section of README.txt!")
 

@@ -92,6 +92,12 @@ class NumPy(InstallPackage):
         if os.path.exists(numpy_instdir):
             shutil.rmtree(numpy_instdir)
 
+    def get_installed_version(self):
+        import numpy
+        import pdb; pdb.set_trace()
+        return numpy.__version__
+
+
         
         
 
