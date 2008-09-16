@@ -4,13 +4,13 @@
 
 import config
 import getopt
-from install_packages import numpy, matplotlib
-from install_packages import wxpython, cmake, dcmtk
-from install_packages import vtk
-from install_packages import vtktudoss, vtkdevide
-from install_packages import itk, itkvtkglue, itktudoss
-from install_packages import swig, gdcm
-from install_packages import installer, setupenvironment, devide
+from install_packages import ip_numpy, ip_matplotlib
+from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
+from install_packages import ip_vtk
+from install_packages import ip_vtktudoss, ip_vtkdevide
+from install_packages import ip_itk, ip_itkvtkglue, ip_itktudoss
+from install_packages import ip_swig, ip_gdcm
+from install_packages import ip_installer, ip_setupenvironment, ip_devide
 import os
 import sys
 import utils
@@ -245,22 +245,22 @@ def main():
                         'Posix prerequisites all good.', 70, '-')
 
 
-        ip_instance_list = [numpy.NumPy(),
-                            wxpython.WXPython(),
-                            matplotlib.matplotlib(),
-                            cmake.CMake(),
-                            dcmtk.DCMTK(),
-                            vtk.VTK(),
-                            vtktudoss.VTKTUDOSS(),
-                            vtkdevide.VTKDEVIDE(),
-                            itk.ITK(),
-                            itkvtkglue.ItkVtkGlue(),
-                            itktudoss.ITKTUDOSS(),
-                            swig.SWIG(),
-                            gdcm.GDCM(),
-                            installer.Installer(),
-                            setupenvironment.SetupEnvironment(),
-                            devide.DeVIDE()]
+        ip_instance_list = [ip_numpy.NumPy(),
+                            ip_wxpython.WXPython(),
+                            ip_matplotlib.matplotlib(),
+                            ip_cmake.CMake(),
+                            ip_dcmtk.DCMTK(),
+                            ip_vtk.VTK(),
+                            ip_vtktudoss.VTKTUDOSS(),
+                            ip_vtkdevide.VTKDEVIDE(),
+                            ip_itk.ITK(),
+                            ip_itkvtkglue.ItkVtkGlue(),
+                            ip_itktudoss.ITKTUDOSS(),
+                            ip_swig.SWIG(),
+                            ip_gdcm.GDCM(),
+                            ip_installer.Installer(),
+                            ip_setupenvironment.SetupEnvironment(),
+                            ip_devide.DeVIDE()]
 
         if ip_names is None:
             # iow the user didn't touch this
