@@ -10,7 +10,7 @@ import utils
 
 BASENAME = "vtktudoss"
 SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
-SVN_REL = 8 
+SVN_REL = 9 
 
 dependencies = ['vtk']
 
@@ -48,6 +48,8 @@ class VTKTUDOSS(InstallPackage):
             os.mkdir(self.build_dir)
 
         cmake_params = "-DBUILD_SHARED_LIBS=ON " \
+                       "-DBUILD_CONTRIB=ON " \
+                       "-DBUILD_CONTRIB_STLIB=ON " \
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
