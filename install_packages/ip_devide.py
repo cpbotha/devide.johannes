@@ -183,4 +183,13 @@ echo "Did you remember to run \". setup_env.sh\"?"
 
         if os.path.isdir(self.inst_dir):
             shutil.rmtree(self.inst_dir)
+
+    def get_installed_version(self):
+        import sys
+        sys.path.insert(0, self.build_dir)
+        import devide
+        del sys.path[0]
+        return devide.DEVIDE_VERSION
+
+
             

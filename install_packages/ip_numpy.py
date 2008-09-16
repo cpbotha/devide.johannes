@@ -94,7 +94,6 @@ class NumPy(InstallPackage):
 
     def get_installed_version(self):
         import numpy
-        import pdb; pdb.set_trace()
         return numpy.__version__
 
 

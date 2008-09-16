@@ -122,3 +122,7 @@ class ITKTUDOSS(InstallPackage):
         if os.path.exists(inst_so):
             os.remove(inst_so)
 
+
+    def get_installed_version(self):
+        return "NA"
+

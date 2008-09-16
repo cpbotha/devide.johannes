@@ -233,3 +233,6 @@ class DCMTK(InstallPackage):
 
         if os.path.exists(self.inst_dir):
             shutil.rmtree(self.inst_dir)
+
+    def get_installed_version(self):
+        return 'NA'

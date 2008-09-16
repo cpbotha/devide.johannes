@@ -99,6 +99,11 @@ class Installer(InstallPackage):
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
 
+
+    def get_installed_version(self):
+        return None
+
+
         
         
 

@@ -121,3 +121,36 @@ class SWIG(InstallPackage):
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
 
+    def get_installed_version(self):
+        import re
+        ver_re = '^.*Version\s+(.*)$'
+
+        def get_version_from_output(output):
+            mo = re.search(ver_re, output, re.MULTILINE)
+            if mo:
+                version = mo.groups()[0]
+            else:
+                version = '<Unable to extract version.>'
+
+            return version
+
+        if os.name == 'nt':
+            local_path = os.path.join(self.inst_dir, 'swig.exe')
+        else:
+            local_path = os.path.join(self.inst_dir, 'bin', 'swig')
+
+        if os.path.exists(local_path):
+            status,output = utils.get_status_output('%s -version' %
+                    (local_path,))
+
+            if status is None:
+                version = get_version_from_output(output)
+                return 'Locally installed version %s' % (version.strip(),)
+
+        status,output = utils.get_status_output('swig -version')
+        if status is None:
+            version = get_version_from_output(output)
+            return 'System installed version %s' % (version.strip(),)
+
+        return 'Not found.'
+

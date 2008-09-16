@@ -77,5 +77,25 @@ class CMake(InstallPackage):
         if os.path.exists(self.inst_dir):
             shutil.rmtree(self.inst_dir)
 
+    def get_installed_version(self):
+        version = None
+
+        local_cmake_path = os.path.join(self.inst_dir, 'bin', 'cmake')
+        if os.path.exists(local_cmake_path):
+            status,output = utils.get_status_output('%s --version',
+                    (local_cmake_path,))
+
+            if status is None:
+                return 'Locally installed %s' % (output.strip(),)
+
+        status,output = utils.get_status_output('cmake --version')
+        if status is None:
+            return 'System installed %s' % (output.strip(),)
+
+        return 'Not found.'
+
+            
+
+
         
         

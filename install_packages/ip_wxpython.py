@@ -153,6 +153,10 @@ class WXPython(InstallPackage):
         # this is where wx-config can be found
         config.WX_BIN_PATH = os.path.join(self.inst_dir, 'bin')
         config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
+
+    def get_installed_version(self):
+        import wx
+        return wx.VERSION_STRING
         
 
 

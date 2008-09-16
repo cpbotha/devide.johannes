@@ -117,3 +117,6 @@ class SetupEnvironment(InstallPackage):
 
         utils.output('Wrote %s.' % (script_fn,))
 
+    def get_installed_version(self):
+        return None
+

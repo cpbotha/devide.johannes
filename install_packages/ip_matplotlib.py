@@ -118,6 +118,10 @@ class matplotlib(InstallPackage):
         if os.path.exists(matplotlib_instdir):
             shutil.rmtree(matplotlib_instdir)
 
+    def get_installed_version(self):
+        import matplotlib
+        return matplotlib.__version__
+
         
         
 
