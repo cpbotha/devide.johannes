@@ -9,6 +9,7 @@ gcc, g++, cvs, svn, chrpath
 bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev | libgtk2.0-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (*optional* for faster numpy)
+libgl-dev, lubglu-dev
 
 A. For a NORMAL full build (the default), do the following:
   
