@@ -9,10 +9,10 @@ import shutil
 import sys
 import utils
 
-NUMPY_TARBALL = "numpy-1.0.4.tar.gz"
+NUMPY_TARBALL = "numpy-1.2.1.tar.gz"
 NUMPY_URL = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s" % \
             (NUMPY_TARBALL,)
-NUMPY_DIRBASE = "numpy-1.0.4"
+NUMPY_DIRBASE = "numpy-1.2.1"
 
 dependencies = []
 

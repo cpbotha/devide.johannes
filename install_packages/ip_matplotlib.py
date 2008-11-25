@@ -9,10 +9,10 @@ import shutil
 import sys
 import utils
 
-MPL_TARBALL = "matplotlib-0.91.2.tar.gz"
+MPL_TARBALL = "matplotlib-0.98.3.tar.gz"
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_TARBALL,)
-MPL_DIRBASE = "matplotlib-0.91.2"
+MPL_DIRBASE = "matplotlib-0.98.3"
 
 # I prefer that this be built with numpy, but it is not a dependency
 # per se
