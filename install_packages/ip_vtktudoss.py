@@ -2,6 +2,11 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+# added -fpermissive to CMAKE_CXX_FLAGS to workaround g++ 4.3 compile
+# problem on the included CPT code.  We were getting "changes meaning
+# of" errors as documented in 
+# http://stupefydeveloper.blogspot.com/2008/11/c-name-lookup-changes-in-g-43.html
+
 import config
 from install_package import InstallPackage
 import os
@@ -52,6 +57,7 @@ class VTKTUDOSS(InstallPackage):
                        "-DBUILD_CONTRIB_STLIB=ON " \
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
+                       "-DCMAKE_CXX_FLAGS=-fpermissive " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DVTK_DIR=%s" % (self.inst_dir, config.VTK_DIR)
 
