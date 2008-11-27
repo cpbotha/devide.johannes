@@ -106,6 +106,13 @@ def init(wd, the_profile):
     build_dir = os.path.join(working_dir, 'build')
     inst_dir = os.path.join(working_dir, 'inst')
 
+
+    # we will also need directory where johannes finds itself, in
+    # order to retrieve patches.
+    global johannes_dir, patches_dir
+    johannes_dir = os.path.dirname(__file__)
+    patches_dir = os.path.join(johannes_dir, 'patches')
+
     global profile
     profile = the_profile
 

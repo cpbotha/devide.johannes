@@ -182,7 +182,6 @@ def urlget(url):
 
     return filename
 
-
 def goto_archive():
     os.chdir(config.archive_dir)
 
