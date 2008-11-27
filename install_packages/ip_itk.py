@@ -20,7 +20,6 @@ CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
 
 # this patch is located in johannes/patches/ teehee
 SOGC_PATCH = "itk310-itkSpatialObjectTreeNode-GetChildren.diff"
-SOGC_PATCH_PATH = os.path.join(config.patches_dir, SOGC_PATCH)
 
 dependencies = []
 
@@ -33,7 +32,9 @@ class ITK(InstallPackage):
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
-        self.sogc_patch_filename = os.path.join(
+        self.sogc_patch_src_filename = os.path.join(
+                config.patches_dir, SOGC_PATCH)
+        self.sogc_patch_dst_filename = os.path.join(
                 config.archive_dir, SOGC_PATCH)
 
 
@@ -57,13 +58,14 @@ class ITK(InstallPackage):
                 utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
 
 
-        if not os.path.exists(self.sogc_patch_filename):
-            shutil.copy(SOGC_PATCH_PATH, self.sogc_patch_filename)
+        if not os.path.exists(self.sogc_patch_dst_filename):
+            shutil.copy(self.sogc_patch_src_filename,
+                        self.sogc_patch_dst_filename)
 
             utils.output("Applying SOGC patch")
             os.chdir(self.source_dir)
             ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.sogc_patch_filename))
+                "%s -p0 < %s" % (config.PATCH, self.sogc_patch_dst_filename))
 
             if ret != 0:
                 utils.error(
