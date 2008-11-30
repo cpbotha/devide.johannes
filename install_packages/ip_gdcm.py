@@ -8,8 +8,8 @@ import os
 import shutil
 import utils
 
-# 2.0.8
-GDCM_REL = "4190"
+# 2.0.10
+GDCM_REL = "4792"
 
 BASENAME = "gdcm"
 SVN_REPO = \
@@ -19,15 +19,12 @@ SVN_REPO = \
 
 SVN_REL = GDCM_REL
 
-PDIR1 = \
-"http://visualisation.tudelft.nl/~cpbotha/files/vtk_itk/patches/"
-
 # this patch is for gdcm 2.0.8. ONLY until Mathieu comes with a better
 # way to indicate location of Part3.xml.  When you change any of this,
 # remember to check devide.spec (it includes Part3.xml) and gdcm_kit
 # (it sets up everything so that this file can be found)
-XML_PATCH = "gdcm208_gdcmDefs_findxml.diff"
-XML_PATCH_URL = PDIR1 + XML_PATCH
+#XML_PATCH = "gdcm208_gdcmDefs_findxml.diff"
+#XML_PATCH_URL = PDIR1 + XML_PATCH
 
 dependencies = ['swig', 'vtk']
 
@@ -38,9 +35,6 @@ class GDCM(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
-
-        self.xml_patch_name = os.path.join(config.archive_dir,
-                XML_PATCH)
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -53,19 +47,6 @@ class GDCM(InstallPackage):
                 SVN_REPO, BASENAME, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
-
-        if not os.path.exists(self.xml_patch_name):
-            utils.goto_archive()
-            utils.urlget(XML_PATCH_URL)
-
-            utils.output("Applying XML patch")
-            os.chdir(self.source_dir)
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.xml_patch_name))
-            if ret != 0:
-                utils.error(
-                    "Could not apply XML patch.  Fix and try again.")
-
 
     def unpack(self):
         # no unpack step
