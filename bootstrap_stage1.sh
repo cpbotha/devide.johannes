@@ -33,7 +33,7 @@ mkdir flags
 mkdir inst
 
 cd archive
-wget -c http://python.org/ftp/python/2.5.2/Python-2.5.2.tar.bz2
+wget -c http://python.org/ftp/python/2.5.4/Python-2.5.4.tar.bz2
 
 cd ../flags
 touch stage1_complete
