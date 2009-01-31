@@ -1,12 +1,13 @@
 This package contains johannes, a very scary *ix build system for DeVIDE.
 
-johannes is copyright 2007,2008 Charl P. Botha <c.p.botha@tudelft.nl>
+johannes is copyright 2007-2009 Charl P. Botha <c.p.botha@tudelft.nl>
 and is made available under the New BSD License.
 
 Before starting, you need at least the following packages (or
 equivalents) on your system:
 gcc, g++, cvs, svn, chrpath
 bzip2-dev | libbz2-dev, ncurses-dev, gtk2-dev | libgtk2.0-dev,
+libxt-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (*optional* for faster numpy)
 libgl-dev, lubglu-dev
