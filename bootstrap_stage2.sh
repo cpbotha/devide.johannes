@@ -59,8 +59,10 @@ JOHANNES ##### cc (compiler) or necessary headers not found.
 See error above.  Please fix and try again.
 
 * On Ubuntu / Debian, the following will install all necessary packages:
-  sudo apt-get install libsqlite3-dev libncurses-dev libgtk2.0-dev \
-  libfreetype6-dev libpng12-dev libz-dev libbz2-dev
+  sudo apt-get install cvs subversion chrpath g++ gcc \
+  libsqlite3-dev libncurses-dev libgtk2.0-dev \
+  libxt-dev libfreetype6-dev libpng12-dev libz-dev libbz2-dev \
+  libgl1-mesa-dev libglu1-mesa-dev
 EOF
     exit
 fi
