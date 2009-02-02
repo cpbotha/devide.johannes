@@ -17,6 +17,8 @@ CVS_VERSION = "-r ITK-3-10-2" #
 CS_BASENAME = "CableSwig"
 # password part of REPO spec
 CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
+# CableSwig doesn't have the full ITK-3-10-2 tag
+CABLESWIG_CVS_VERSION = "-r ITK-3-10"
 
 # this patch is located in johannes/patches/ teehee
 SOGC_PATCH = "itk310-itkSpatialObjectTreeNode-GetChildren.diff"
@@ -52,7 +54,8 @@ class ITK(InstallPackage):
 
             os.chdir(os.path.join(self.source_dir, 'Utilities'))
             ret = os.system("%s -d %s co %s %s" %
-                            (config.CVS, CS_CVS_REPO, CVS_VERSION, CS_BASENAME))
+                            (config.CVS, CS_CVS_REPO, 
+                                CABLESWIG_CVS_VERSION, CS_BASENAME))
             
             if ret != 0:
                 utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
