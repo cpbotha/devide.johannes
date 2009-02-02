@@ -60,11 +60,13 @@ class ITK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
 
+            # only download patch if we don't have it
+            # only do this check if we're already downloading source
+            if not os.path.exists(self.sogc_patch_dst_filename):
+                shutil.copy(self.sogc_patch_src_filename,
+                            self.sogc_patch_dst_filename)
 
-        if not os.path.exists(self.sogc_patch_dst_filename):
-            shutil.copy(self.sogc_patch_src_filename,
-                        self.sogc_patch_dst_filename)
-
+            # always try to apply patch if we've just checked out
             utils.output("Applying SOGC patch")
             os.chdir(self.source_dir)
             ret = os.system(
