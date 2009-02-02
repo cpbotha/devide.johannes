@@ -47,6 +47,8 @@ cat > $DEPS_TEST_FN << EOF
 #include <ft2build.h>
 #include <png.h>
 #include <zlib.h>
+#include <X11/Intrinsic.h>
+#include <GL/glu.h>
 int main(void) {}
 EOF
 
@@ -58,11 +60,9 @@ cat << EOF
 JOHANNES ##### cc (compiler) or necessary headers not found.
 See error above.  Please fix and try again.
 
-* On Ubuntu / Debian, the following will install all necessary packages:
-  sudo apt-get install cvs subversion chrpath g++ gcc\
-  libsqlite3-dev libncurses-dev libgtk2.0-dev\
-  libxt-dev libfreetype6-dev libpng12-dev libz-dev libbz2-dev\
-  libgl1-mesa-dev libglu1-mesa-dev
+* See the johannes README.txt for more details on which packages to
+  install, and also for correct apt-get invocation to install them all
+  on for example Debian / Ubuntu.
 EOF
     exit
 fi
