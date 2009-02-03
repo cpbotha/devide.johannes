@@ -23,20 +23,15 @@ CVS_VERSION = "-r VTK-5-2-1"
 
 VTK_BASE_VERSION = "vtk-5.2"
 
-PDIR1 = \
-"http://visualisation.tudelft.nl/~cpbotha/files/vtk_itk/patches/"
-
 # this patch does two things:
 # 1. adds try/catch blocks to all python method calls in order
 #    to trap bad_alloc exceptions
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
 EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20080830_vtk-5-2-0.diff"
-EXC_PATCH_URL = PDIR1 + EXC_PATCH
 
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
-VTKPRPRTY_PATCH_URL = PDIR1 + VTKPRPRTY_PATCH
 
 dependencies = ['cmake']
                   
@@ -47,10 +42,11 @@ class VTK(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
-        self.exc_patch_filename = os.path.join(config.archive_dir,
+        self.exc_patch_filename = os.path.join(config.patches_dir,
                                                EXC_PATCH)
-        self.vtkprprty_patch_filename = os.path.join(config.archive_dir,
+        self.vtkprprty_patch_filename = os.path.join(config.patches_dir,
                                                  VTKPRPRTY_PATCH)
+
     def update_wpvi(self):
         """Update Wrapping/Python/vtk/__init__.py to fix nasty DL bug
         on AMD64.  Thanks to Mathieu Malaterre for finding this!
@@ -176,10 +172,6 @@ class VTK(InstallPackage):
             #self.update_vtkoglprop()
             #self.update_wxvtkrwi()
 
-        if not os.path.exists(self.exc_patch_filename):
-            utils.goto_archive()
-            utils.urlget(EXC_PATCH_URL)
-
             # EXC PATCH
             utils.output("Applying EXC patch")
             os.chdir(self.source_dir)
@@ -188,10 +180,6 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply EXC patch.  Fix and try again.")
-
-        if not os.path.exists(self.vtkprprty_patch_filename):
-            utils.goto_archive()
-            utils.urlget(VTKPRPRTY_PATCH_URL)
 
             # VTKPRPRTY PATCH
             utils.output("Applying VTKPRPRTY patch")
