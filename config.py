@@ -40,7 +40,7 @@ import sys
 # build it, so it is important that you change this timestamp so that
 # config.py gets updated with a new revision keyword when you are
 # shipping a new devide.
-STAMP = "20090203-20:57"
+STAMP = "20090203-21:18"
 JOHANNES_REV = "$Revision$"
 JOHANNES_REL = JOHANNES_REV.split()[1]
 
