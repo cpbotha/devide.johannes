@@ -56,10 +56,15 @@ class VTKTUDOSS(InstallPackage):
                        "-DBUILD_CONTRIB=ON " \
                        "-DBUILD_CONTRIB_STLIB=ON " \
                        "-DBUILD_TESTING=OFF " \
+                       "-DCMAKE_BACKWARDS_COMPATIBILITY=2.6 " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
-                       "-DCMAKE_CXX_FLAGS=-fpermissive " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DVTK_DIR=%s" % (self.inst_dir, config.VTK_DIR)
+
+        # we only add this under posix as a work-around to compile the
+        # STLib code under g++
+        if os.name == 'posix':
+            cmake_params = cmake_params + " -DCMAKE_CXX_FLAGS=-fpermissive "
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
