@@ -19,9 +19,9 @@ import utils
 BASENAME = "VTK"
 # password "vtk" integrated in CVS -d spec
 CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
-CVS_VERSION = "-r VTK-5-2-1"
+CVS_VERSION = "-r VTK-5-4-0"
 
-VTK_BASE_VERSION = "vtk-5.2"
+VTK_BASE_VERSION = "vtk-5.4"
 
 # this patch does two things:
 # 1. adds try/catch blocks to all python method calls in order
@@ -29,6 +29,7 @@ VTK_BASE_VERSION = "vtk-5.2"
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
 EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20080830_vtk-5-2-0.diff"
+# it applies without problems on VTK-5-4-0 as well
 
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
@@ -52,6 +53,9 @@ class VTK(InstallPackage):
         on AMD64.  Thanks to Mathieu Malaterre for finding this!
 
         Not necessary on VTK-5-2 20080802.
+
+        Keeping this as example on how to update select files in
+        checkout.
         """
 
         utils.output("Updating Wrapping/Python/vtk/__init__.py.")
@@ -67,94 +71,6 @@ class VTK(InstallPackage):
             utils.error("Error updating W/P/v/__init__.py.")
 
 
-    def update_mip(self):
-        """Update vtkMedicalImageProperties files to GDCM2-compatible
-        versions.
-
-        Not necessary on VTK-5-2 20080802.
-        """
-        # we have to update two files to specific versions for
-        # GDCM2 VTK support ##################################
-        utils.output("Updating vtkMedicalImageProperties.")
-
-        utils.goto_archive()
-        os.chdir(os.path.join(BASENAME, 'IO'))
-
-        ret1 = os.system(
-        "%s -z3 update -r 1.29 vtkMedicalImageProperties.cxx" %
-        (config.CVS,))
-
-        ret2 = os.system(
-        "%s -z3 update -r 1.23 vtkMedicalImageProperties.h" %
-        (config.CVS,))
-
-        if ret1 != 0 or ret2 != 0:
-            utils.error("Error updating vtkMedicalImageProperties.")
-
-        # end of vtkMedicalImageProperties update #############
-
-    def update_ta3d(self):
-        """Update vtkTextActor3D to DeVIDE-compatible versions (fixed
-        by yours truly in VTK CVS).
-
-        Not necessary on VTK-5-2 20080802.
-        """
-
-        utils.output("Updating vtkTextActor3D.")
-
-        utils.goto_archive()
-        os.chdir(os.path.join(BASENAME, 'Rendering'))
-
-        ret1 = os.system(
-        "%s -z3 update -r 1.9 vtkTextActor3D.cxx" %
-        (config.CVS,))
-
-        ret2 = os.system(
-        "%s -z3 update -r 1.4 vtkTextActor3D.h" %
-        (config.CVS,))
-
-        if ret1 != 0 or ret2 != 0:
-            utils.error("Error updating vtkTextActor3D.")
-
-        # end of vtkTextActor3D update #############
-
-    def update_wxvtkrwi(self):
-        """Update wxVTKRenderWindowInteractor to latest fixed version.
-
-        Not necessary on VTK-5-2 20080802.
-        """
-
-        utils.output("Updating wxVTKRenderWindowInteractor.")
-
-        utils.goto_archive()
-        os.chdir(os.path.join(BASENAME, 'Wrapping','Python','vtk','wx'))
-
-        ret1 = os.system(
-        "%s -z3 update -r 1.28 wxVTKRenderWindowInteractor.py" %
-        (config.CVS,))
-
-        if ret1 != 0:
-            utils.error("Error updating wxVTKRenderWindowInteractor.")
-
-    def update_vtkoglprop(self):
-        """Update vtkOpenGLProperty to DeVIDE-compatible versions (fixed
-        by yours truly in VTK CVS - stippling problem).
-
-        Not necessary on VTK-5-2 20080802.
-        """
-
-        utils.output("Updating vtkOpenGLProperty.")
-
-        utils.goto_archive()
-        os.chdir(os.path.join(BASENAME, 'Rendering'))
-
-        ret1 = os.system(
-        "%s -z3 update -r 1.42 vtkOpenGLProperty.cxx" %
-        (config.CVS,))
-
-        if ret1 != 0:
-            utils.error("Error updating vtkOpenGLProperty.")
-
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("VTK already checked out, skipping step.")
@@ -167,10 +83,6 @@ class VTK(InstallPackage):
                 utils.error("Could not CVS checkout.  Fix and try again.")
 
             #self.update_wpvi()
-            #self.update_mip()    
-            #self.update_ta3d()
-            #self.update_vtkoglprop()
-            #self.update_wxvtkrwi()
 
             # EXC PATCH
             utils.output("Applying EXC patch")
