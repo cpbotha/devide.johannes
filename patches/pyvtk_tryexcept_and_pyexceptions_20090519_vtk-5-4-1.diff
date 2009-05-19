@@ -1,0 +1,258 @@
+Index: Common/vtkPythonUtil.cxx
+===================================================================
+RCS file: /cvsroot/VTK/VTK/Common/vtkPythonUtil.cxx,v
+retrieving revision 1.90
+diff -u -r1.90 vtkPythonUtil.cxx
+--- Common/vtkPythonUtil.cxx	6 Aug 2008 20:23:20 -0000	1.90
++++ Common/vtkPythonUtil.cxx	19 May 2009 21:36:58 -0000
+@@ -22,6 +22,7 @@
+ #include "vtkDataArray.h"
+ #include "vtkObject.h"
+ #include "vtkObjectFactory.h"
++#include "vtkOutputWindow.h"
+ #include "vtkSmartPointerBase.h"
+ #include "vtkTimeStamp.h"
+ #include "vtkWindows.h"
+@@ -65,6 +66,108 @@
+ 
+ //#define VTKPYTHONDEBUG
+ 
++
++//--------------------------------------------------------------------
++
++
++// these macros should be used to guard calls into Python from
++// C++ code, for example in C++ event handlers and the
++// vtkPythonOutputWindow
++#if ((PY_MAJOR_VERSION > 2) || \
++((PY_MAJOR_VERSION == 2) && (PY_MINOR_VERSION >= 3))) && \
++!defined(VTK_NO_PYTHON_THREADS)
++#define PyGILBeginMacro PyGILState_STATE state = PyGILState_Ensure();
++#define PyGILEndMacro PyGILState_Release(state);
++#else
++#define PyGILBeginMacro
++#define PyGILEndMacro
++#endif
++
++// .NAME vtkPythonOutputWindow - output window to transform VTK error
++//                               messages to Python exceptions
++// .SECTION Description
++// The Python wrappings set an instance of this class to be the output
++// window.  When any VTK code makes use of e.g. vtkErrorMacro or
++// vtkWarningMacro, this class will turn the error message into a
++// Python RuntimeError exception and a warning into a Python
++// RuntimeWarning.  Debug text will be displayed with the Python
++// 'print' command.  VTK errors and warnings can now be handled in a
++// far more Pythonic way.
++//
++//  -- Charl P. Botha <http://cpbotha.net/>
++class vtkPythonOutputWindow : public vtkOutputWindow
++{
++public:
++  static vtkPythonOutputWindow *New() {
++    return new vtkPythonOutputWindow(); };
++
++  virtual void DisplayText(const char*);
++  virtual void DisplayErrorText(const char*);
++  virtual void DisplayWarningText(const char*);
++  virtual void DisplayGenericWarningText(const char*);
++  virtual void DisplayDebugText(const char*);
++
++protected:
++  vtkPythonOutputWindow() {};
++  ~vtkPythonOutputWindow() {};
++
++private:
++  vtkPythonOutputWindow(const vtkPythonOutputWindow&);  //Not implemented
++  void operator=(const vtkPythonOutputWindow&);  //Not implemented
++};
++
++void vtkPythonOutputWindow::DisplayText(const char* message)
++{
++  char command[4097]; // extra for 0-termination
++
++  // we have to do it this way to:
++  // 1. handle directory slashes correctly
++  // 2. handle EOLs correctly
++  snprintf(command, 4096, "import os; print os.path.normpath(r\"\"\"%s\"\"\")", 
++          message);
++  
++  PyGILBeginMacro;
++
++  PyRun_SimpleString(command);
++
++  PyGILEndMacro;
++}
++
++void vtkPythonOutputWindow::DisplayErrorText(const char* message)
++{
++  PyGILBeginMacro;
++
++  if (!PyErr_Occurred())
++    PyErr_SetString(PyExc_RuntimeError, message);
++
++  PyGILEndMacro;
++}
++
++void vtkPythonOutputWindow::DisplayWarningText(const char* message)
++{
++  PyGILBeginMacro;
++
++  if (!PyErr_Occurred())
++    PyErr_SetString(PyExc_RuntimeWarning, message);
++
++  PyGILEndMacro;
++}
++
++void vtkPythonOutputWindow::DisplayGenericWarningText(const char* message)
++{
++  PyGILBeginMacro;
++
++  if (!PyErr_Occurred())
++    PyErr_SetString(PyExc_RuntimeWarning, message);
++
++  PyGILEndMacro;
++}
++
++void vtkPythonOutputWindow::DisplayDebugText(const char* message)
++{
++  this->DisplayText(message);
++}
++
+ //--------------------------------------------------------------------
+ // There are two hash tables associated with the Python wrappers
+ 
+@@ -86,6 +189,23 @@
+ {
+   this->ObjectHash = new vtkstd::map<vtkSmartPointerBase, PyObject*>;
+   this->ClassHash = new vtkstd::map<vtkstd::string, PyObject*>;;
++
++#if (PY_MAJOR_VERSION > 2) || \
++    ((PY_MAJOR_VERSION == 2) && (PY_MINOR_VERSION >= 3))
++
++  // we need to have this call because we're using
++  // PyGILState_Ensure/Release, see PEP 0311
++  // Python event handlers could be called from different C-threads,
++  // which is why the event handlers use the PyGILState calls.
++  PyEval_InitThreads();
++
++#endif
++
++  // set the vtkPythonOutputWindow as the singleton instance
++  vtkPythonOutputWindow *ow = vtkPythonOutputWindow::New();
++  ow->SetInstance(ow);
++  ow->Delete();
++  
+ }
+ 
+ //--------------------------------------------------------------------
+@@ -372,6 +492,7 @@
+ }
+ 
+ //--------------------------------------------------------------------
++
+ static void PyVTKObject_PyDelete(PyVTKObject *self)
+ {
+ #if PY_VERSION_HEX >= 0x02010000
+@@ -1987,13 +2108,15 @@
+     return;
+     }
+ 
+-#ifndef VTK_NO_PYTHON_THREADS
+-#if (PY_MAJOR_VERSION > 2) || \
+-((PY_MAJOR_VERSION == 2) && (PY_MINOR_VERSION >= 3))
+-  PyGILState_STATE state = PyGILState_Ensure();
+-#endif
+-#endif
+-  
++  PyGILBeginMacro;
++
++  // we save the error indicator here so that we can restore at at the end
++  // because event handlers (for example a ProgressEvent) can be called
++  // at any time and by default reset the error indicator, thus zeroing
++  // any previously set exceptions.
++  PyObject *atype, *avalue, *atraceback;
++  PyErr_Fetch(&atype, &avalue, &atraceback);
++
+   if (ptr && ptr->GetReferenceCount() > 0)
+     {
+     obj2 = vtkPythonGetObjectFromPointer(ptr);
+@@ -2088,12 +2211,10 @@
+     PyErr_Print();
+     }
+ 
+-#ifndef VTK_NO_PYTHON_THREADS
+-#if (PY_MAJOR_VERSION > 2) || \
+-((PY_MAJOR_VERSION == 2) && (PY_MINOR_VERSION >= 3))
+-  PyGILState_Release(state);
+-#endif
+-#endif
++  // restore error indicator.
++  PyErr_Restore(atype, avalue, atraceback);
++
++  PyGILEndMacro;
+ }
+ //--------------------------------------------------------------------
+ 
+Index: Wrapping/vtkWrapPython.c
+===================================================================
+RCS file: /cvsroot/VTK/VTK/Wrapping/vtkWrapPython.c,v
+retrieving revision 1.91
+diff -u -r1.91 vtkWrapPython.c
+--- Wrapping/vtkWrapPython.c	10 Dec 2008 20:58:40 -0000	1.91
++++ Wrapping/vtkWrapPython.c	19 May 2009 21:36:58 -0000
+@@ -1056,6 +1056,13 @@
+               fprintf(fp,"    else\n      {\n");
+               sprintf(methodname,"op->%s",currentFunction->Name);
+               }
++
++            /* release GIL so that other Python threads can do their
++             * thing during this potentially long-running C++ method
++             * call. */
++            fprintf(fp, "     PyThreadState *_save = PyEval_SaveThread();\n");
++		    /* start of try around method invocation */
++			fprintf(fp, "     try {\n");
+                 
+             switch (currentFunction->ReturnType % 0x1000)
+               {
+@@ -1090,6 +1097,31 @@
+                 }
+               }
+             fprintf(fp,");\n");
++
++        /* Call successfully completed, we have to get back the
++         * thread-lock so that we can continue Python processing. */
++        fprintf(fp, "      PyEval_RestoreThread(_save);\n");
++
++	    /* check if the special OutputWindow has set Python exception
++	       information... */
++	    fprintf(fp, "      if (PyErr_Occurred())\n");
++	    fprintf(fp, "        return NULL;\n");
++
++	    /* disabling warnings:
++	       #pragma warning( disable: 4207 )
++	     */
++	    
++            /* catch clause for any possible C++ exceptions (e.g. bad_alloc) */
++            fprintf(fp, "     }\n");
++            fprintf(fp, "     catch (vtkstd::exception &_e) {\n");
++            /* we can only get here by C++ exception, which means we
++             * have to get back the Python thread lock.  We do the
++             * same as Py_END_ALLOW_THREADS, but withouth the closing
++             * } */
++            fprintf(fp, "       PyEval_RestoreThread(_save);\n");
++            fprintf(fp, "       PyErr_SetString(PyExc_RuntimeError, _e.what());\n");
++            fprintf(fp, "       return NULL;\n");
++            fprintf(fp, "     }\n");
+           
+             if (currentFunction->NumberOfArguments == 1 
+                 && currentFunction->ArgTypes[0] == 0x5000)
+@@ -1381,6 +1413,8 @@
+   fprintf(fp,"#include <vtksys/ios/sstream>\n");
+   fprintf(fp,"#include \"%s.h\"\n",data->ClassName);
+ 
++  fprintf(fp, "#include <vtkstd/stdexcept>\n");
++
+   fprintf(fp,"#if defined(WIN32)\n");
+   fprintf(fp,"extern \"C\" { __declspec( dllexport ) PyObject *PyVTKClass_%sNew(char *); }\n",
+           data->ClassName);
