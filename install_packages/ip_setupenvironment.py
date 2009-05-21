@@ -9,12 +9,11 @@ import utils
 
 dependencies = []
 
-posix_script = """
-#!/bin/bash
+posix_scripts = {'inc': ('paths.inc', """
+# include file used by other DeVIDE scripts
+# make sure invoking script has set MYDIR
 
-# johannes.py: setup environment ##################################
-
-export PATH=%(python_binary_path)s:$PATH
+PATH=%(python_binary_path)s:$PATH
 
 unset LD_LIBRARY_PATH
 unset PYTHONPATH
@@ -39,19 +38,50 @@ PYTHONPATH=%(vtktudoss_python)s:%(vtktudoss_lib)s:$PYTHONPATH
 # ITK
 LD_LIBRARY_PATH=%(itk_lib)s:%(wrapitk_lib)s:$LD_LIBRARY_PATH
 PYTHONPATH=%(wrapitk_python)s:%(wrapitk_lib)s:$PYTHONPATH
+"""),
+'setup_env': ('setup_env.sh', """
+#!/bin/bash
+# sets up environment for your own work.
+# in this case we can't use dirname, because this one is supposed to
+# be sourced.
+MYDIR=%s
+source $MYDIR/paths.inc
 
-# finally export
-export LD_LIBRARY_PATH
 export PYTHONPATH
-"""
+export LD_LIBRARY_PATH
+"""),
+'devide' : ('devide.sh', """
+#!/bin/bash
+# invokes DeVIDE
+MYDIR=`dirname $0`
+source $MYDIR/paths.inc
+
+export PYTHONPATH
+export LD_LIBRARY_PATH
+
+python $MYDIR/devide/devide.py $*
+"""),
+
+'python' : ('python.sh', """
+#!/bin/bash
+# invokes DeVIDE-capable Python
+MYDIR=`dirname $0`
+source $MYDIR/paths.inc
+
+export PYTHONPATH
+export LD_LIBRARY_PATH
+
+python $*
+""")
+}
 
 # we have to use %% where we want a single % due to the way python
 # string interpolation works.  Python expects a single % to be
 # followed by valid format specifiers.  Also see "Template strings"
 # for a modern and simpler way to do string interpolation: 
 # http://docs.python.org/lib/node40.html
-nt_script = """
-@rem johannes.py: setup environment ##################################
+nt_scripts = {'inc': ('paths.inc', """
+@rem include file used by other DeVIDE scripts
 
 @rem zero the pythonpath for this session
 @set PYTHONPATH=
@@ -79,7 +109,14 @@ nt_script = """
 @rem ITK
 @set PATH=%(itk_bin)s;%(wrapitk_lib)s;%%PATH%%
 @set PYTHONPATH=%(wrapitk_python)s;%(wrapitk_lib)s;%%PYTHONPATH%%
-"""
+"""),
+'setup_env': ('setup_env.cmd', """
+"""),
+'devide' : ('devide.cmd', """
+"""),
+'python' : ('python.cmd', """
+""")
+}
 
 class SetupEnvironment(InstallPackage):
 
@@ -102,20 +139,57 @@ class SetupEnvironment(InstallPackage):
                    'wrapitk_lib' : config.WRAPITK_LIB,
                    'wrapitk_python' : config.WRAPITK_PYTHON}
 
+        # replace all instances of the installation dir with the
+        # variable $MYDIR / %MYDIR%
+        vardict2 = {}
+        idir = config.inst_dir
+        if idir.endswith(os.path.sep):
+            idir = idir[:-1]
+            
+        for k,v in vardict.items():
+            vardict2[k] = v.replace(idir, '$MYDIR')
 
         if os.name == 'nt':
-            script = nt_script % vardict
-            script_name = 'setup_env.cmd'
+            scripts = nt_scripts
         else:
-            script = posix_script % vardict
-            script_name = 'setup_env.sh'
+            scripts = posix_scripts
 
-        script_fn = os.path.join(config.working_dir, script_name)
-        sf = file(script_fn, 'w')
-        sf.write(script)
+        # create the paths include script text
+        fname, inc_script = scripts['inc']
+        inc_script = inc_script % vardict2
+        # write it to disc
+        inc_script_fn = os.path.join(config.inst_dir, 'paths.inc')
+        sf = file(inc_script_fn, 'w')
+        sf.write(inc_script)
         sf.close()
+        utils.output('Wrote %s.' % (inc_script_fn,))
 
-        utils.output('Wrote %s.' % (script_fn,))
+        # create the setup environment script text
+        fname, setup_env_script = scripts['setup_env']
+        setup_env_script = setup_env_script % (config.inst_dir,)
+        # write it to disc
+        se_script_fn = os.path.join(
+                config.inst_dir, fname)
+        sef = file(se_script_fn, 'w')
+        sef.write(setup_env_script)
+        sef.close()
+        utils.output('Write %s.' % (se_script_fn,))
+
+        fname, devide_script = scripts['devide']
+        dsfn = os.path.join(
+                config.inst_dir, fname)
+        dsf = file(dsfn, 'w')
+        dsf.write(devide_script)
+        dsf.close()
+        utils.output('Wrote %s.' % (dsfn,))
+
+        fname, python_script = scripts['python']
+        psfn = os.path.join(
+                config.inst_dir, fname)
+        psf = file(psfn, 'w')
+        psf.write(python_script)
+        psf.close()
+        utils.output('Wrote %s.' % (psfn,))
 
     def get_installed_version(self):
         return None
