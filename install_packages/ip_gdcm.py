@@ -112,12 +112,24 @@ class GDCM(InstallPackage):
         
 
     def install(self):
-        config.GDCM_LIB = os.path.join(self.build_dir, 'bin')
         if os.name == 'nt':
             config.GDCM_LIB = os.path.join(
-                    config.GDCM_LIB, config.BUILD_TARGET)
+                    self.inst_dir, 'bin')
+        else:
+            config.GDCM_LIB = os.path.join(self.inst_dir, 'lib')
 
-        config.GDCM_PYTHON = os.path.join(self.build_dir, 'bin')
+        config.GDCM_PYTHON = os.path.join(self.inst_dir, 'lib')
+
+        test_file = os.path.join(config.GDCM_PYTHON, 'gdcm.py')
+        if os.path.exists(test_file):
+            utils.output("gdcm already installed, skipping step.")
+        else:
+            os.chdir(self.build_dir)
+            ret = utils.make_command('GDCM.sln', install=True)
+
+            if ret != 0:
+                utils.error(
+                "Could not install gdcm.  Fix and try again.")
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
