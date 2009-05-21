@@ -91,13 +91,24 @@ class VTKTUDOSS(InstallPackage):
         
 
     def install(self):
-        config.VTKTUDOSS_LIB = os.path.join(self.build_dir, 'bin')
+        config.VTKTUDOSS_PYTHON = os.path.join(
+            self.inst_dir, 'lib')
+
+        config.VTKTUDOSS_LIB = os.path.join(self.inst_dir, 'lib')
         if os.name == 'nt':
             config.VTKTUDOSS_LIB = os.path.join(
                     config.VTKTUDOSS_LIB, config.BUILD_TARGET)
 
-        config.VTKTUDOSS_PYTHON = os.path.join(
-            self.build_dir, 'Wrapping/Python')
+        test_file = os.path.join(config.VTKTUDOSS_LIB, 'vtktudoss.py')
+        if os.path.exists(test_file):
+            utils.output("vtktudoss already installed, skipping step.")
+        else:
+            os.chdir(self.build_dir)
+            ret = utils.make_command('VTKTUDOSS.sln', install=True)
+
+            if ret != 0:
+                utils.error(
+                "Could not install vtktudoss.  Fix and try again.")
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is

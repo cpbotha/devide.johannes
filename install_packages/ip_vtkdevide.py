@@ -81,13 +81,25 @@ class VTKDEVIDE(InstallPackage):
         
 
     def install(self):
-        config.VTKDEVIDE_LIB = os.path.join(self.build_dir, 'bin')
+        config.VTKDEVIDE_PYTHON = os.path.join(
+            self.inst_dir, 'lib')
+
+        config.VTKDEVIDE_LIB = os.path.join(self.inst_dir, 'lib')
         if os.name == 'nt':
             config.VTKDEVIDE_LIB = os.path.join(
                     config.VTKDEVIDE_LIB, config.BUILD_TARGET)
 
-        config.VTKDEVIDE_PYTHON = os.path.join(
-            self.source_dir, 'Wrapping/Python')
+        test_file = os.path.join(config.VTKDEVIDE_LIB, 'vtkdevide.py')
+        if os.path.exists(test_file):
+            utils.output("vtkdevide already installed, skipping step.")
+        else:
+            os.chdir(self.build_dir)
+            ret = utils.make_command('VTKDEVIDE.sln', install=True)
+
+            if ret != 0:
+                utils.error(
+                "Could not install vtkdevide.  Fix and try again.")
+ 
 
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
