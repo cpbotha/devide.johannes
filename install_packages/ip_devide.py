@@ -29,10 +29,7 @@ class DeVIDE(InstallPackage):
 
         # setup some devide config variables (we need to do this in anycase,
         # because they're config vars and other modules might want them)
-        config.DEVIDE_PY = os.path.join(self.build_dir, 'devide.py')
-        config.DEVIDE_MAKERELEASE_SH = os.path.join(
-            self.build_dir, 'installer/makeRelease.sh')
-
+        config.DEVIDE_PY = os.path.join(self.inst_dir, 'devide.py')
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -46,17 +43,22 @@ class DeVIDE(InstallPackage):
                             "Fix and try again.")
 
     def unpack(self):
+        """No unpack step.
+        """
+        pass
+
+    def copy_devide_to_inst(self):
         # we unpack by copying the checked out tree to the build dir
-        if os.path.isdir(self.build_dir):
+        if os.path.isdir(self.inst_dir):
             utils.output(
-                'DeVIDE already present in build dir.  Skipping step.')
+                'DeVIDE already present in inst dir.  Skipping step.')
             return
 
-        shutil.copytree(self.source_dir, self.build_dir)
+        shutil.copytree(self.source_dir, self.inst_dir)
 
         # now modify the version unpacked devide.py
         utils.output("Modifying DeVIDE version")
-        devide_py = os.path.join(self.build_dir, 'devide.py')
+        devide_py = os.path.join(self.inst_dir, 'devide.py')
         # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
         # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
         # "$JOHANNES_REL") 
@@ -66,6 +68,9 @@ class DeVIDE(InstallPackage):
             devide_py)
 
     def build(self):
+        pass
+
+    def create_scripts(self):
         # first make script for starting DeVIDE right from the build dir
         # if the user wants to do so...
         ##################################################################
@@ -97,96 +102,19 @@ echo "Starting up DeVIDE..."
 
         utils.output('Wrote %s.' % (invoking_script_fn,))
 
-        # now also create script with which packages can be built
-        #################################################################
-        PYINSTALLER_SCRIPT = os.path.join(config.INSTALLER_DIR, 'Build.py')
-        IDIR = os.path.join(self.build_dir, 'installer')
-        MAKEDIST_SCRIPT = os.path.join(IDIR, 'make_dist.py')
-        SPECFILE = os.path.join(IDIR, 'devide.spec')
-
-        if os.name == 'nt':
-            package_script = """
-@rem build DeVIDE redistributable binary packages.            
-@echo Did you remember to run setup_env.cmd?
-%s %s -s %s -i %s 
-
-            """ % (sys.executable, MAKEDIST_SCRIPT, SPECFILE, PYINSTALLER_SCRIPT)
-            ps_fn1 = 'make_devide_package.cmd'
-
-        else:
-            package_script = """
-#!/bin/bash
-# build DeVIDE redistributable binary packages.
-echo "Did you remember to run \". setup_env.sh\"?"
-%s %s -s %s -i %s 
-
-            """ % (sys.executable, MAKEDIST_SCRIPT, SPECFILE, PYINSTALLER_SCRIPT)
-            ps_fn1 = 'make_devide_package.sh'
-
-        ps_fn = os.path.join(config.working_dir, ps_fn1)
-        psf = file(ps_fn, 'w')
-        psf.write(package_script)
-        psf.close()
-
-        utils.output('Wrote %s.' % (ps_fn,))
-
-        # and then build the packages if the config says so
-        ##################################################################
-        if config.BUILD_DEVIDE_DISTRIBUTABLES:
-            ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
-                                'distdevide')
-            if os.path.isdir(ddir):
-                utils.output('DeVIDE packages already built, skipping...')
-                return
-           
-            if os.name == 'nt':
-                setup_script = os.path.join(
-                        config.working_dir, 'setup_env.cmd')
-
-                ret = os.system("%s & %s" % (setup_script, ps_fn))
-
-            else:
-                ret = os.system(". %s && sh %s" %
-                                (os.path.join(config.working_dir, 'setup_env.sh'),
-                                 ps_fn))
-            
-            if ret != 0:
-                utils.error("Could not build DeVIDE installer packages.")
-                return
-            
-
     def install(self):
-        if config.BUILD_DEVIDE_DISTRIBUTABLES:
-            # check if devide has already been installed.
-            if os.path.isdir(self.inst_dir):
-                utils.output('DeVIDE already installed.  Skipping step.')
-                return
-
-            # we should have complete DeVIDE tarballs in devide/installer
-            # and a complete (including ITK) installation in distdevide
-            # copy binaries in distdevide to wd/inst/devide
-            ddir = os.path.join(os.path.join(self.build_dir, 'installer'),
-                                'distdevide')
-
-            # we have to delete the destination path first
-            # copytree doesn't work if the destination doesn't exist
-            if os.path.isdir(self.inst_dir):
-                shutil.rmtree(self.inst_dir)
-                
-            shutil.copytree(ddir, self.inst_dir)
+        self.copy_devide_to_inst()
+        self.create_scripts()
                    
     def clean_build(self):
         utils.output("Removing build and installation directories.")
-
-        if os.path.isdir(self.build_dir):
-            shutil.rmtree(self.build_dir)
 
         if os.path.isdir(self.inst_dir):
             shutil.rmtree(self.inst_dir)
 
     def get_installed_version(self):
         import sys
-        sys.path.insert(0, self.build_dir)
+        sys.path.insert(0, self.inst_dir)
         import devide
         del sys.path[0]
         return devide.DEVIDE_VERSION
