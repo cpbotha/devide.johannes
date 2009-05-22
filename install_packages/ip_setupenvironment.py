@@ -22,7 +22,6 @@ unset PYTHONPATH
 LD_LIBRARY_PATH=%(python_library_path)s:$LD_LIBRARY_PATH
 # wxpython
 LD_LIBRARY_PATH=%(wx_lib_path)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(wxp_pythonpath)s:$PYTHONPATH
 # VTK
 LD_LIBRARY_PATH=%(vtk_sodir)s:$LD_LIBRARY_PATH
 PYTHONPATH=%(vtk_python)s:%(vtk_sodir)s:$PYTHONPATH
@@ -88,7 +87,6 @@ nt_scripts = {'inc': ('paths.inc', """
 
 @rem wxpython
 @set PATH=%(wx_lib_path)s;%%PATH%%
-@set PYTHONPATH=%(wxp_pythonpath)s;%%PYTHONPATH%%
 
 @rem VTK
 @set PATH=%(vtk_sodir)s;%%PATH%%
@@ -125,7 +123,6 @@ class SetupEnvironment(InstallPackage):
         vardict = {'python_binary_path' : config.python_binary_path,
                    'python_library_path' : config.python_library_path,
                    'wx_lib_path' : config.WX_LIB_PATH,
-                   'wxp_pythonpath' : config.WXP_PYTHONPATH,
                    'vtk_sodir' : config.VTK_SODIR,
                    'vtk_python' : config.VTK_PYTHON,
                    'gdcm_lib' : config.GDCM_LIB,

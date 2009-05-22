@@ -9,6 +9,7 @@ import sys
 import shutil
 from install_package import InstallPackage
 import utils
+from distutils import sysconfig
 
 WXP_TARBALL = "wxPython-src-2.8.9.2.tar.bz2"
 WXP_DIRBASE = WXP_TARBALL[0:WXP_TARBALL.find('tar.bz2')-1]
@@ -22,7 +23,11 @@ class WXPython(InstallPackage):
     def __init__(self):
         self.tbfilename = os.path.join(config.archive_dir, WXP_TARBALL)
         self.build_dir = os.path.join(config.build_dir, WXP_DIRBASE)
+        # this is where wxwidgets gets installed
         self.inst_dir = os.path.join(config.inst_dir, 'wx')
+        # and this is where the wxpython part ends up.
+        # python/lib/python2.x/site-packages/
+        self.sp_dir = sysconfig.get_python_lib()
 
     def get(self):
         if os.path.exists(self.tbfilename):
@@ -81,8 +86,9 @@ class WXPython(InstallPackage):
             raise RuntimeError(
                 '##### Error making wxWidgets STC.  Fix and try again.')
 
-    def build_wxpython(self):
-        os.chdir(os.path.join(self.build_dir, 'wxPython'))
+    def setup_env_for_wxp_build(self):
+        saved = [os.environ.get(key) for key in ['PATH',
+            'LD_LIBRARY_PATH', 'PYTHONPATH']]
 
         # add wx bin to path and wx lib to LD_LIBRARY_PATH
         os.environ['PATH'] = "%s%s%s" % (os.path.join(self.inst_dir, 'bin'),
@@ -95,12 +101,27 @@ class WXPython(InstallPackage):
         # somewhere else when setup.py runs
         os.environ['PYTHONPATH'] = ''
 
+        return saved
+
+    def restore_env_after_wxp_build(self, saved):
+        for idx, key in enumerate(
+                ['PATH', 'LD_LIBRARY_PATH', 'PYTHONPATH']):
+            if saved[idx] is not None:
+                os.environ[key] = saved[idx]
+
+    def build_wxpython(self):
+        os.chdir(os.path.join(self.build_dir, 'wxPython'))
+
+        saved = self.setup_env_for_wxp_build()
+
         # find path to current python binary        
         exe = sys.executable
 
         ret = os.system(
             '%s setup.py build_ext --inplace UNICODE=1 BUILD_GLCANVAS=1' %
             (exe,))
+
+        self.restore_env_after_wxp_build(saved)
         
         if ret != 0:
             utils.error('wxPython setup failed.  Please fix and try again.')
@@ -132,27 +153,29 @@ class WXPython(InstallPackage):
         os.chdir(self.build_dir)
         os.chdir('wxPython')
 
-        if os.path.exists(os.path.join(self.inst_dir, 'wxPython')):
+        if os.path.exists(os.path.join(self.sp_dir, 'wxversion.py')):
             utils.output('wxPython already installed.')
 
         else:
             utils.output('Installing wxPython.')
-            wxp_build = os.path.join(self.build_dir, 'wxPython')
-            shutil.copytree(wxp_build,
-                            os.path.join(self.inst_dir, 'wxPython'))
 
-            # also make sure that the include dir has been copied
-            # to self.inst_dir/include/wx-2.6/wx/wxPython
-            # I'm not so happy about this, but python setup.py --root=
-            # doesn't do what I want...
-            #shutil.copytree(
-            #    os.path.join(wxp_build, 'include/wx/wxPython'),
-            #    os.path.join(self.inst_dir, 'include/wx-2.6/wx/wxPython'))
+            saved = self.setup_env_for_wxp_build() 
+
+            # find path to current python binary        
+            exe = sys.executable
+            ret = os.system(
+                '%s setup.py install' % (exe,))
+
+            self.restore_env_after_wxp_build(saved)
+
+            if ret != 0:
+                utils.error(
+                        'wxPython install failed.  Please fix and try again.')
 
         config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
         # this is where wx-config can be found
         config.WX_BIN_PATH = os.path.join(self.inst_dir, 'bin')
-        config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
+        #config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
 
     def get_installed_version(self):
         import wx
