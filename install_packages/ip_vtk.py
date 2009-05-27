@@ -23,12 +23,14 @@ CVS_VERSION = "-r VTK-5-4-1"
 
 VTK_BASE_VERSION = "vtk-5.4"
 
-# this patch does two things:
+# this patch does three things:
 # 1. adds try/catch blocks to all python method calls in order
 #    to trap bad_alloc exceptions
 # 2. implements my scheme for turning all VTK errors into Python exceptions
 #    by making use of a special output window class
-EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions_20090519_vtk-5-4-1.diff"
+# 3. gives up the GIL around all VTK calls.  This is also necessary
+#    for 2 not to deadlock on multi-cores.
+EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions.diff"
 
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
