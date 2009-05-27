@@ -4,7 +4,7 @@ RCS file: /cvsroot/VTK/VTK/Common/vtkPythonUtil.cxx,v
 retrieving revision 1.90
 diff -u -r1.90 vtkPythonUtil.cxx
 --- Common/vtkPythonUtil.cxx	6 Aug 2008 20:23:20 -0000	1.90
-+++ Common/vtkPythonUtil.cxx	19 May 2009 21:36:58 -0000
++++ Common/vtkPythonUtil.cxx	27 May 2009 14:19:14 -0000
 @@ -22,6 +22,7 @@
  #include "vtkDataArray.h"
  #include "vtkObject.h"
@@ -13,7 +13,7 @@ diff -u -r1.90 vtkPythonUtil.cxx
  #include "vtkSmartPointerBase.h"
  #include "vtkTimeStamp.h"
  #include "vtkWindows.h"
-@@ -65,6 +66,108 @@
+@@ -65,6 +66,104 @@
  
  //#define VTKPYTHONDEBUG
  
@@ -96,22 +96,18 @@ diff -u -r1.90 vtkPythonUtil.cxx
 +
 +void vtkPythonOutputWindow::DisplayWarningText(const char* message)
 +{
-+  PyGILBeginMacro;
-+
-+  if (!PyErr_Occurred())
-+    PyErr_SetString(PyExc_RuntimeWarning, message);
-+
-+  PyGILEndMacro;
++  // one could have considered setting a PyExc_RuntimeWarning, but
++  // this causes all VTK warnings (usually non-critical conditions) to
++  // trigger Python exceptions that terminate the whole program flow.
++  this->DisplayText(message);
 +}
 +
 +void vtkPythonOutputWindow::DisplayGenericWarningText(const char* message)
 +{
-+  PyGILBeginMacro;
-+
-+  if (!PyErr_Occurred())
-+    PyErr_SetString(PyExc_RuntimeWarning, message);
-+
-+  PyGILEndMacro;
++  // one could have considered setting a PyExc_RuntimeWarning, but
++  // this causes all VTK warnings (usually non-critical conditions) to
++  // trigger Python exceptions that terminate the whole program flow.
++  this->DisplayText(message);
 +}
 +
 +void vtkPythonOutputWindow::DisplayDebugText(const char* message)
@@ -122,7 +118,7 @@ diff -u -r1.90 vtkPythonUtil.cxx
  //--------------------------------------------------------------------
  // There are two hash tables associated with the Python wrappers
  
-@@ -86,6 +189,23 @@
+@@ -86,6 +185,23 @@
  {
    this->ObjectHash = new vtkstd::map<vtkSmartPointerBase, PyObject*>;
    this->ClassHash = new vtkstd::map<vtkstd::string, PyObject*>;;
@@ -146,7 +142,7 @@ diff -u -r1.90 vtkPythonUtil.cxx
  }
  
  //--------------------------------------------------------------------
-@@ -372,6 +492,7 @@
+@@ -372,6 +488,7 @@
  }
  
  //--------------------------------------------------------------------
@@ -154,7 +150,7 @@ diff -u -r1.90 vtkPythonUtil.cxx
  static void PyVTKObject_PyDelete(PyVTKObject *self)
  {
  #if PY_VERSION_HEX >= 0x02010000
-@@ -1987,13 +2108,15 @@
+@@ -1987,13 +2104,15 @@
      return;
      }
  
@@ -177,7 +173,7 @@ diff -u -r1.90 vtkPythonUtil.cxx
    if (ptr && ptr->GetReferenceCount() > 0)
      {
      obj2 = vtkPythonGetObjectFromPointer(ptr);
-@@ -2088,12 +2211,10 @@
+@@ -2088,12 +2207,10 @@
      PyErr_Print();
      }
  
@@ -200,7 +196,7 @@ RCS file: /cvsroot/VTK/VTK/Wrapping/vtkWrapPython.c,v
 retrieving revision 1.91
 diff -u -r1.91 vtkWrapPython.c
 --- Wrapping/vtkWrapPython.c	10 Dec 2008 20:58:40 -0000	1.91
-+++ Wrapping/vtkWrapPython.c	19 May 2009 21:36:58 -0000
++++ Wrapping/vtkWrapPython.c	27 May 2009 14:19:14 -0000
 @@ -1056,6 +1056,13 @@
                fprintf(fp,"    else\n      {\n");
                sprintf(methodname,"op->%s",currentFunction->Name);
