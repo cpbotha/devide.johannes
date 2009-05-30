@@ -178,7 +178,8 @@ def init(wd, the_profile):
         PYTHON_LIBRARY = os.path.join(ll, ldl)
 
     if not os.path.exists(PYTHON_LIBRARY):
-        raise RuntimeError('!!!!! %s does not exist.' %
+        raise RuntimeError(
+        '!!!!! %s does not exist (python-dev installed?).' %
                 (PYTHON_LIBRARY,))
 
 
