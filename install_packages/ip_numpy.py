@@ -9,24 +9,31 @@ import shutil
 import sys
 import utils
 
-NUMPY_TARBALL = "numpy-1.2.1.tar.gz"
-NUMPY_URL = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s" % \
-            (NUMPY_TARBALL,)
-NUMPY_DIRBASE = "numpy-1.2.1"
+NUMPY_BASENAME = "numpy-1.3.0"
+NUMPY_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s"
+
+if os.name == 'posix':
+    NUMPY_ARCHIVE = "%s.tar.gz" % (NUMPY_BASENAME,)
+else:
+    NUMPY_ARCHIVE = "%s.zip" % (NUMPY_BASENAME,)   
+    
+NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
+
+NUMPY_DIRBASE = NUMPY_BASENAME 
 
 dependencies = []
 
 class NumPy(InstallPackage):
 
     def __init__(self):
-        self.tbfilename = os.path.join(config.archive_dir, NUMPY_TARBALL)
+        self.tbfilename = os.path.join(config.archive_dir, NUMPY_ARCHIVE)
         self.build_dir = os.path.join(config.build_dir, NUMPY_DIRBASE)
         self.inst_dir = os.path.join(config.inst_dir, 'numpy')
 
     def get(self):
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
-                         (NUMPY_TARBALL,))
+                         (NUMPY_ARCHIVE,))
         else:
             utils.goto_archive()
             utils.urlget(NUMPY_URL)
