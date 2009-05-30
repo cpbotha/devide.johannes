@@ -27,14 +27,20 @@ nt_python = """
 %~dp0\inst\python\python.exe %1 %2 %3 %4 %5 %6 %7 %8 %9 
 """
 
+# I tried with a jython.sh script that sets up the environment and
+# then runs the correct python, but even with exports, if that python
+# process then restarted another python (with os.system) it would not
+# get the modified environment (LD_LIBRARY_PATH), and would hence not
+# be able to find its own libraries.
 posix_python = """
 #!/bin/sh
-# script to run locally installed johannes python
-# should be located in johannes workingdir/jpython.sh
-MYDIR=`dirname $0`
-export LD_LIBRARY_PATH=$MYDIR/inst/python/lib
-export PATH=$MYDIR/inst/python/bin/:\$PATH
-python $*
+# script to setup environment for running local python
+# this should be sourced before running python
+# double-check with 'which python' that the locally installed
+# version is running...
+MYDIR=%s
+export LD_LIBRARY_PATH=$MYDIR/python/lib
+export PATH=$MYDIR/python/bin/:$PATH
 """
 
 
@@ -133,9 +139,14 @@ def main():
                         'Failed locally installing Python.  EFS / msiexec problems?')
 
         jpcmd = 'jpython.cmd'
-        f = open(os.path.join(config.working_dir, jpcmd), 'w')
+        jpc_fn = os.path.join(config.working_dir, jpcmd)
+        f = open(jpc_fn, 'w')
         f.write(nt_python)
         f.close()
+
+        ilines = """
+%s johannes.py -w %s
+        """ (jpc_fn, config.working_dir)
 
     else:
         if not posix_deps_test_c():
@@ -177,24 +188,29 @@ See error above.  Please fix and try again.
 
         # this means we have to test for dependencies and then build
         # Python.
-        jpcmd = 'jpython'
+        sefn = 'jpython_setup_env.sh'
 
-        jpcmd_fn = os.path.join(config.working_dir, jpcmd)
+        jpcmd_fn = os.path.join(config.working_dir, sefn)
         f = open(jpcmd_fn, 'w')
-        f.write(posix_python)
+        f.write(posix_python % (config.inst_dir,))
         f.close()
 
         # make it executable
-        os.chmod(jpcmd_fn, stat.S_IEXEC)
+        #os.chmod(jpcmd_fn, stat.S_IEXEC)
+
+        ilines = """
+source %s
+which python
+python johannes.py -w %s
+        """ % (sefn, config.working_dir)
 
 
     print """
 ######################################################################
 Successfully bootstrapped local johannes Python.  Start the full build
 system with:
-%s johannes.py -w %s
-    """ % \
-    (os.path.join(config.working_dir, jpcmd), config.working_dir)
+%s
+    """ % (ilines,) 
 
 
 def posix_deps_test_c():
