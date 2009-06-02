@@ -268,14 +268,6 @@ def main():
             ip_names = [i.__class__.__name__.lower()
                         for i in ip_instance_list]
 
-        # if we're on windows, remove a number of packages regardless
-        # of user preferences.  Sorry user!
-        if (mode != 'show_versions') and os.name == 'nt':
-            #nogo = ['numpy', 'wxpython', 'matplotlib', 'cmake']
-            nogo = ['wxpython', 'matplotlib', 'cmake']
-            ip_names = [i for i in ip_names if i not
-                    in nogo]
-
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()

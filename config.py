@@ -140,11 +140,21 @@ def init(wd, the_profile):
         PYE_EXT = SO_EXT
 
     elif os.name == 'nt':
-        CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 8 2005"'
-        # where the %s substitution is the SLN file
-        # important that devenv is run, and NOT devenv.exe!
-        MAKE = DEVENV + ' %s /project %s ' \
-            '/projectconfig "%s|Win32" /build %s'
+        import platform
+        a = platform.architecture()[0]
+        if a == '32bit':        
+		CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008"'
+		# where the %s substitution is the SLN file
+		# important that devenv is run, and NOT devenv.exe!
+		MAKE = DEVENV + ' %s /project %s ' \
+		    '/projectconfig "%s|Win32" /build %s'
+
+	else:
+		CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008 Win64"'
+		# where the %s substitution is the SLN file
+		# important that devenv is run, and NOT devenv.exe!
+		MAKE = DEVENV + ' %s /project %s ' \
+		    '/projectconfig "%s|Win64" /build %s'
 
         SO_EXT = '.dll'
         PYE_EXT = '.pyd'
