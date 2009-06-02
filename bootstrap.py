@@ -146,7 +146,7 @@ def main():
 
         ilines = """
 %s johannes.py -w %s
-        """ (jpc_fn, config.working_dir)
+        """ % (jpc_fn, config.working_dir)
 
     else:
         if not posix_deps_test_c():

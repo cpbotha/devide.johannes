@@ -8,7 +8,7 @@ stuff, also automatically and nicely localised in a folder.
 
 * Get and install Python 2.6 from [1].  This will only be used for
   bootstrapping, so a Python 2.5 should also do.
-* SVN on your PATH: get the command-line client from http://www.collab.net/downloads/subversion/
+* SVN on your PATH: get the command-line client from [2]
 * CVS on your PATH: get the WinCVS ZIP from
   http://wincvs.org/download.html then extract the CVSNT installer
   from there and install it.
@@ -21,6 +21,9 @@ stuff, also automatically and nicely localised in a folder.
   path (for yourself, or for all users).
 
 [1] http://www.python.org/ftp/python/2.6.2/python-2.6.2.msi
+[2] http://subversion.tigris.org/files/documents/15/45953/Setup-Subversion-1.6.2.msi
+
+
 [2] http://surfnet.dl.sourceforge.net/sourceforge/numpy/numpy-1.2.1.win32-superpack-python2.5.msi
 [3] http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.1-py25.exe
 [4] http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/matplotlib-0.98.5.2.win32-py2.5.exe
