@@ -95,13 +95,13 @@ def windows_prereq_check(working_dir):
             'MS Visual Studio', '%s /?' % (config.DEVENV,), 
             'Visual Studio Version (.*)\.$')
 
-    v = v and utils.find_command_with_ver(
-            'CMake', '%s --version' % (config.CMAKE_BINPATH,),
-            '^cmake version\s+(.*)$')
+    #v = v and utils.find_command_with_ver(
+    #        'CMake', '%s --version' % (config.CMAKE_BINPATH,),
+    #        '^cmake version\s+(.*)$')
 
     v = v and utils.find_command_with_ver(
             'CVS', '%s -v' % (config.CVS,),
-            '\(CVS\)\s+(.*)\s+')
+            '\((CVS|CVSNT)\)\s+(.*)\s+')
 
     v = v and utils.find_command_with_ver(
             'Subversion (SVN)', '%s --version' % (config.SVN,),
