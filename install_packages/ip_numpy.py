@@ -10,12 +10,19 @@ import sys
 import utils
 
 NUMPY_BASENAME = "numpy-1.3.0"
-NUMPY_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s"
 
 if os.name == 'posix':
+    NUMPY_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s"
     NUMPY_ARCHIVE = "%s.tar.gz" % (NUMPY_BASENAME,)
-else:
-    NUMPY_ARCHIVE = "%s.zip" % (NUMPY_BASENAME,)   
+elif os.name == 'nt':
+    NUMPY_URL_BASE = "http://visualisation.tudelft.nl/~cpbotha/files/devide/johannes_support/%s"
+
+    import platform
+    a = platform.architecture()[0]
+    if a == '32bit':
+        NUMPY_ARCHIVE = "%s-win32py26.zip" % (NUMPY_BASENAME,)   
+    else:
+        NUMPY_ARCHIVE = "%s-win64py26.zip" % (NUMPY_BASENAME,)   
     
 NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
 
@@ -39,16 +46,24 @@ class NumPy(InstallPackage):
             utils.urlget(NUMPY_URL)
 
     def unpack(self):
-        if os.path.isdir(self.build_dir):
-            utils.output("NUMPY source already unpacked, not redoing.")
+        if os.name == 'posix':
+            if os.path.isdir(self.build_dir):
+                utils.output("NUMPY source already unpacked, not redoing.")
+            else:
+                utils.output("Unpacking NUMPY source.")
+                utils.unpack_build(self.tbfilename)
+
         else:
-            utils.output("Unpacking NUMPY source.")
-            utils.unpack_build(self.tbfilename)
+            utils.output("Nothing to unpack (Windows).")
 
     def configure(self):
         pass
     
     def build(self):
+        if os.name == 'nt':
+            utils.output("Nothing to build (Windows).")
+
+        # for posix, we have to build the whole shebang.
         os.chdir(self.build_dir)
 
         # weak test... there are .so files deeper, but they're in platform
@@ -81,12 +96,20 @@ class NumPy(InstallPackage):
             utils.output('ImportError test shows that numpy is not '
                          'installed.  Installing...')
 
-            os.chdir(self.build_dir)
-            
-            ret = os.system('%s setup.py install' % (sys.executable,))
-            
-            if ret != 0:
-                utils.error('numpy install failed.  Please fix and try again.')
+            if os.name == 'posix':
+                os.chdir(self.build_dir)
+                
+                ret = os.system('%s setup.py install' % (sys.executable,))
+                
+                if ret != 0:
+                    utils.error('numpy install failed.  Please fix and try again.')
+
+            elif os.name == 'nt':
+                # unpack relevant ZIP into Python site-packages dir.
+                from distutils import sysconfig
+                spd = sysconfig.get_python_lib()
+                os.chdir(spd)
+                utils.unpack(self.tbfilename)
 
     def clean_build(self):
         utils.output("Removing build and install directories.")

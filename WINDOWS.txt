@@ -8,11 +8,19 @@ stuff, also automatically and nicely localised in a folder.
 
 * Get and install Python 2.6 from [1].  This will only be used for
   bootstrapping, so a Python 2.5 should also do.
-* SVN on your PATH: get the command-line client from [2]
-* CVS on your PATH: get the WinCVS ZIP from
-  http://wincvs.org/download.html then extract the CVSNT installer
-  from there and install it.
-* patch on your PATH: http://gnuwin32.sourceforge.net/packages/patch.htm
+* SVN: get and install the command-line client from [2].
+  The installer will modify your PATH variable. 
+* CVS: get the WinCVS ZIP from http://wincvs.org/download.html then
+  extract the CVSNT installer
+  from there and install it.  The installer will modify your PATH
+  variable.
+* patch: get from http://gnuwin32.sourceforge.net/packages/patch.htm
+  and install.  Add its install directory to your path.
+* Add the Visual Studio 2008 devenv.com directory to your path.  On
+  this win32 image, that's: C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
+
+I can recommend cpbotha.net/software/envedit for easy path editing.
+It's BSD open source by yours truly.
 
 * Get and install numpy 1.2.1 [2].
 * Get and install wxpython 2.8.7.1 [3]
