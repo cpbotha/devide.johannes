@@ -11,38 +11,53 @@ from install_package import InstallPackage
 import utils
 from distutils import sysconfig
 
-WXP_TARBALL = "wxPython-src-2.8.9.2.tar.bz2"
-WXP_DIRBASE = WXP_TARBALL[0:WXP_TARBALL.find('tar.bz2')-1]
-WXP_URL = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s" % \
-          (WXP_TARBALL,)
+# wxPython 2.8.10.1 had problems building on Linux
+
+WXP_VER = '2.8.9.2'
+WXP_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s"
+
+if os.name == 'posix':
+    WXP_ARCHIVE = "wxPython-src-%s.tar.bz2" % (WXP_VER,)
+    WXP_DIRBASE = WXP_ARCHIVE[0:WXP_ARCHIVE.find('tar.bz2')-1]    
+    WXP_URL = WXP_URL_BASE % (WXP_ARCHIVE,)
+elif os.name == 'nt':
+    print config.WINARCH
+    if config.WINARCH == '32bit':
+        WXP_ARCHIVE = "wxPython2.8-win32-unicode-%s-py26.exe" % (WXP_VER,)
+    elif config.WINARCH == '64bit':
+        WXP_ARCHIVE = "wxPython2.8-win64-unicode-%s-py26.exe" % (WXP_VER,)
+
+    WXP_URL =  WXP_URL_BASE % (WXP_ARCHIVE,)
 
 dependencies = []
 
 class WXPython(InstallPackage):
 
     def __init__(self):
-        self.tbfilename = os.path.join(config.archive_dir, WXP_TARBALL)
-        self.build_dir = os.path.join(config.build_dir, WXP_DIRBASE)
-        # this is where wxwidgets gets installed
-        self.inst_dir = os.path.join(config.inst_dir, 'wx')
-        # and this is where the wxpython part ends up.
-        # python/lib/python2.x/site-packages/
-        self.sp_dir = sysconfig.get_python_lib()
+        self.afilename = os.path.join(config.archive_dir, WXP_ARCHIVE)
+        if os.name == 'posix':
+            self.build_dir = os.path.join(config.build_dir, WXP_DIRBASE)
+            # this is where wxwidgets gets installed on POSIX
+            self.inst_dir = os.path.join(config.inst_dir, 'wx')
+            # and this is where the wxpython part ends up.
+            # python/lib/python2.x/site-packages/
+            self.sp_dir = sysconfig.get_python_lib()
 
     def get(self):
-        if os.path.exists(self.tbfilename):
+        if os.path.exists(self.afilename):
             utils.output("%s already present, not downloading." %
-                         (WXP_TARBALL,))
+                         (WXP_ARCHIVE,))
 
         else:
             utils.goto_archive()
             utils.urlget(WXP_URL)
 
     def unpack(self):
-        if os.path.isdir(self.build_dir):
-            utils.output("wxPython already unpacked, not redoing.")
-        else:
-            utils.unpack_build(self.tbfilename)
+        if os.name == 'posix':
+            if os.path.isdir(self.build_dir):
+                utils.output("wxPython already unpacked, not redoing.")
+            else:
+                utils.unpack_build(self.tbfilename)
 
     def configure(self):
         pass
@@ -110,6 +125,7 @@ class WXPython(InstallPackage):
                 os.environ[key] = saved[idx]
 
     def build_wxpython(self):
+
         os.chdir(os.path.join(self.build_dir, 'wxPython'))
 
         saved = self.setup_env_for_wxp_build()
@@ -128,9 +144,12 @@ class WXPython(InstallPackage):
 
         
     def build(self):
+        if os.name == 'nt':
+            utils.output('Not building (WINDOWS).')
+            return
+
         # our build step includes config,build and install of wxwidgets,
         # as this is a dependency of wxPython
-        
         os.chdir(self.build_dir)
 
         if os.path.exists(os.path.join(config.inst_dir, 'wx/bin/wx-config')):
@@ -149,7 +168,21 @@ class WXPython(InstallPackage):
             utils.output("Building wxPython.")
             self.build_wxpython()
 
-    def install(self):
+    def install_nt(self):
+        if os.path.exists(os.path.join(
+            config.PYTHON_SITE_PACKAGES, 'wxversion.py')):
+            utils.output('wxPython already installed.')
+            return
+
+        utils.goto_archive()
+        # innotek installer, run in unattended mode
+        cmd = '%s /DIR=%s /sp- /silent /norestart' % \
+        (WXP_ARCHIVE, config.PYTHON_SITE_PACKAGES)
+        ret = os.system(cmd)
+        if ret != 0:
+            utils.error('Error install wxPython.')
+
+    def install_posix(self):
         os.chdir(self.build_dir)
         os.chdir('wxPython')
 
@@ -172,10 +205,18 @@ class WXPython(InstallPackage):
                 utils.error(
                         'wxPython install failed.  Please fix and try again.')
 
-        config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
-        # this is where wx-config can be found
-        config.WX_BIN_PATH = os.path.join(self.inst_dir, 'bin')
-        #config.WXP_PYTHONPATH = os.path.join(self.inst_dir, 'wxPython')
+    def install(self):
+        if os.name == 'nt':
+            self.install_nt()
+        elif os.name == 'posix':
+            self.install_posix()
+
+            # LIB_PATH is only used on posix to extend the
+            # LD_LIBRARY_PATH.  On Windows this is not necessary
+            config.WX_LIB_PATH = os.path.join(self.inst_dir, 'lib')
+            # this is where wx-config can be found
+            # only valid on posix where matplotlib has to be built
+            config.WX_BIN_PATH = os.path.join(self.inst_dir, 'bin')
 
     def get_installed_version(self):
         import wx
