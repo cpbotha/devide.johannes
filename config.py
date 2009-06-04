@@ -58,6 +58,8 @@ MAKE = ''
 SO_EXT = ''
 PYE_EXT = ''
 
+WINARCH = ''
+
 # together with CMAKE_BIN_PATH, these will be used by the utils
 # modules to build up a cmake command.
 CMAKE_DEFAULT_PARAMS = '' # this will be set by init()
@@ -126,6 +128,7 @@ def init(wd, the_profile):
 
     global MAKE, DEVENV, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS
     global SO_EXT, PYE_EXT
+    global WINARCH
 
     if os.name == 'posix':
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
@@ -143,18 +146,20 @@ def init(wd, the_profile):
         import platform
         a = platform.architecture()[0]
         if a == '32bit':        
-		CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008"'
-		# where the %s substitution is the SLN file
-		# important that devenv is run, and NOT devenv.exe!
-		MAKE = DEVENV + ' %s /project %s ' \
-		    '/projectconfig "%s|Win32" /build %s'
+            CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008"'
+            # where the %s substitution is the SLN file
+            # important that devenv is run, and NOT devenv.exe!
+            MAKE = DEVENV + ' %s /project %s ' \
+                '/projectconfig "%s|Win32" /build %s'
+            WINARCH = '32bit'
 
-	else:
-		CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008 Win64"'
-		# where the %s substitution is the SLN file
-		# important that devenv is run, and NOT devenv.exe!
-		MAKE = DEVENV + ' %s /project %s ' \
-		    '/projectconfig "%s|Win64" /build %s'
+        else:
+            CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008 Win64"'
+            # where the %s substitution is the SLN file
+            # important that devenv is run, and NOT devenv.exe!
+            MAKE = DEVENV + ' %s /project %s ' \
+                '/projectconfig "%s|Win64" /build %s'
+            WINARCH = '64bit'
 
         SO_EXT = '.dll'
         PYE_EXT = '.pyd'
@@ -164,9 +169,11 @@ def init(wd, the_profile):
     global PYTHON_EXECUTABLE
     global PYTHON_INCLUDE_PATH
     global PYTHON_LIBRARY
+    global PYTHON_SITE_PACKAGES
     from distutils import sysconfig
     PYTHON_EXECUTABLE = sys.executable 
     PYTHON_INCLUDE_PATH = sysconfig.get_python_inc()
+    PYTHON_SITE_PACKAGES = sysconfig.get_python_lib()
 
     # PYTHON_LIBRARY:
     if os.name == 'posix':
