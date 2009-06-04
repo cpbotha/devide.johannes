@@ -62,6 +62,7 @@ class NumPy(InstallPackage):
     def build(self):
         if os.name == 'nt':
             utils.output("Nothing to build (Windows).")
+            return
 
         # for posix, we have to build the whole shebang.
         os.chdir(self.build_dir)
