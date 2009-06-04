@@ -4,13 +4,6 @@
 
 import config
 import getopt
-from install_packages import ip_numpy, ip_matplotlib
-from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
-from install_packages import ip_vtk
-from install_packages import ip_vtktudoss, ip_vtkdevide
-from install_packages import ip_itk, ip_itkvtkglue, ip_itktudoss
-from install_packages import ip_swig, ip_gdcm
-from install_packages import ip_installer, ip_setupenvironment, ip_devide
 import os
 import sys
 import utils
@@ -217,6 +210,16 @@ def main():
 
         # init config (DURR)
         config.init(working_dir, profile)
+
+        from install_packages import ip_numpy, ip_matplotlib
+        from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
+        from install_packages import ip_vtk
+        from install_packages import ip_vtktudoss, ip_vtkdevide
+        from install_packages import ip_itk, ip_itkvtkglue
+        from install_packages import ip_itktudoss
+        from install_packages import ip_swig, ip_gdcm
+        from install_packages import ip_installer
+        from install_packages import ip_setupenvironment, ip_devide
 
         # if user is asking for versions, we don't do the
         # prerequisites check as we're not going to build anything
