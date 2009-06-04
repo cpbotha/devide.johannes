@@ -73,6 +73,8 @@ def download_python():
             fname = 'python-%s.amd64.msi' % (PYVER_STR,)
             url = '%s/%s' % (urlbase, fname)
 
+	print "##### Bootstrapping with %s Python. #####" % (a,)
+
     utils.goto_archive()
     utils.urlget(url)
 
