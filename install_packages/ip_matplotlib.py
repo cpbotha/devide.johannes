@@ -9,10 +9,17 @@ import shutil
 import sys
 import utils
 
-MPL_TARBALL = "matplotlib-0.98.5.3.tar.gz"
+MPL_VER = "0.98.5.3"
+
+if os.name == 'posix':
+    MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
+elif os.name == 'nt':
+    MPL_ARCHIVE = "matplotlib-%s.win32-py2.6.exe" % (MPL_VER,)
+
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
-          (MPL_TARBALL,)
-MPL_DIRBASE = "matplotlib-0.98.5.3"
+          (MPL_ARCHIVE,)
+
+MPL_DIRBASE = "matplotlib-%s" % (MPL_VER,)
 
 # I prefer that this be built with numpy, but it is not a dependency
 # per se
@@ -21,14 +28,14 @@ dependencies = []
 class matplotlib(InstallPackage):
 
     def __init__(self):
-        self.tbfilename = os.path.join(config.archive_dir, MPL_TARBALL)
+        self.tbfilename = os.path.join(config.archive_dir, MPL_ARCHIVE)
         self.build_dir = os.path.join(config.build_dir, MPL_DIRBASE)
         self.inst_dir = os.path.join(config.inst_dir, 'matplotlib')
 
     def get(self):
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
-                         (MPL_TARBALL,))
+                         (MPL_ARCHIVE,))
         else:
             utils.goto_archive()
             utils.urlget(MPL_URL)
