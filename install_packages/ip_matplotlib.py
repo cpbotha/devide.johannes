@@ -8,13 +8,14 @@ import os
 import shutil
 import sys
 import utils
+from distutils import sysconfig
 
 MPL_VER = "0.98.5.3"
 
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
 elif os.name == 'nt':
-    MPL_ARCHIVE = "matplotlib-%s.win32-py2.6.exe" % (MPL_VER,)
+    MPL_ARCHIVE = "matplotlib-%s_r0-py2.6-win32.egg" % (MPL_VER,)
 
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_ARCHIVE,)
@@ -41,6 +42,10 @@ class matplotlib(InstallPackage):
             utils.urlget(MPL_URL)
 
     def unpack(self):
+        if os.name == 'nt':
+            utils.output("Skipping unpack (WINDOWS).")
+            return
+
         if os.path.isdir(self.build_dir):
             utils.output("MATPLOTLIB source already unpacked, not redoing.")
         else:
@@ -48,9 +53,12 @@ class matplotlib(InstallPackage):
             utils.unpack_build(self.tbfilename)
 
     def configure(self):
+        if os.name == 'nt':
+            utils.output("Skipping configure (WINDOWS).")
+            return
+
         # pre-configure setup.py and setupext.py so that everything is
         # found and configured as we want it.
-
         os.chdir(self.build_dir)
 
         if os.path.exists('setup.py.new'):
@@ -68,6 +76,10 @@ class matplotlib(InstallPackage):
             utils.re_sub_filter_file(repls, 'setup.py')
 
     def build(self):
+        if os.name == 'nt':
+            utils.output("Skipping build (WINDOWS).")
+            return
+
         os.chdir(self.build_dir)
 
         # weak test... there are .so files deeper, but they're in platform
@@ -100,18 +112,31 @@ class matplotlib(InstallPackage):
             utils.output('ImportError test shows that matplotlib is not '
                          'installed.  Installing...')
 
-            os.chdir(self.build_dir)
-            
+            if os.name == 'nt':
+                self.install_nt()
+            else:
+                self.install_posix()
 
-            # add wx bin to path so that wx-config can be found
-            os.environ['PATH'] = "%s%s%s" % (config.WX_BIN_PATH,
-                                             os.pathsep, os.environ['PATH'])
+    def install_nt(self):
+        sp_dir = sysconfig.get_python_lib()
+        os.chdir(sp_dir)
+        # on windows, this is an egg file, we simply unpack.
+        utils.unpack(self.tbfilename)
 
-            ret = os.system('%s setup.py install' % (sys.executable,))
-            
-            if ret != 0:
-                utils.error(
-                    'matplotlib install failed.  Please fix and try again.')
+        # should we delete the EGG-INFO dir that gets created in site-packages?
+
+    def install_posix(self):
+        os.chdir(self.build_dir)
+        
+        # add wx bin to path so that wx-config can be found
+        os.environ['PATH'] = "%s%s%s" % (config.WX_BIN_PATH,
+                                         os.pathsep, os.environ['PATH'])
+
+        ret = os.system('%s setup.py install' % (sys.executable,))
+        
+        if ret != 0:
+            utils.error(
+                'matplotlib install failed.  Please fix and try again.')
 
     def clean_build(self):
         utils.output("Removing build and install directories.")
