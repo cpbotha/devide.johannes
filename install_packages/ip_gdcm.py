@@ -8,23 +8,13 @@ import os
 import shutil
 import utils
 
-# 2.0.10
-GDCM_REL = "4792"
-
 BASENAME = "gdcm"
 SVN_REPO = \
-        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
+        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/tags/gdcm-2-0-12"
+#SVN_REPO = \
+#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
 #SVN_REPO = \
 #        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
-
-SVN_REL = GDCM_REL
-
-# this patch is for gdcm 2.0.8. ONLY until Mathieu comes with a better
-# way to indicate location of Part3.xml.  When you change any of this,
-# remember to check devide.spec (it includes Part3.xml) and gdcm_kit
-# (it sets up everything so that this file can be found)
-#XML_PATCH = "gdcm208_gdcmDefs_findxml.diff"
-#XML_PATCH_URL = PDIR1 + XML_PATCH
 
 dependencies = ['swig', 'vtk']
 
@@ -43,8 +33,8 @@ class GDCM(InstallPackage):
         else:
             os.chdir(config.archive_dir)
             # checkout trunk into directory vtktudoss
-            ret = os.system("%s co %s %s -r%s" % (config.SVN,
-                SVN_REPO, BASENAME, SVN_REL))
+            ret = os.system("%s co %s %s" % (config.SVN,
+                SVN_REPO, BASENAME))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
