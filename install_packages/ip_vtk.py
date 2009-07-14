@@ -19,7 +19,7 @@ import utils
 BASENAME = "VTK"
 # password "vtk" integrated in CVS -d spec
 CVS_REPO = ":pserver:anonymous:vtk@public.kitware.com:/cvsroot/" + BASENAME
-CVS_VERSION = "-r VTK-5-4-1"
+CVS_VERSION = "-r VTK-5-4-2"
 
 VTK_BASE_VERSION = "vtk-5.4"
 
