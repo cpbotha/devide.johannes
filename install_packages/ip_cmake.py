@@ -46,7 +46,7 @@ class CMake(InstallPackage):
             utils.output("CMAKE source already unpacked, not redoing.")
         else:
             utils.output("Unpacking CMAKE source.")
-            utils.unpack_build(self.tbfilename)
+            utils.unpack_build(self.afilename)
 
     def configure(self):
         if os.name == 'nt':
