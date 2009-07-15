@@ -260,7 +260,7 @@ def main():
                             ip_itktudoss.ITKTUDOSS(),
                             ip_swig.SWIG(),
                             ip_gdcm.GDCM(),
-                            ip_installer.Installer(),
+                            #ip_installer.Installer(),
                             ip_setupenvironment.SetupEnvironment(),
                             ip_devide.DeVIDE()]
 

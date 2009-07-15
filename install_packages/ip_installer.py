@@ -2,6 +2,9 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+# this install package has been deactivated.  will remove this module from the
+# source tree soon.
+
 import config
 from install_package import InstallPackage
 import os
