@@ -85,9 +85,6 @@ class VTKDEVIDE(InstallPackage):
             self.inst_dir, 'lib')
 
         config.VTKDEVIDE_LIB = os.path.join(self.inst_dir, 'lib')
-        if os.name == 'nt':
-            config.VTKDEVIDE_LIB = os.path.join(
-                    config.VTKDEVIDE_LIB, config.BUILD_TARGET)
 
         test_file = os.path.join(config.VTKDEVIDE_LIB, 'vtkdevide.py')
         if os.path.exists(test_file):

@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "vtktudoss"
 SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
-SVN_REL = 27 
+SVN_REL = 28 
 
 dependencies = ['vtk']
 
@@ -95,9 +95,6 @@ class VTKTUDOSS(InstallPackage):
             self.inst_dir, 'lib')
 
         config.VTKTUDOSS_LIB = os.path.join(self.inst_dir, 'lib')
-        if os.name == 'nt':
-            config.VTKTUDOSS_LIB = os.path.join(
-                    config.VTKTUDOSS_LIB, config.BUILD_TARGET)
 
         test_file = os.path.join(config.VTKTUDOSS_LIB, 'vtktudoss.py')
         if os.path.exists(test_file):
