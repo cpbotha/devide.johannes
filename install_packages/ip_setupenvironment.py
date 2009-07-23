@@ -9,6 +9,13 @@ import utils
 
 dependencies = []
 
+posix_cfg = """
+[env:ld_library_path]
+python: %(python_library_paths)s
+wxpython: %(wx_lib_path)s
+
+"""
+
 posix_scripts = {'inc': ('paths.inc', """
 # include file used by other DeVIDE scripts
 # make sure invoking script has set MYDIR
