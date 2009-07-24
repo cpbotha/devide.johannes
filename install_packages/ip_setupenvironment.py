@@ -16,6 +16,27 @@ wxpython: %(wx_lib_path)s
 
 """
 
+nt_cfg = """
+# DRE config written by johannes build system
+# %%(dre_top)s will be replaced by the DRE top-level directory.
+
+[env:path]
+wxpython: %(wx_lib_path)s
+vtk: %(vtk_sodir)s
+gdcm: %(gdcm_lib)s
+vtkdevide: %(vtkdevide_lib)s
+vtktudoss: %(vtktudoss_lib)s
+itk:%(itk_bin)s;%(wrapitk_lib)s
+
+[env:pythonpath]
+vtk: %(vtk_python)s;%(vtk_sodir)s
+gdcm: %(gdcm_python)s;%(gdcm_lib)s
+vtkdevide: %(vtkdevide_python)s;%(vtkdevide_lib)s
+vtktudoss:%(vtktudoss_python)s;%(vtktudoss_lib)s
+itk:%(wrapitk_python)s;%(wrapitk_lib)s
+
+"""
+
 posix_scripts = {'inc': ('paths.inc', """
 # include file used by other DeVIDE scripts
 # make sure invoking script has set MYDIR
@@ -151,12 +172,30 @@ class SetupEnvironment(InstallPackage):
             idir = idir[:-1]
             
         for k,v in vardict.items():
-            vardict2[k] = v.replace(idir, '$MYDIR')
+            vardict2[k] = v.replace(idir, '%(dre_top)s')
+
+        print vardict2
 
         if os.name == 'nt':
             scripts = nt_scripts
+            cfg = nt_cfg
         else:
             scripts = posix_scripts
+            cfg = posix_cfg
+
+
+        # let's write out the CFG file
+        fname = os.path.join(config.inst_dir, 'dre.cfg')
+        cf = file(fname, 'w')
+        cfg2 = cfg % vardict2
+        cf.write(cfg2)
+        cf.close()
+        utils.output('Write DRE CFG.')
+
+
+        # will probably remove code below...
+        return
+
 
         # create the paths include script text
         fname, inc_script = scripts['inc']
