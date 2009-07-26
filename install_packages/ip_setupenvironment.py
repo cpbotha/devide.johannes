@@ -10,10 +10,24 @@ import utils
 dependencies = []
 
 posix_cfg = """
-[env:ld_library_path]
-python: %(python_library_paths)s
-wxpython: %(wx_lib_path)s
+# DRE config written by johannes build system
+# %%(dre_top)s will be replaced by the DRE top-level directory.
 
+[env:ld_library_path]
+python: %(python_library_path)s
+wxpython: %(wx_lib_path)s
+vtk: %(vtk_sodir)s
+gdcm: %(gdcm_lib)s
+vtkdevide: %(vtkdevide_lib)s
+vtktudoss: %(vtktudoss_lib)s
+itk: %(itk_lib)s:%(wrapitk_lib)s
+
+[env:pythonpath]
+vtk: %(vtk_python)s:%(vtk_sodir)s
+gdcm: %(gdcm_python)s:%(gdcm_lib)s
+vtkdevide: %(vtkdevide_python)s:%(vtkdevide_lib)s
+vtktudoss: %(vtktudoss_python)s:%(vtktudoss_lib)s
+itk: %(wrapitk_python)s:%(wrapitk_lib)s
 """
 
 nt_cfg = """
@@ -173,8 +187,6 @@ class SetupEnvironment(InstallPackage):
             
         for k,v in vardict.items():
             vardict2[k] = v.replace(idir, '%(dre_top)s')
-
-        print vardict2
 
         if os.name == 'nt':
             scripts = nt_scripts
