@@ -68,6 +68,45 @@ def find_command_with_ver(name, command, ver_re):
 
     return retval
 
+def find_files(start_dir, re_pattern='.*\.(pyd|dll)', exclude_pats=[]):
+    """Recursively find all files (not directories) with filenames 
+    matching given regular expression.  Case is ignored.
+
+    @param start_dir: search starts in this directory
+    @param re_pattern: regular expression with which all found files
+    will be matched. example: re_pattern = '.*\.(pyd|dll)' will match
+    all filenames ending in pyd or dll.
+    @param exclude_pats: if filename (without directory) matches any
+    one of these patterns, do not include it in the list
+    @return: list of fully qualified filenames that satisfy the
+    pattern
+    """
+
+    cpat = re.compile(re_pattern, re.IGNORECASE)
+    found_files = []
+    excluded_files = []
+
+    for dirpath, dirnames, filenames in os.walk(start_dir):
+        ndirpath = os.path.normpath(os.path.abspath(dirpath))
+        for fn in filenames:
+            if cpat.match(fn):
+              
+                # see if fn does not satisfy one of the exclude
+                # patterns
+                exclude_fn = False
+                for exclude_pat in exclude_pats:
+                    if re.match(exclude_pat, fn, re.IGNORECASE):
+                        exclude_fn = True
+                        break
+                
+                if not exclude_fn:
+                    found_files.append(os.path.join(ndirpath,fn))
+                else:
+                    excluded_files.append(os.path.join(ndirpath,fn))
+
+    return found_files, excluded_files
+
+
 def get_status_output(command):
     """Run command, return output of command and exit code in status.
     In general, status is None for success and 1 for command not
