@@ -5,9 +5,16 @@
 import config
 from install_package import InstallPackage
 import os
+import shutil
 import utils
 
 dependencies = []
+
+DRE_BASENAME = "dre"
+DRE_SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + DRE_BASENAME
+# this should be the same release as johannes and the rest of devide
+DRE_SVN_REL = config.DEVIDE_REL
+
 
 posix_cfg = """
 # DRE config written by johannes build system
@@ -51,116 +58,64 @@ itk:%(wrapitk_python)s;%(wrapitk_lib)s
 
 """
 
-posix_scripts = {'inc': ('paths.inc', """
-# include file used by other DeVIDE scripts
-# make sure invoking script has set MYDIR
-
-PATH=%(python_binary_path)s:$PATH
-
-unset LD_LIBRARY_PATH
-unset PYTHONPATH
-
-# python
-LD_LIBRARY_PATH=%(python_library_path)s:$LD_LIBRARY_PATH
-# wxpython
-LD_LIBRARY_PATH=%(wx_lib_path)s:$LD_LIBRARY_PATH
-# VTK
-LD_LIBRARY_PATH=%(vtk_sodir)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(vtk_python)s:%(vtk_sodir)s:$PYTHONPATH
-# GDCM
-LD_LIBRARY_PATH=%(gdcm_lib)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(gdcm_python)s:%(gdcm_lib)s:$PYTHONPATH
-# vtkdevide
-LD_LIBRARY_PATH=%(vtkdevide_lib)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(vtkdevide_python)s:%(vtkdevide_lib)s:$PYTHONPATH
-# vtktudoss
-LD_LIBRARY_PATH=%(vtktudoss_lib)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(vtktudoss_python)s:%(vtktudoss_lib)s:$PYTHONPATH
-# ITK
-LD_LIBRARY_PATH=%(itk_lib)s:%(wrapitk_lib)s:$LD_LIBRARY_PATH
-PYTHONPATH=%(wrapitk_python)s:%(wrapitk_lib)s:$PYTHONPATH
-"""),
-'setup_env': ('setup_env.sh', """
-#!/bin/bash
-# sets up environment for your own work.
-# in this case we can't use dirname, because this one is supposed to
-# be sourced.
-MYDIR=%s
-source $MYDIR/paths.inc
-
-export PYTHONPATH
-export LD_LIBRARY_PATH
-"""),
-'devide' : ('devide.sh', """
-#!/bin/bash
-# invokes DeVIDE
-MYDIR=`dirname $0`
-source $MYDIR/paths.inc
-
-export PYTHONPATH
-export LD_LIBRARY_PATH
-
-python $MYDIR/devide/devide.py $*
-"""),
-
-'python' : ('python.sh', """
-#!/bin/bash
-# invokes DeVIDE-capable Python
-MYDIR=`dirname $0`
-source $MYDIR/paths.inc
-
-export PYTHONPATH
-export LD_LIBRARY_PATH
-
-python $*
-""")
-}
-
-# we have to use %% where we want a single % due to the way python
-# string interpolation works.  Python expects a single % to be
-# followed by valid format specifiers.  Also see "Template strings"
-# for a modern and simpler way to do string interpolation: 
-# http://docs.python.org/lib/node40.html
-nt_scripts = {'inc': ('paths.inc', """
-@rem include file used by other DeVIDE scripts
-
-@rem zero the pythonpath for this session
-@set PYTHONPATH=
-
-@rem wxpython
-@set PATH=%(wx_lib_path)s;%%PATH%%
-
-@rem VTK
-@set PATH=%(vtk_sodir)s;%%PATH%%
-@set PYTHONPATH=%(vtk_python)s;%(vtk_sodir)s;%%PYTHONPATH%%
-
-@rem GDCM
-@set PATH=%(gdcm_lib)s;%%PATH%%
-@set PYTHONPATH=%(gdcm_python)s;%(gdcm_lib)s;%%PYTHONPATH%%
-
-@rem vtkdevide
-@set PATH=%(vtkdevide_lib)s;%%PATH%%
-@set PYTHONPATH=%(vtkdevide_python)s;%(vtkdevide_lib)s;%%PYTHONPATH%%
-
-@rem vtktudoss
-@set PATH=%(vtktudoss_lib)s;%%PATH%%
-@set PYTHONPATH=%(vtktudoss_python)s;%(vtktudoss_lib)s;%%PYTHONPATH%%
-
-@rem ITK
-@set PATH=%(itk_bin)s;%(wrapitk_lib)s;%%PATH%%
-@set PYTHONPATH=%(wrapitk_python)s;%(wrapitk_lib)s;%%PYTHONPATH%%
-"""),
-'setup_env': ('setup_env.cmd', """
-"""),
-'devide' : ('devide.cmd', """
-"""),
-'python' : ('python.cmd', """
-""")
-}
-
 class SetupEnvironment(InstallPackage):
 
+    def __init__(self):
+        self.dre_src_dir = os.path.join(
+                config.archive_dir, DRE_BASENAME)
+
+        self.dreams_dest_dir = os.path.join(
+                config.inst_dir, 'dreams')
+
+        self.drepy_src = os.path.join(
+                self.dre_src_dir, 'core', 'dre.py')
+        self.drepy_dest = os.path.join(
+                config.inst_dir, 'dre.py')
+
+        if os.name == 'nt':
+            shfn = 'dre.cmd'
+        else:
+            shfn = 'dre'
+
+        self.dresh_src = os.path.join(
+                self.dre_src_dir, 'core', shfn)
+        self.dresh_dest = os.path.join(
+                config.inst_dir, shfn)
+
+    def get(self):
+        if os.path.exists(self.dre_src_dir):
+            utils.output("DRE already checked out, skipping step.")
+
+        else:
+            os.chdir(config.archive_dir)
+            ret = os.system("%s co %s -r%s" % 
+                    (config.SVN, DRE_SVN_REPO, DRE_SVN_REL))
+            if ret != 0:
+                utils.error("Could not SVN checkout DRE.  "
+                            "Fix and try again.")
+
     def install(self):
+
+        # copy dreams dir and relevant driver scripts to inst dir
+        if os.path.exists(self.dreams_dest_dir):
+            utils.output('DREAMs already in inst_dir, not copying.')
+        else:
+            shutil.copytree(
+                    os.path.join( self.dre_src_dir, 'dreams'),
+                    self.dreams_dest_dir)
+            utils.output('Copied %s.' % (self.dreams_dest_dir,))
+
+        if os.path.exists(self.drepy_dest):
+            utils.output('%s already present.' % (self.drepy_dest,))
+        else:
+            shutil.copy2(self.drepy_src, self.drepy_dest)
+            utils.output('Copied %s.' % (self.drepy_dest,))
+
+        if os.path.exists(self.dresh_dest):
+            utils.output('%s already present.' % (self.dresh_dest,))
+        else:
+            shutil.copy2(self.dresh_src, self.dresh_dest)
+            utils.output('Copied %s.' % (self.dresh_dest,))
 
         vardict = {'python_binary_path' : config.python_binary_path,
                    'python_library_path' : config.python_library_path,
@@ -189,12 +144,9 @@ class SetupEnvironment(InstallPackage):
             vardict2[k] = v.replace(idir, '%(dre_top)s')
 
         if os.name == 'nt':
-            scripts = nt_scripts
             cfg = nt_cfg
         else:
-            scripts = posix_scripts
             cfg = posix_cfg
-
 
         # let's write out the CFG file
         fname = os.path.join(config.inst_dir, 'dre.cfg')
@@ -204,47 +156,6 @@ class SetupEnvironment(InstallPackage):
         cf.close()
         utils.output('Write DRE CFG.')
 
-
-        # will probably remove code below...
-        return
-
-
-        # create the paths include script text
-        fname, inc_script = scripts['inc']
-        inc_script = inc_script % vardict2
-        # write it to disc
-        inc_script_fn = os.path.join(config.inst_dir, 'paths.inc')
-        sf = file(inc_script_fn, 'w')
-        sf.write(inc_script)
-        sf.close()
-        utils.output('Wrote %s.' % (inc_script_fn,))
-
-        # create the setup environment script text
-        fname, setup_env_script = scripts['setup_env']
-        setup_env_script = setup_env_script % (config.inst_dir,)
-        # write it to disc
-        se_script_fn = os.path.join(
-                config.inst_dir, fname)
-        sef = file(se_script_fn, 'w')
-        sef.write(setup_env_script)
-        sef.close()
-        utils.output('Write %s.' % (se_script_fn,))
-
-        fname, devide_script = scripts['devide']
-        dsfn = os.path.join(
-                config.inst_dir, fname)
-        dsf = file(dsfn, 'w')
-        dsf.write(devide_script)
-        dsf.close()
-        utils.output('Wrote %s.' % (dsfn,))
-
-        fname, python_script = scripts['python']
-        psfn = os.path.join(
-                config.inst_dir, fname)
-        psf = file(psfn, 'w')
-        psf.write(python_script)
-        psf.close()
-        utils.output('Wrote %s.' % (psfn,))
 
     def get_installed_version(self):
         return None
