@@ -84,8 +84,8 @@ fi
 
 
 cd build
-tar xjvf ../archive/Python-2.5.4.tar.bz2
-cd Python-2.5.4
+tar xjvf ../archive/Python-2.6.2.tar.bz2
+cd Python-2.6.2
 ./configure --enable-shared --prefix=$WD/inst/python
 
 if [ "$?" -ne "0" ]; then
