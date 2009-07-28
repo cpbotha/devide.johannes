@@ -261,8 +261,9 @@ def main():
                             ip_swig.SWIG(),
                             ip_gdcm.GDCM(),
                             #ip_installer.Installer(),
-                            ip_setupenvironment.SetupEnvironment(),
-                            ip_devide.DeVIDE()]
+                            ip_devide.DeVIDE(),
+                            ip_setupenvironment.SetupEnvironment()
+                            ]
 
         if ip_names is None:
             # iow the user didn't touch this

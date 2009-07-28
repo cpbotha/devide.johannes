@@ -70,42 +70,9 @@ class DeVIDE(InstallPackage):
     def build(self):
         pass
 
-    def create_scripts(self):
-        # first make script for starting DeVIDE right from the build dir
-        # if the user wants to do so...
-        ##################################################################
-
-        if os.name == 'nt':
-            edfb_script = """
-@rem invokes DeVIDE directly from build directory
-@echo Did you remember to run setup_env.cmd?
-%s %s %%1 %%2 %%3 %%4 %%5 %%6 %%7 %%8 %%9 
-
-            """ % (sys.executable, config.DEVIDE_PY,)
-            edfb_fn = 'devide.cmd'
-
-        else:
-            edfb_script = """
-#!/bin/bash
-# invokes DeVIDE directly from build directory
-echo "Did you remember to run \". setup_env.sh\"?"
-echo "Starting up DeVIDE..."
-%s %s $*
-
-            """ % (sys.executable, config.DEVIDE_PY,)
-            edfb_fn = 'devide.sh'
-
-        invoking_script_fn = os.path.join(config.working_dir, edfb_fn)
-        isf = file(invoking_script_fn, 'w')
-        isf.write(edfb_script)
-        isf.close()
-
-        utils.output('Wrote %s.' % (invoking_script_fn,))
-
     def install(self):
         self.copy_devide_to_inst()
-        self.create_scripts()
-                   
+
     def clean_build(self):
         utils.output("Removing build and installation directories.")
 
