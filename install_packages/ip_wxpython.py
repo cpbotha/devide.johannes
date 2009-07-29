@@ -57,7 +57,7 @@ class WXPython(InstallPackage):
             if os.path.isdir(self.build_dir):
                 utils.output("wxPython already unpacked, not redoing.")
             else:
-                utils.unpack_build(self.tbfilename)
+                utils.unpack_build(self.afilename)
 
     def configure(self):
         pass
