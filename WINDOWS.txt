@@ -16,31 +16,24 @@ stuff, also automatically and nicely localised in a folder.
   variable.
 * patch: get from http://gnuwin32.sourceforge.net/packages/patch.htm
   and install.  Add its install directory to your path.
+* Get and install the NSIS installer builder from [3].  Put its install
+  directory on your system PATH.
 * Add the Visual Studio 2008 devenv.com directory to your path.  On
   this win32 image, that's: C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
 
 I can recommend cpbotha.net/software/envedit for easy path editing.
 It's BSD open source by yours truly.
 
-* Get and install numpy 1.2.1 [2].
-* Get and install wxpython 2.8.7.1 [3]
-* Get and install matplotlib 0.98.5.2 [4]
-* Get and install cmake 2.4.8 [5] and choose to add it to the system
-  path (for yourself, or for all users).
 
 [1] http://www.python.org/ftp/python/2.6.2/python-2.6.2.msi
 [2] http://subversion.tigris.org/files/documents/15/45953/Setup-Subversion-1.6.2.msi
-
-
-[2] http://surfnet.dl.sourceforge.net/sourceforge/numpy/numpy-1.2.1.win32-superpack-python2.5.msi
-[3] http://downloads.sourceforge.net/wxpython/wxPython2.8-win32-unicode-2.8.8.1-py25.exe
-[4] http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/matplotlib-0.98.5.2.win32-py2.5.exe
-[5] http://www.cmake.org/files/v2.6/cmake-2.6.2-win32-x86.exe
+[3] http://sourceforge.net/projects/nsis/files/NSIS%202/2.45/nsis-2.45-setup.exe/download
 
 2. Now let johannes do its magic:
 ---------------------------------
 
-python \where\you\put\it\johannes.py -w your_working_dir
+python \where\you\put\it\bootstrap.py -w your_working_dir
+your_working_dir\jpython \where\you\put\it\johannes.py -w your_working_dir
 
 Wait a few hours.  When the build is done, results are as explained in
 the RESULTS section of the main johannes README.txt file.
@@ -53,7 +46,7 @@ to build for example just VTK and/or ITK.  You can!
 
 Follow all instructions under 1., then do for example:
 
-python \where\you\put\it\johannes.py -w your_working_dir -p itk,vtk
+your_working_dir\jpython \where\you\put\it\johannes.py -w your_working_dir -p itk,vtk
 
 See johannes --help for clues to package names.
 
