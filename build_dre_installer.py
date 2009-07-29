@@ -34,7 +34,7 @@ class BDIPaths:
 
 
 def copy_inst_to_dre():
-    """Copy the dre top-level dir (inst) to final 'dre' 
+    """Copy the dre top-level dir (inst) to final devide-re 
     """
 
     print S_PPF, 'Copying INST to DRE.'
@@ -104,7 +104,7 @@ def postproc_sos():
             
             print "%s: %s" % (f, ','.join(actions))
 
-def rebase_dlls(md_paths):
+def rebase_dlls():
     """Rebase all DLLs in the distdevide tree on Windows.
     """
 
@@ -118,7 +118,8 @@ def rebase_dlls(md_paths):
         # Image may be corrupted
 
         # get list of pyd / dll files, excluding sqlite3
-        so_files, excluded_files = find_files(
+        # this returns full path names
+        so_files, excluded_files = utils.find_files(
                 BDIPaths.dre_dest, '.*\.(pyd|dll)', ['sqlite3\.dll'])
         # add newline to each and every filename
         so_files = ['%s\n' % (i,) for i in so_files]
@@ -128,13 +129,13 @@ def rebase_dlls(md_paths):
 
         # open file in specfile_dir, write the whole list
         dll_list_fn = os.path.join(
-                BDIPaths.dre_dest, 'dll_list.txt')
+                config.working_dir, 'dll_list.txt')
         dll_list = file(dll_list_fn, 'w')
         dll_list.writelines(so_files)
         dll_list.close()
 
         # now run rebase on the list
-        os.chdir(BDIPaths.dre_dest)
+        os.chdir(config.working_dir)
         ret = os.system(
                 '%s -b 0x60000000 -e 0x1000000 @dll_list.txt -v' %
                 (REBASE,))
@@ -165,23 +166,25 @@ def package_dist():
         raise RuntimeError('Could not extract DeVIDE version.')
 
     if os.name == 'nt':
-        # we need to be in the installer directory before starting
-        # makensis
-        os.chdir(md_paths.specfile_dir)
-        cmd = '%s devide.nsi' % (MAKE_NSIS,)
+        # go to working dir
+        os.chdir(config.working_dir)
+        # /nocd tells makensis not to change to the directory
+        # containing the nsi file.
+        cmd = '%s /NOCD archive\dre\support\devide-re.nsi' \
+                % (MAKE_NSIS,)
         ret = os.system(cmd)
         if ret != 0:
             raise RuntimeError('Error running NSIS.')
 
         # nsis creates devidesetup.exe - we're going to rename
-        os.rename('devidesetup.exe', 
-                'devidesetup-%s.exe' % (devide_ver,))
+        os.rename('devide-re-setup.exe', 
+                'devide-re-setup-%s.exe' % (devide_ver,))
 
     else:
-        # go to the installer dir
+        # go to the working dir
         os.chdir(config.working_dir)
 
-        # rename distdevide to devide-version
+        # basename will be e.g. devide-re-v9.8.2341
         basename = '%s-%s' % (BDIPaths.dre_basename, devide_ver)
         tarball = '%s.tar.bz2' % (basename,)
 
