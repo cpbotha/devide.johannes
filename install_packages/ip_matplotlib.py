@@ -12,11 +12,18 @@ from distutils import sysconfig
 
 MPL_VER = "0.98.5.3"
 
+WIN64 = False
+
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
 elif os.name == 'nt':
     MPL_ARCHIVE = "matplotlib-%s_r0-py2.6-win32.egg" % (MPL_VER,)
 
+    import platform
+    a = platform.architecture()[0]
+    if a == '64bit':
+        WIN64 = True
+ 
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_ARCHIVE,)
 
@@ -34,6 +41,10 @@ class matplotlib(InstallPackage):
         self.inst_dir = os.path.join(config.inst_dir, 'matplotlib')
 
     def get(self):
+        if WIN64:
+            utils.output("matplotlib not yet supported on Win64.")
+            return
+
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
                          (MPL_ARCHIVE,))
@@ -99,6 +110,10 @@ class matplotlib(InstallPackage):
                 utils.error('matplotlib build failed.  Please fix and try again.')
 
     def install(self):
+        if WIN64:
+            utils.output("matplotlib not yet supported on Win64.")
+            return
+
         # to test for install, just do python -c "import matplotlib"
         # and test the result (we could just import directly, but that would
         # only work once our invoking python has been stopped and started
@@ -151,6 +166,9 @@ class matplotlib(InstallPackage):
             shutil.rmtree(matplotlib_instdir)
 
     def get_installed_version(self):
+        if WIN64:
+            return "No numpy on Win64."
+
         import matplotlib
         return matplotlib.__version__
 

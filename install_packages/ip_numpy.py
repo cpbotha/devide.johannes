@@ -11,6 +11,7 @@ import utils
 
 NUMPY_BASENAME = "numpy-1.3.0"
 
+WIN64 = False
 if os.name == 'posix':
     NUMPY_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s"
     NUMPY_ARCHIVE = "%s.tar.gz" % (NUMPY_BASENAME,)
@@ -23,6 +24,7 @@ elif os.name == 'nt':
         NUMPY_ARCHIVE = "%s-win32py26.zip" % (NUMPY_BASENAME,)   
     else:
         NUMPY_ARCHIVE = "%s-win64py26.zip" % (NUMPY_BASENAME,)   
+        WIN64 = True
     
 NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
 
@@ -38,6 +40,10 @@ class NumPy(InstallPackage):
         self.inst_dir = os.path.join(config.inst_dir, 'numpy')
 
     def get(self):
+        if WIN64:
+            utils.output("numpy not yet supported on Win64.")
+            return
+
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
                          (NUMPY_ARCHIVE,))
@@ -82,7 +88,9 @@ class NumPy(InstallPackage):
                 utils.error('numpy build failed.  Please fix and try again.')
 
     def install(self):
-
+        if WIN64:
+            utils.output("numpy not yet supported on Win64.")
+            return
 
         # to test for install, just do python -c "import numpy"
         # and test the result (we could just import directly, but that would
@@ -124,6 +132,9 @@ class NumPy(InstallPackage):
             shutil.rmtree(numpy_instdir)
 
     def get_installed_version(self):
+        if WIN64:
+            return "No numpy on Win64."
+
         import numpy
         return numpy.__version__
 
