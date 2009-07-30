@@ -158,7 +158,7 @@ def init(wd, the_profile):
             # where the %s substitution is the SLN file
             # important that devenv is run, and NOT devenv.exe!
             MAKE = DEVENV + ' %s /project %s ' \
-                '/projectconfig "%s|Win64" /build %s'
+                '/projectconfig "%s|x64" /build %s'
             WINARCH = '64bit'
 
         SO_EXT = '.dll'
