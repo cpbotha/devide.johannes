@@ -18,12 +18,13 @@ stuff, also automatically and nicely localised in a folder.
   and install.  Add its install directory to your path.
 * Get and install the NSIS installer builder from [3].  Put its install
   directory on your system PATH.
-* Add the Visual Studio 2008 devenv.com directory to your path.  On
-  this win32 image, that's: C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
+* Visual Studio 2008: Make sure the latest service pack installed, SP1
+  at the time of this writing (August 1, 2009).  Add the Visual Studio
+  2008 devenv.com directory to your path.  On this win32 image,
+  that's: C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
 
 I can recommend cpbotha.net/software/envedit for easy path editing.
 It's BSD open source by yours truly.
-
 
 [1] http://www.python.org/ftp/python/2.6.2/python-2.6.2.msi
 [2] http://subversion.tigris.org/files/documents/15/45953/Setup-Subversion-1.6.2.msi
