@@ -114,11 +114,12 @@ class ITK(InstallPackage):
                        "-DWRAP_ITK_JAVA=OFF " \
                        "-DWRAP_covariant_vector_float=OFF " \
                        "-DWRAP_rgb_unsigned_short=OFF " \
+                       "-DWRAP_rgba_unsigned_short=OFF " \
                        "-DWRAP_unsigned_short=OFF " \
                        "-DWRAP_signed_short=ON " \
                        "-DWRAP_unsigned_long=ON " \
                        "-DWRAP_Iterators=ON " \
-                       "-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=ON "\
+                       "-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=OFF "\
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           config.PYTHON_EXECUTABLE,
