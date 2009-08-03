@@ -170,13 +170,6 @@ class ITK(InstallPackage):
                 config.ITK_BIN, itd)
 
 
-        # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)
-        #config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
-        # contains all WrapITK shared objects / libraries
-        #config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
-        # contains itk.py
-        #config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
-
         nt_file = os.path.join(config.ITK_BIN, 'ITKCommon.dll')
         posix_file = os.path.join(
                 config.ITK_DIR, 'libITKCommon.so')

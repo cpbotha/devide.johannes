@@ -47,6 +47,8 @@ class WrapITK(InstallPackage):
             os.mkdir(self.build_dir)
 
         # need unsigned short for itkPyImageFilter
+        # with the switches below, I need /bigobj on win64 for the
+        # following projects: ITKPyBasePython
         cmake_params = \
                 "-DBUILD_TESTING=OFF " \
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
@@ -103,42 +105,48 @@ class WrapITK(InstallPackage):
         # jpython_setup.sh), as the build process relies on the
         # correct python being available.
 
-        raise RuntimeError
         posix_file = os.path.join(self.build_dir, 
-                'bin/libvtkgdcmPython.so')
-        nt_file = os.path.join(self.build_dir, 'bin',
-                config.BUILD_TARGET, 'vtkgdcmPythonD.dll')
+                'lib', '_RegistrationPython.so')
+        nt_file = os.path.join(self.build_dir, 
+                'lib', '_RegistrationPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):    
-            utils.output("GDCM already built.  Skipping build step.")
+            utils.output("WrapITK already built.  Skipping build step.")
 
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('GDCM.sln')
+            ret = utils.make_command('WrapITK.sln')
 
             if ret != 0:
-                utils.error("Could not build GDCM.  Fix and try again.")
+                utils.error("Could not build WrapITK.  Fix and try again.")
         
 
     def install(self):
-        if os.name == 'nt':
-            config.GDCM_LIB = os.path.join(
-                    self.inst_dir, 'bin')
-        else:
-            config.GDCM_LIB = os.path.join(self.inst_dir, 'lib')
+        config.WRAPITK_TOPLEVEL = self.inst_dir
+        # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)
+        config.WRAPITK_DIR = os.path.join(
+                self.inst_dir, 'lib', 'InsightToolkit', 'WrapITK')
+        # contains all WrapITK shared objects / libraries
+        config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
+        # contains itk.py
+        config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
+        # subsequent wrapitk components will need this
+        config.WRAPITK_SOURCE_DIR = self.source_dir
 
-        config.GDCM_PYTHON = os.path.join(self.inst_dir, 'lib')
+        posix_file = os.path.join(
+                config.WRAPITK_DIR, '_RegistrationPython.so')
+        nt_file = os.path.join(
+                config.WRAPITK_DIR, '_RegistrationPython' + config.PYE_EXT)
 
-        test_file = os.path.join(config.GDCM_PYTHON, 'gdcm.py')
-        if os.path.exists(test_file):
-            utils.output("gdcm already installed, skipping step.")
+        if utils.file_exists(posix_file, nt_file):
+            utils.output("WrapITK already installed, skipping step.")
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('GDCM.sln', install=True)
+            ret = utils.make_command('WrapITK.sln', install=True)
 
             if ret != 0:
                 utils.error(
-                "Could not install gdcm.  Fix and try again.")
+                "Could not install WrapITK.  Fix and try again.")
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine and there is
@@ -148,7 +156,7 @@ class WrapITK(InstallPackage):
             shutil.rmtree(self.build_dir)
 
     def get_installed_version(self):
-        import gdcm
-        return gdcm.Version.GetVersion()
+        import itk
+        return itk.GetVersion()
 
 
