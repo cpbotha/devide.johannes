@@ -134,9 +134,9 @@ class WrapITK(InstallPackage):
         config.WRAPITK_SOURCE_DIR = self.source_dir
 
         posix_file = os.path.join(
-                config.WRAPITK_DIR, '_RegistrationPython.so')
+                config.WRAPITK_LIB, '_RegistrationPython.so')
         nt_file = os.path.join(
-                config.WRAPITK_DIR, '_RegistrationPython' + config.PYE_EXT)
+                config.WRAPITK_LIB, '_RegistrationPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):
             utils.output("WrapITK already installed, skipping step.")
