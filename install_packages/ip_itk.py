@@ -22,7 +22,7 @@ CABLESWIG_CVS_VERSION = "-r ITK-3-14"
 # this patch is located in johannes/patches/ teehee
 SOGC_PATCH = "itk310-itkSpatialObjectTreeNode-GetChildren.diff"
 
-dependencies = []
+dependencies = ['cmake']
 
 
 class ITK(InstallPackage):
@@ -106,6 +106,7 @@ class ITK(InstallPackage):
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
+                       "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           config.PYTHON_EXECUTABLE,
                           config.PYTHON_LIBRARY,
