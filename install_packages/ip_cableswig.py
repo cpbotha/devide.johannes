@@ -86,7 +86,7 @@ class CableSwig(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s install" % (config.MAKE,))
+            ret = utils.make_command('CableSwig.sln', install=True) 
             if ret != 0:
                 utils.error("Could not install CableSwig.  Fix and try again.")
 
