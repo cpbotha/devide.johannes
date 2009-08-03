@@ -72,7 +72,7 @@ class WrapITK(InstallPackage):
                 "-DWRAP_signed_long=OFF " \
                 "-DWRAP_signed_short=ON " \
                 "-DWRAP_unsigned_char=OFF " \
-                "-DWRAP_unsigned_long=ON " \
+                "-DWRAP_unsigned_long=OFF " \
                 "-DWRAP_unsigned_short=OFF " \
                 "-DWRAP_vector_double=OFF " \
                 "-DWRAP_vector_float=ON " \
