@@ -9,7 +9,7 @@ import shutil
 import utils
 import sys
 
-SWIG_VER = "1.3.34"
+SWIG_VER = "1.3.39"
 BASENAME = "swig"
 BASE_URL = \
         "http://surfnet.dl.sourceforge.net/sourceforge/swig/"
