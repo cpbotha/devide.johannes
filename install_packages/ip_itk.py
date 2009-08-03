@@ -107,10 +107,10 @@ class ITK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_USE_REVIEW=ON " \
-                       % (self.inst_dir,
-                          config.PYTHON_EXECUTABLE,
-                          config.PYTHON_LIBRARY,
-                          config.PYTHON_INCLUDE_PATH)
+                       % (self.inst_dir,)
+                       #   config.PYTHON_EXECUTABLE,
+                       #   config.PYTHON_LIBRARY,
+                       #   config.PYTHON_INCLUDE_PATH)
                        #"-DUSE_WRAP_ITK=ON " \
                        #"-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
                        #"-DPYTHON_EXECUTABLE=%s " \
@@ -161,6 +161,15 @@ class ITK(InstallPackage):
         # this is the dir with the cmake config and on *ix the main
         # SOs (on Win these are in ITK_BIN)
         config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
+        if os.name == 'posix':
+            itd = 'itkTestDriver'
+        elif os.name == 'nt':
+            itd = 'itkTestDriver.exe'
+
+        config.ITK_TEST_DRIVER = os.path.join(
+                config.ITK_BIN, itd)
+
+
         # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)
         #config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
         # contains all WrapITK shared objects / libraries
