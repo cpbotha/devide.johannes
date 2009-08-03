@@ -261,7 +261,7 @@ def main():
                             ip_swig.SWIG(),
                             ip_cableswig.CableSwig(),
                             ip_wrapitk.WrapITK(),
-                            #ip_itkvtkglue.ItkVtkGlue(),
+                            ip_itkvtkglue.ItkVtkGlue(),
                             ip_itktudoss.ITKTUDOSS(),
                             ip_gdcm.GDCM(),
                             ip_devide.DeVIDE(),

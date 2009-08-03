@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "ItkVtkGlue"
 
-dependencies = ['itk', 'vtk']
+dependencies = ['cmake', 'itk', 'vtk', 'wrapitk', 'swig']
 
 class ItkVtkGlue(InstallPackage):
     
@@ -26,28 +26,32 @@ class ItkVtkGlue(InstallPackage):
         #self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
     def get(self):
-        self.source_dir = os.path.join(config.WRAPITK_SOURCE_DIR,
-                                       'ExternalProjects/ItkVtkGlue')
+        self.source_dir = os.path.join(
+                config.WRAPITK_SOURCE_DIR, 
+                'ExternalProjects', 'ItkVtkGlue')
         
         if not os.path.exists(self.source_dir):
             utils.error("ItkVtkGlue source not available.  Have you executed "
-                        "the ITK InstallPackage?")
+                        "the WrapITK InstallPackage?")
 
         else:
-            # make sure that ENABLE_TESTING() in the CMakeLists.txt has been
-            # deactivated
-            repls = [('ENABLE_TESTING\(\)', '')]
-            utils.re_sub_filter_file(
-                repls,
-                os.path.join(self.source_dir,'CMakeLists.txt'))
+            pass
 
-            # and also disable inclusing of Wrapping/Python/Testing dir
-            # this will probably change in future versions of ItkVtkGlue
-            repls = [('SUBDIRS\(Tests\)', '')]
-            utils.re_sub_filter_file(
-                repls,
-                os.path.join(self.source_dir,
-                             'Wrapping/Python/CMakeLists.txt'))
+            if False:
+                # make sure that ENABLE_TESTING() in the CMakeLists.txt has been
+                # deactivated
+                repls = [('ENABLE_TESTING\(\)', '')]
+                utils.re_sub_filter_file(
+                    repls,
+                    os.path.join(self.source_dir,'CMakeLists.txt'))
+
+                # and also disable inclusing of Wrapping/Python/Testing dir
+                # this will probably change in future versions of ItkVtkGlue
+                repls = [('SUBDIRS\(Tests\)', '')]
+                utils.re_sub_filter_file(
+                    repls,
+                    os.path.join(self.source_dir,
+                                 'Wrapping/Python/CMakeLists.txt'))
 
     def unpack(self):
         # no unpack step
@@ -71,14 +75,19 @@ class ItkVtkGlue(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DVTK_DIR:PATH=%s " \
                        "-DITK_DIR=%s " \
-                       "-DWrapITK_DIR:PATH=%s " \
+                       "-DITK_TEST_DRIVER=%s " \
+                       "-DWrapITK_DIR=%s " \
+                       "-DSWIG_DIR=%s " \
+                       "-DSWIG_EXECUTABLE=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                         % \
-                       (config.ITK_INSTALL_PREFIX,
-                        config.VTK_DIR, config.ITK_DIR,
+                       (config.WRAPITK_TOPLEVEL,
+                        config.VTK_DIR, 
+                        config.ITK_DIR, config.ITK_TEST_DRIVER,
                         config.WRAPITK_DIR,
+                        config.SWIG_DIR, config.SWIG_EXECUTABLE,
                         config.PYTHON_EXECUTABLE,
                         config.PYTHON_LIBRARY,
                         config.PYTHON_INCLUDE_PATH)
