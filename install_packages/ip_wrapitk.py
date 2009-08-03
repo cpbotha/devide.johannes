@@ -38,7 +38,6 @@ class WrapITK(InstallPackage):
         pass
 
     def configure(self):
-        raise RuntimeError
         if os.path.exists(
             os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
             utils.output("wrapitk build already configured.")
@@ -80,6 +79,7 @@ class WrapITK(InstallPackage):
         
 
     def build(self):
+        raise RuntimeError
         posix_file = os.path.join(self.build_dir, 
                 'bin/libvtkgdcmPython.so')
         nt_file = os.path.join(self.build_dir, 'bin',
