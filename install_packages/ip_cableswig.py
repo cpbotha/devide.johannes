@@ -60,8 +60,13 @@ class CableSwig(InstallPackage):
             utils.error("Could not configure CableSwig.  Fix and try again.")
 
     def build(self):
-        if os.path.exists(
-            os.path.join(self.build_dir, 'bin/cswig')):
+        posix_file = os.path.join(
+                self.build_dir, 'bin', 'cswig')
+        nt_file = os.path.join(
+                self.build_dir, 'bin', config.BUILD_TARGET,
+                'cswig.exe')
+
+        if utils.file_exists(posix_file, nt_file):
             utils.output("CableSwig already built.  Skipping build step.")
 
         else:
