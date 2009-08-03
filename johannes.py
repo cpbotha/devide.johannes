@@ -31,7 +31,7 @@ Options are as follows:
 -m, --mode             : working mode, 'everything' (default),
                          'clean_build', 'get_only' or 'configure_only'
 -p, --install-packages : specify comma-separated list of packages to work on,
-                         default all
+                         default all.  Example: -p "cmake,cableswig"
 --package-set          : preset collections of packages; vtkitk
 --no-win-prereq        : do NOT do Windows prerequisites check.
 -v, --versions         : display installed versions of all packages.
@@ -217,6 +217,7 @@ def main():
         from install_packages import ip_vtktudoss, ip_vtkdevide
         from install_packages import ip_itk, ip_itkvtkglue
         from install_packages import ip_itktudoss
+        from install_packages import ip_cableswig
         from install_packages import ip_swig, ip_gdcm
         from install_packages import ip_installer
         from install_packages import ip_setupenvironment, ip_devide
@@ -256,6 +257,7 @@ def main():
                             ip_vtktudoss.VTKTUDOSS(),
                             ip_vtkdevide.VTKDEVIDE(),
                             ip_swig.SWIG(),
+                            ip_cableswig.CableSwig(),
                             ip_itk.ITK(),
                             ip_itkvtkglue.ItkVtkGlue(),
                             ip_itktudoss.ITKTUDOSS(),
@@ -271,6 +273,9 @@ def main():
             # ONLY w.r.t. case
             ip_names = [i.__class__.__name__.lower()
                         for i in ip_instance_list]
+
+        print 'Building install_packages:', str(ip_names)
+
 
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)

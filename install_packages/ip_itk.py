@@ -52,12 +52,14 @@ class ITK(InstallPackage):
                 utils.error("Could not CVS checkout ITK.  Fix and try again.")
 
             os.chdir(os.path.join(self.source_dir, 'Utilities'))
-            ret = os.system("%s -d %s co %s %s" %
-                            (config.CVS, CS_CVS_REPO, 
-                                CABLESWIG_CVS_VERSION, CS_BASENAME))
-            
-            if ret != 0:
-                utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
+
+            if False:
+                ret = os.system("%s -d %s co %s %s" %
+                                (config.CVS, CS_CVS_REPO, 
+                                    CABLESWIG_CVS_VERSION, CS_BASENAME))
+                
+                if ret != 0:
+                    utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
 
             if False:
                 # only download patch if we don't have it
@@ -104,27 +106,27 @@ class ITK(InstallPackage):
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
-                       "-DUSE_WRAP_ITK=ON " \
-                       "-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
-                       "-DPYTHON_EXECUTABLE=%s " \
-                       "-DPYTHON_LIBRARY=%s " \
-                       "-DPYTHON_INCLUDE_PATH=%s " \
-                       "-DWRAP_ITK_PYTHON=ON " \
-                       "-DWRAP_ITK_TCL=OFF " \
-                       "-DWRAP_ITK_JAVA=OFF " \
-                       "-DWRAP_covariant_vector_float=OFF " \
-                       "-DWRAP_rgb_unsigned_short=OFF " \
-                       "-DWRAP_rgba_unsigned_short=OFF " \
-                       "-DWRAP_unsigned_short=OFF " \
-                       "-DWRAP_signed_short=ON " \
-                       "-DWRAP_unsigned_long=ON " \
-                       "-DWRAP_Iterators=ON " \
-                       "-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=OFF "\
-                       "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,
                           config.PYTHON_EXECUTABLE,
                           config.PYTHON_LIBRARY,
                           config.PYTHON_INCLUDE_PATH)
+                       #"-DUSE_WRAP_ITK=ON " \
+                       #"-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
+                       #"-DPYTHON_EXECUTABLE=%s " \
+                       #"-DPYTHON_LIBRARY=%s " \
+                       #"-DPYTHON_INCLUDE_PATH=%s " \
+                       #"-DWRAP_ITK_PYTHON=ON " \
+                       #"-DWRAP_ITK_TCL=OFF " \
+                       #"-DWRAP_ITK_JAVA=OFF " \
+                       #"-DWRAP_covariant_vector_float=OFF " \
+                       #"-DWRAP_rgb_unsigned_short=OFF " \
+                       #"-DWRAP_rgba_unsigned_short=OFF " \
+                       #"-DWRAP_unsigned_short=OFF " \
+                       #"-DWRAP_signed_short=ON " \
+                       #"-DWRAP_unsigned_long=ON " \
+                       #"-DWRAP_Iterators=ON " \
+                       #"-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=OFF "\
+                       #"-DITK_USE_REVIEW=ON " \
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
@@ -135,11 +137,11 @@ class ITK(InstallPackage):
     def build(self):
         
         posix_file = os.path.join(self.build_dir,
-                'bin/_RegistrationPython.so')
+                'bin/libITKCommon.so')
 
         nt_file = os.path.join(self.build_dir, 'bin',
                 config.BUILD_TARGET, 
-                '_RegistrationPython' + config.PYE_EXT)
+                'ITKCommon.dll')
 
         if utils.file_exists(posix_file, nt_file):
             utils.output("ITK already built.  Skipping build step.")
@@ -159,17 +161,17 @@ class ITK(InstallPackage):
         # SOs (on Win these are in ITK_BIN)
         config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
         # this dir contains the WrapITK cmake config (WrapITKConfig.cmake)
-        config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
+        #config.WRAPITK_DIR = os.path.join(config.ITK_DIR, 'WrapITK')
         # contains all WrapITK shared objects / libraries
-        config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
+        #config.WRAPITK_LIB = os.path.join(config.WRAPITK_DIR, 'lib')
         # contains itk.py
-        config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
+        #config.WRAPITK_PYTHON = os.path.join(config.WRAPITK_DIR, 'Python')
 
+        nt_file = os.path.join(config.ITK_BIN, 'ITKCommon.dll')
+        posix_file = os.path.join(
+                config.ITK_DIR, 'libITKCommon.so')
        
-        filename = os.path.join(config.WRAPITK_LIB, 
-                '_UnaryPixelMathPython' + config.PYE_EXT)
-
-        if os.path.exists(filename):
+        if utils.file_exists(posix_file, nt_file):
             utils.output("ITK already installed.  Skipping step.")
 
         else:

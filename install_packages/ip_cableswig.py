@@ -2,10 +2,6 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
-# since ITK 3.4 (perhaps earlier) you do NOT HAVE TO BUILD CABLESWIG
-# separately.  This install package is on ice.  DO NOT USE.
-
-
 import config
 from install_package import InstallPackage
 import os
@@ -16,7 +12,8 @@ import sys
 BASENAME = "CableSwig"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ITK-3-4" # 
+CVS_VERSION = "-r ITK-3-14"
+
 
 class CableSwig(InstallPackage):
     
@@ -50,14 +47,13 @@ class CableSwig(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
-        os.chdir(self.build_dir)
         cmake_params = "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                       % (self.inst_dir,)
 
-        ret = os.system("%s %s %s" %
-                        (config.CMAKE, cmake_params, self.source_dir))
+        ret = utils.cmake_command(self.build_dir, self.source_dir,
+                cmake_params)
 
         if ret != 0:
             utils.error("Could not configure CableSwig.  Fix and try again.")
