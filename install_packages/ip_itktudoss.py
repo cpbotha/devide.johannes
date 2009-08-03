@@ -15,9 +15,9 @@ import utils
 
 BASENAME = "itktudoss"
 SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
-SVN_REL = 5
+SVN_REL = 7
 
-dependencies = ['itk']
+dependencies = ['cmake', 'itk', 'wrapitk', 'swig']
 
 class ITKTUDOSS(InstallPackage):
     
@@ -52,23 +52,27 @@ class ITKTUDOSS(InstallPackage):
 
         # we need the PATH types for VTK_DIR and for WrapITK_DIR, else
         # these variables are NOT stored.  That's just weird.
-        # we also need to pass the same instal prefix as for ITK, so
+        # we also need to pass the same instal prefix as for WrapITK, so
         # that the external module can be put in the right place.
         cmake_params = "-DBUILD_WRAPPERS=ON " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_DIR=%s " \
+                       "-DITK_TEST_DRIVER=%s " \
                        "-DWrapITK_DIR:PATH=%s " \
+                       "-DSWIG_DIR=%s " \
+                       "-DSWIG_EXECUTABLE=%s " \
                        "-DPYTHON_EXECUTABLE=%s " \
                        "-DPYTHON_LIBRARY=%s " \
                        "-DPYTHON_INCLUDE_PATH=%s " \
                         % \
-                       (config.ITK_INSTALL_PREFIX,
-                        config.ITK_DIR, config.WRAPITK_DIR,
+                       (config.WRAPITK_TOPLEVEL,
+                        config.ITK_DIR, config.ITK_TEST_DRIVER,
+                        config.WRAPITK_DIR,
+                        config.SWIG_DIR, config.SWIG_EXECUTABLE,
                         config.PYTHON_EXECUTABLE,
                         config.PYTHON_LIBRARY,
                         config.PYTHON_INCLUDE_PATH)
- 
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
