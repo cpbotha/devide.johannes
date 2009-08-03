@@ -219,6 +219,7 @@ def main():
         from install_packages import ip_itktudoss
         from install_packages import ip_cableswig
         from install_packages import ip_swig, ip_gdcm
+        from install_packages import ip_wrapitk
         from install_packages import ip_installer
         from install_packages import ip_setupenvironment, ip_devide
 
@@ -256,13 +257,13 @@ def main():
                             ip_vtk.VTK(),
                             ip_vtktudoss.VTKTUDOSS(),
                             ip_vtkdevide.VTKDEVIDE(),
+                            ip_itk.ITK(),
                             ip_swig.SWIG(),
                             ip_cableswig.CableSwig(),
-                            ip_itk.ITK(),
-                            ip_itkvtkglue.ItkVtkGlue(),
+                            ip_wrapitk.WrapITK(),
+                            #ip_itkvtkglue.ItkVtkGlue(),
                             ip_itktudoss.ITKTUDOSS(),
                             ip_gdcm.GDCM(),
-                            #ip_installer.Installer(),
                             ip_devide.DeVIDE(),
                             ip_setupenvironment.SetupEnvironment()
                             ]
