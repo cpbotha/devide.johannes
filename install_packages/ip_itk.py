@@ -19,8 +19,10 @@ CS_BASENAME = "CableSwig"
 CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
 CABLESWIG_CVS_VERSION = "-r ITK-3-14"
 
-# this patch is located in johannes/patches/ teehee
-SOGC_PATCH = "itk310-itkSpatialObjectTreeNode-GetChildren.diff"
+# we need this patch to be able to build WrapITK 0.3.0 for ITK 3.14 on
+# Visual Studio 2008.  Gaetan Lehman has already applied to ITK CVS.
+VNOI_PATCH = \
+"itk314_wrapitk030_itkVoronoiSegmentationImageFilterBase_h.diff"
 
 dependencies = ['cmake']
 
@@ -33,10 +35,10 @@ class ITK(InstallPackage):
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
-        self.sogc_patch_src_filename = os.path.join(
-                config.patches_dir, SOGC_PATCH)
-        self.sogc_patch_dst_filename = os.path.join(
-                config.archive_dir, SOGC_PATCH)
+        self.vnoi_patch_src_filename = os.path.join(
+                config.patches_dir, VNOI_PATCH)
+        self.vnoi_patch_dst_filename = os.path.join(
+                config.archive_dir, VNOI_PATCH)
 
 
     def get(self):
@@ -51,32 +53,21 @@ class ITK(InstallPackage):
             if ret != 0:
                 utils.error("Could not CVS checkout ITK.  Fix and try again.")
 
-            os.chdir(os.path.join(self.source_dir, 'Utilities'))
+        # only download patch if we don't have it
+        if not os.path.exists(self.vnoi_patch_dst_filename):
+            shutil.copy(self.vnoi_patch_src_filename,
+                        self.vnoi_patch_dst_filename)
 
-            if False:
-                ret = os.system("%s -d %s co %s %s" %
-                                (config.CVS, CS_CVS_REPO, 
-                                    CABLESWIG_CVS_VERSION, CS_BASENAME))
-                
-                if ret != 0:
-                    utils.error("Could not CVS checkout CableSwig.  Fix and try again.")
+            # always try to apply patch if we've just copied it
+            utils.output("Applying VORONOI itk314 patch")
+            os.chdir(os.path.join(
+                self.source_dir, 'Code', 'Algorithms'))
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.vnoi_patch_dst_filename))
 
-            if False:
-                # only download patch if we don't have it
-                # only do this check if we're already downloading source
-                if not os.path.exists(self.sogc_patch_dst_filename):
-                    shutil.copy(self.sogc_patch_src_filename,
-                                self.sogc_patch_dst_filename)
-
-                # always try to apply patch if we've just checked out
-                utils.output("Applying SOGC patch")
-                os.chdir(self.source_dir)
-                ret = os.system(
-                    "%s -p0 < %s" % (config.PATCH, self.sogc_patch_dst_filename))
-
-                if ret != 0:
-                    utils.error(
-                        "Could not apply EXC patch.  Fix and try again.")
+            if ret != 0:
+                utils.error(
+                    "Could not apply EXC patch.  Fix and try again.")
 
 
         # also the source dir for other installpackages that wish to build
@@ -108,26 +99,6 @@ class ITK(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_USE_REVIEW=ON " \
                        % (self.inst_dir,)
-                       #   config.PYTHON_EXECUTABLE,
-                       #   config.PYTHON_LIBRARY,
-                       #   config.PYTHON_INCLUDE_PATH)
-                       #"-DUSE_WRAP_ITK=ON " \
-                       #"-DINSTALL_WRAP_ITK_COMPATIBILITY=OFF " \
-                       #"-DPYTHON_EXECUTABLE=%s " \
-                       #"-DPYTHON_LIBRARY=%s " \
-                       #"-DPYTHON_INCLUDE_PATH=%s " \
-                       #"-DWRAP_ITK_PYTHON=ON " \
-                       #"-DWRAP_ITK_TCL=OFF " \
-                       #"-DWRAP_ITK_JAVA=OFF " \
-                       #"-DWRAP_covariant_vector_float=OFF " \
-                       #"-DWRAP_rgb_unsigned_short=OFF " \
-                       #"-DWRAP_rgba_unsigned_short=OFF " \
-                       #"-DWRAP_unsigned_short=OFF " \
-                       #"-DWRAP_signed_short=ON " \
-                       #"-DWRAP_unsigned_long=ON " \
-                       #"-DWRAP_Iterators=ON " \
-                       #"-DITK_USE_OPTIMIZED_REGISTRATION_METHODS=OFF "\
-                       #"-DITK_USE_REVIEW=ON " \
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
