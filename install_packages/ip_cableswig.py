@@ -14,6 +14,7 @@ BASENAME = "CableSwig"
 CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ITK-3-14"
 
+dependencies = ['cmake']
 
 class CableSwig(InstallPackage):
     
@@ -65,7 +66,7 @@ class CableSwig(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
-            ret = os.system("%s" % (config.MAKE,))
+            ret = utils.make_command('CableSwig.sln')
             if ret != 0:
                 utils.error("Error building CableSwig.  Fix and try again.")
 
