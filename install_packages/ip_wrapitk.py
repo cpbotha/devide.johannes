@@ -46,6 +46,7 @@ class WrapITK(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
+        # need unsigned short for itkPyImageFilter
         cmake_params = \
                 "-DBUILD_TESTING=OFF " \
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
@@ -73,7 +74,7 @@ class WrapITK(InstallPackage):
                 "-DWRAP_signed_short=ON " \
                 "-DWRAP_unsigned_char=OFF " \
                 "-DWRAP_unsigned_long=OFF " \
-                "-DWRAP_unsigned_short=OFF " \
+                "-DWRAP_unsigned_short=ON " \
                 "-DWRAP_vector_double=OFF " \
                 "-DWRAP_vector_float=ON " \
                 "-DPYTHON_EXECUTABLE=%s " \
