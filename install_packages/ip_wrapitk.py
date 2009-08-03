@@ -98,6 +98,11 @@ class WrapITK(InstallPackage):
         
 
     def build(self):
+        # NB: if you run "make" in wrapitk-build yourself, make sure
+        # the johannes python is in the path (by having ran source
+        # jpython_setup.sh), as the build process relies on the
+        # correct python being available.
+
         raise RuntimeError
         posix_file = os.path.join(self.build_dir, 
                 'bin/libvtkgdcmPython.so')
