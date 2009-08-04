@@ -215,7 +215,8 @@ def main():
         from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
         from install_packages import ip_vtk
         from install_packages import ip_vtktudoss, ip_vtkdevide
-        from install_packages import ip_itk, ip_itkvtkglue
+        from install_packages import ip_itk
+        from install_packages import ip_itkvtkglue, ip_itkpybuffer
         from install_packages import ip_itktudoss
         from install_packages import ip_cableswig
         from install_packages import ip_swig, ip_gdcm
@@ -262,6 +263,7 @@ def main():
                             ip_cableswig.CableSwig(),
                             ip_wrapitk.WrapITK(),
                             ip_itkvtkglue.ItkVtkGlue(),
+                            ip_itkpybuffer.itkPyBuffer(),
                             ip_itktudoss.ITKTUDOSS(),
                             ip_gdcm.GDCM(),
                             ip_devide.DeVIDE(),
