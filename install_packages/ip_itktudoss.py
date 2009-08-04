@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "itktudoss"
 SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
-SVN_REL = 8
+SVN_REL = 9
 
 dependencies = ['cmake', 'itk', 'wrapitk', 'swig']
 
