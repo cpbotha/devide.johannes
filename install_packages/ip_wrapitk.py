@@ -11,6 +11,9 @@ import utils
 BASENAME = "wrapitk"
 SVN_REPO = \
         "http://wrapitk.googlecode.com/svn/tags/0.3.0"
+
+BO_PATCH = "wrapitk030_bigobj.diff"
+
 dependencies = ['cmake', 'itk', 'cableswig', 'swig']
 
 class WrapITK(InstallPackage):
@@ -20,6 +23,11 @@ class WrapITK(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+
+        self.bo_patch_src_filename = os.path.join(
+                config.patches_dir, BO_PATCH)
+        self.bo_patch_dst_filename = os.path.join(
+                config.archive_dir, BO_PATCH)
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -32,6 +40,21 @@ class WrapITK(InstallPackage):
                 SVN_REPO, BASENAME))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
+
+        # only download patch if we don't have it
+        if not os.path.exists(self.bo_patch_dst_filename):
+            shutil.copy(self.bo_patch_src_filename,
+                        self.bo_patch_dst_filename)
+
+            # always try to apply patch if we've just copied it
+            utils.output("Applying bigobj wrapitk030 patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.bo_patch_dst_filename))
+
+            if ret != 0:
+                utils.error(
+                    "Could not apply BO patch.  Fix and try again.")
 
     def unpack(self):
         # no unpack step
