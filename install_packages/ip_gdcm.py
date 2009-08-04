@@ -16,6 +16,8 @@ SVN_REPO = \
 #SVN_REPO = \
 #        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
 
+FISH_PATCH = "gdcm2012_fish320.diff"
+
 dependencies = ['swig', 'vtk']
 
 class GDCM(InstallPackage):
@@ -25,6 +27,12 @@ class GDCM(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+
+        self.fish_patch_src_filename = os.path.join(
+                config.patches_dir, FISH_PATCH)
+        self.fish_patch_dst_filename = os.path.join(
+                config.archive_dir, FISH_PATCH)
+
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -37,6 +45,23 @@ class GDCM(InstallPackage):
                 SVN_REPO, BASENAME))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
+
+        # only download patch if we don't have it
+        if not os.path.exists(self.fish_patch_dst_filename):
+            shutil.copy(self.fish_patch_src_filename,
+                        self.fish_patch_dst_filename)
+
+            # always try to apply patch if we've just copied it
+            utils.output("Applying bigobj wrapitk030 patch")
+            os.chdir(os.path.join(
+                self.source_dir, 'Source', 'MediaStorageAndFileFormat'))
+
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.fish_patch_dst_filename))
+
+            if ret != 0:
+                utils.error(
+                    "Could not apply FISH patch.  Fix and try again.")
 
     def unpack(self):
         # no unpack step
