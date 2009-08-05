@@ -131,7 +131,8 @@ class WrapITK(InstallPackage):
         posix_file = os.path.join(self.build_dir, 
                 'lib', '_RegistrationPython.so')
         nt_file = os.path.join(self.build_dir, 
-                'lib', '_RegistrationPython' + config.PYE_EXT)
+                'lib', config.BUILD_TARGET,
+                '_RegistrationPython' + config.PYE_EXT)
 
         if utils.file_exists(posix_file, nt_file):    
             utils.output("WrapITK already built.  Skipping build step.")
