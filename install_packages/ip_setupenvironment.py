@@ -25,6 +25,7 @@ python: %(python_library_path)s
 wxpython: %(wx_lib_path)s
 vtk: %(vtk_sodir)s
 gdcm: %(gdcm_lib)s
+dcmtk: %(dcmtk_lib)s
 vtkdevide: %(vtkdevide_lib)s
 vtktudoss: %(vtktudoss_lib)s
 itk: %(itk_lib)s:%(wrapitk_lib)s
@@ -122,6 +123,7 @@ class SetupEnvironment(InstallPackage):
                    'wx_lib_path' : config.WX_LIB_PATH,
                    'vtk_sodir' : config.VTK_SODIR,
                    'vtk_python' : config.VTK_PYTHON,
+                   'dcmtk_lib' : config.DCMTK_LIB,
                    'gdcm_lib' : config.GDCM_LIB,
                    'gdcm_python' : config.GDCM_PYTHON,
                    'vtkdevide_lib' : config.VTKDEVIDE_LIB,
