@@ -35,6 +35,8 @@ EXC_PATCH = "pyvtk_tryexcept_and_pyexceptions.diff"
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 
+VTKFT_PATCH = "vtkfreetype_segfault.diff"
+
 dependencies = ['cmake']
                   
 class VTK(InstallPackage):
@@ -48,6 +50,11 @@ class VTK(InstallPackage):
                                                EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.patches_dir,
                                                  VTKPRPRTY_PATCH)
+
+        self.vtkft_patch_src_filename = os.path.join(
+                config.patches_dir, VTKFT_PATCH)
+        self.vtkft_patch_dst_filename = os.path.join(
+                config.archive_dir, VTKFT_PATCH)
 
     def update_wpvi(self):
         """Update Wrapping/Python/vtk/__init__.py to fix nasty DL bug
@@ -102,6 +109,22 @@ class VTK(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply VTKPRPRTY patch.  Fix and try again.")
+
+        # this is the correct way to handle patches:
+        # only download patch if we don't have it
+        if not os.path.exists(self.vtkft_patch_dst_filename):
+            shutil.copy(self.vtkft_patch_src_filename,
+                        self.vtkft_patch_dst_filename)
+
+            # always try to apply patch if we've just copied it
+            utils.output("Applying vtkfreetype_segfault patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.vtkft_patch_dst_filename))
+
+            if ret != 0:
+                utils.error(
+                    "Could not apply vtkfreetype_segfault patch.  Fix and try again.")
 
     def unpack(self):
         pass               

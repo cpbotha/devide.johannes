@@ -1,0 +1,26 @@
+Index: Utilities/vtkfreetype/CMakeLists.txt
+===================================================================
+RCS file: /cvsroot/VTK/VTK/Utilities/vtkfreetype/CMakeLists.txt,v
+retrieving revision 1.16
+diff -u -r1.16 CMakeLists.txt
+--- Utilities/vtkfreetype/CMakeLists.txt	26 May 2008 14:51:11 -0000	1.16
++++ Utilities/vtkfreetype/CMakeLists.txt	5 Aug 2009 15:28:13 -0000
+@@ -115,6 +115,18 @@
+   SET_TARGET_PROPERTIES(vtkfreetype PROPERTIES ${VTK_LIBRARY_PROPERTIES})
+ ENDIF(VTK_LIBRARY_PROPERTIES)
+ 
++# on ubuntu 8.04 (g++ 4.2.4) and 8.10 (g++ 4.3.2), compiler 
++# optimisations (-O2), cause the vtkfreetype code to segfault 
++# when I do the following:
++# import vtk; ta=vtk.vtkTextActor3D(); ta.SetInput('aeu'); ta.GetBounds()
++# the fault occurs in vtk_freetype_FTC_CMapCache_Lookup ()
++# on ubuntu 9.04 (g++ 4.3.3) there are no problems.
++# because we build the DRE currently on Ubuntu 8.04, we'll compile with
++# no optimisation (-O0) to work around this bug.
++IF(UNIX)
++  SET_SOURCE_FILES_PROPERTIES(${FREETYPE_SRCS} PROPERTIES COMPILE_FLAGS "-O0")
++ENDIF(UNIX)
++
+ IF(NOT VTK_INSTALL_NO_LIBRARIES)
+   INSTALL(TARGETS vtkfreetype
+     RUNTIME DESTINATION ${VTK_INSTALL_BIN_DIR_CM24} COMPONENT RuntimeLibraries
