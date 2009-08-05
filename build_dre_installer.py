@@ -165,6 +165,14 @@ def package_dist():
     else:
         raise RuntimeError('Could not extract DeVIDE version.')
 
+    # now get 32 or 64bit: we're going to use this in the package
+    # naming.
+    import platform
+    if platform.architecture()[0] == '64bit':
+        bits_str = '64'
+    else:
+        bits_str = '32'
+
     if os.name == 'nt':
         # go to working dir
         os.chdir(config.working_dir)
@@ -176,16 +184,21 @@ def package_dist():
         if ret != 0:
             raise RuntimeError('Error running NSIS.')
 
-        # nsis creates devidesetup.exe - we're going to rename
+        # nsis creates devidesetup.exe - we're going to rename to
+        # devide-re-v9.8.1234-win64-setup.exe
+        platform_str = 'win' + bits_str
         os.rename('devide-re-setup.exe', 
-                'devide-re-setup-%s.exe' % (devide_ver,))
+                'devide-re-%s-%s-setup.exe' % \
+                        (devide_ver, platform_str))
 
     else:
         # go to the working dir
         os.chdir(config.working_dir)
 
-        # basename will be e.g. devide-re-v9.8.2341
-        basename = '%s-%s' % (BDIPaths.dre_basename, devide_ver)
+        platform_str = 'lin' + bits_str
+        # basename will be e.g. devide-re-v9.8.2341-lin64
+        basename = '%s-%s-%s' % \
+                (BDIPaths.dre_basename, devide_ver, platform_str)
         tarball = '%s.tar.bz2' % (basename,)
 
         if os.path.exists(tarball):
