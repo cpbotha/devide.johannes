@@ -31,6 +31,7 @@ vtktudoss: %(vtktudoss_lib)s
 itk: %(itk_lib)s:%(wrapitk_lib)s
 
 [env:pythonpath]
+devide: %(devide_inst_dir)s
 vtk: %(vtk_python)s:%(vtk_sodir)s
 gdcm: %(gdcm_python)s:%(gdcm_lib)s
 vtkdevide: %(vtkdevide_python)s:%(vtkdevide_lib)s
@@ -51,6 +52,7 @@ vtktudoss: %(vtktudoss_lib)s
 itk:%(itk_bin)s;%(wrapitk_lib)s
 
 [env:pythonpath]
+devide: %(devide_inst_dir)s
 vtk: %(vtk_python)s;%(vtk_sodir)s
 gdcm: %(gdcm_python)s;%(gdcm_lib)s
 vtkdevide: %(vtkdevide_python)s;%(vtkdevide_lib)s
@@ -120,6 +122,7 @@ class SetupEnvironment(InstallPackage):
 
         vardict = {'python_binary_path' : config.python_binary_path,
                    'python_library_path' : config.python_library_path,
+                   'devide_inst_dir' : config.DEVIDE_INST_DIR,
                    'wx_lib_path' : config.WX_LIB_PATH,
                    'vtk_sodir' : config.VTK_SODIR,
                    'vtk_python' : config.VTK_PYTHON,

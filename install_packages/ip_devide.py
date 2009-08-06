@@ -71,6 +71,7 @@ class DeVIDE(InstallPackage):
         pass
 
     def install(self):
+        config.DEVIDE_INST_DIR = self.inst_dir
         self.copy_devide_to_inst()
 
     def clean_build(self):
