@@ -251,7 +251,7 @@ diff -u -r1.91 vtkWrapPython.c
 +  /* Disable unreachable code warnings.  Visual Studio assumes that
 +   * externs won't throw, so it spits out warnings with our try /
 +   * catch blocks around VTK method calls. */
-+  fprintf(fp, "#pragma warning( disable: 4207 )\n");
++  fprintf(fp, "#pragma warning( disable: 4702 )\n");
    fprintf(fp,"#else\n");
    fprintf(fp,"extern \"C\" { PyObject *PyVTKClass_%sNew(char *); }\n",
            data->ClassName);
