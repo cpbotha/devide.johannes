@@ -90,6 +90,14 @@ class CableSwig(InstallPackage):
             if ret != 0:
                 utils.error("Could not install CableSwig.  Fix and try again.")
 
+            # when on windows, we have to run CABLESWIG_DIR\gccxml_vcconfig.bat
+            if os.name == 'nt':
+                os.chdir(os.path.join(
+                    config.CABLESWIG_DIR, 'bin'))
+                ret = os.system('gccxml_vcconfig.bat')
+                if ret != 0:
+                    utils.error("Could not run gccxml_vcconfig.bat.")
+
 
     def clean_build(self):
         utils.output("Removing build and installation directories.")
