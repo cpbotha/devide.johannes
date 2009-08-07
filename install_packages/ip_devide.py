@@ -67,6 +67,12 @@ class DeVIDE(InstallPackage):
               (config.JOHANNES_REL,))],
             devide_py)
 
+        # on win64, we need to delete numpy_kit.mkd, as
+        # numpy+matplotlib are not yet available on this platform
+        if config.WINARCH == '64bit':
+            os.remove(os.path.join(
+                    self.inst_dir, 'module_kits', 'numpy_kit.mkd'))
+
     def build(self):
         pass
 
