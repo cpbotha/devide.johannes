@@ -127,7 +127,7 @@ class itkPyBuffer(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('itkPyBuffer.sln')
+            ret = utils.make_command('PyBuffer.sln')
             if ret != 0:
                 utils.error("Could not build itkPyBuffer.  Fix and try again.")
         
