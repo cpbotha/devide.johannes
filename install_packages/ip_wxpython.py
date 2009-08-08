@@ -11,9 +11,7 @@ from install_package import InstallPackage
 import utils
 from distutils import sysconfig
 
-# wxPython 2.8.10.1 had problems building on Linux
-
-WXP_VER = '2.8.9.2'
+WXP_VER = '2.8.10.1'
 WXP_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s"
 
 if os.name == 'posix':
@@ -29,6 +27,8 @@ elif os.name == 'nt':
 
     WXP_URL =  WXP_URL_BASE % (WXP_ARCHIVE,)
 
+WXP28101_GDIWRAP_PATCH = "wxpython28101_gdiwrap.diff"
+
 dependencies = []
 
 class WXPython(InstallPackage):
@@ -43,6 +43,13 @@ class WXPython(InstallPackage):
             # python/lib/python2.x/site-packages/
             self.sp_dir = sysconfig.get_python_lib()
 
+            self.patch1_src = os.path.join(
+                    config.PATCHES_DIR,
+                    WXP28101_GDIWRAP_PATCH)
+            self.patch1_dst = os.path.join(
+                    config.archive_dir,
+                    WXP28101_GDIWRAP_PATCH) 
+
     def get(self):
         if os.path.exists(self.afilename):
             utils.output("%s already present, not downloading." %
@@ -51,6 +58,23 @@ class WXPython(InstallPackage):
         else:
             utils.goto_archive()
             utils.urlget(WXP_URL)
+
+        if os.name == 'posix':
+            if not os.path.exists(self.patch1_dst):
+                shutil.copy(
+                        self.patch1_src,
+                        self.patch1_dst)
+
+                # always try to apply patch if we've just copied it
+                utils.output("Applying wxp28101 patch")
+
+                os.chdir(self.source_dir)
+                ret = os.system(
+                    "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
+
+                if ret != 0:
+                    utils.error(
+                        "Could not apply WXP28101 patch.  Fix and try again.")
 
     def unpack(self):
         if os.name == 'posix':
