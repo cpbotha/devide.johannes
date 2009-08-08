@@ -44,7 +44,7 @@ class WXPython(InstallPackage):
             self.sp_dir = sysconfig.get_python_lib()
 
             self.patch1_src = os.path.join(
-                    config.PATCHES_DIR,
+                    config.patches_dir,
                     WXP28101_GDIWRAP_PATCH)
             self.patch1_dst = os.path.join(
                     config.archive_dir,
@@ -68,7 +68,7 @@ class WXPython(InstallPackage):
                 # always try to apply patch if we've just copied it
                 utils.output("Applying wxp28101 patch")
 
-                os.chdir(self.source_dir)
+                os.chdir(self.build_dir)
                 ret = os.system(
                     "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
 
@@ -82,6 +82,18 @@ class WXPython(InstallPackage):
                 utils.output("wxPython already unpacked, not redoing.")
             else:
                 utils.unpack_build(self.afilename)
+
+                # try to apply patch
+                utils.output("Applying wxp28101 patch")
+
+                os.chdir(self.build_dir)
+                ret = os.system(
+                    "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
+
+                if ret != 0:
+                    utils.error(
+                        "Could not apply WXP28101 patch.  Fix and try again.")
+
 
     def configure(self):
         pass
