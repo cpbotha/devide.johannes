@@ -274,8 +274,8 @@ You can reinstall later by using ez_setup.py again.
 
     # check that the user has put the correct vcredist_[].exe in the
     # archive dir
-    if os.path.exists(config.archive_dir, 
-            'vcredist_%s.exe' % (config.WINARCH_STR,)):
+    if os.path.exists(os.path.join(
+        config.archive_dir, 'vcredist_%s.exe' % (config.WINARCH_STR,))):
         vcr = True
     else:
         vcr = False
