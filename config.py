@@ -128,6 +128,8 @@ def init(wd, the_profile):
 
     global MAKE, DEVENV, CMAKE_DEFAULT_PARAMS, CMAKE_PRE_VARS
     global SO_EXT, PYE_EXT
+    # FIXME: change convention to x86, amd64, ia64 instead of 32bit and 64bit.
+    # Go through all user code to fix.
     global WINARCH
 
     if os.name == 'posix':

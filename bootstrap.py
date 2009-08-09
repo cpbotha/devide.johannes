@@ -14,6 +14,7 @@ PYVER_STR = '2.6.2'
 import config
 import getopt
 import os
+import shutil
 import stat
 import sys
 import utils
@@ -140,6 +141,42 @@ def main():
             if ret != 0:
                 utils.error(
                         'Failed locally installing Python.  EFS / msiexec problems?')
+
+
+        sxs_manifest_dest = os.path.join(
+                py_inst_dir, 'Microsoft.VC90.CRT.manifest')
+        if not os.path.exists(sxs_manifest_dest):
+            utils.output(
+                    'Copying Python MSVCRT 9.0 runtime libs.')
+
+            # now copy the frikking VS2008 RTM (i.e. NOT SP1) from the system
+            sr = os.environ.get('SYSTEMROOT')
+            sxsd = os.path.join(sr, 'WinSxS')
+            if config.WINARCH == '64bit':
+                astr = 'amd64'
+            else:
+                astr = 'x86'
+
+            mbase = '%s_Microsoft.VC90.CRT_1fc8b3b9a1e18e3b_'+ \
+                    '9.0.21022.8_x-ww_d08d0375'
+            mbase = mbase % (astr,)
+
+            mfn = os.path.join(
+                    sxsd, 'Manifests',
+                    '%s.manifest' % (mbase,))
+
+            # copy the manifest  file
+            shutil.copy(
+                    mfn, sxs_manifest_dest)
+
+            # now copy the DLLs
+            dllsd = os.path.join(sxsd, mbase)
+            for dllfn in ['msvcm90.dll', 'msvcp90.dll', 
+                    'msvcr90.dll']:
+                shutil.copy(os.path.join(
+                    dllsd, dllfn), os.path.join(
+                        py_inst_dir, dllfn))
+            
 
         jpcmd = 'jpython.cmd'
         jpc_fn = os.path.join(config.working_dir, jpcmd)
