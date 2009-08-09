@@ -272,7 +272,21 @@ You can reinstall later by using ez_setup.py again.
 """
         sut_v = False
 
-    return v and sut_v
+    # check that the user has put the correct vcredist_[].exe in the
+    # archive dir
+    if os.path.exists(config.archive_dir, 
+            'vcredist_%s.exe' % (config.WINARCH_STR,)):
+        vcr = True
+    else:
+        vcr = False
+        print PPF, """vcredist_[x86,x64].exe not found.
+        
+Please download vcredist_[x86,x64].exe for VS 2008 SP1 and put it in
+the johannes archive directory.
+"""
+
+
+    return v and sut_v and vcr
 
 
 

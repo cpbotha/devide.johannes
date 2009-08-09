@@ -130,7 +130,7 @@ def init(wd, the_profile):
     global SO_EXT, PYE_EXT
     # FIXME: change convention to x86, amd64, ia64 instead of 32bit and 64bit.
     # Go through all user code to fix.
-    global WINARCH
+    global WINARCH, WINARCH_STR
 
     if os.name == 'posix':
         CMAKE_DEFAULT_PARAMS = '-G "Unix Makefiles"'
@@ -154,6 +154,7 @@ def init(wd, the_profile):
             MAKE = DEVENV + ' %s /project %s ' \
                 '/projectconfig "%s|Win32" /build %s'
             WINARCH = '32bit'
+            WINARCH_STR = 'x86'
 
         else:
             CMAKE_DEFAULT_PARAMS = '-G "Visual Studio 9 2008 Win64"'
@@ -162,6 +163,7 @@ def init(wd, the_profile):
             MAKE = DEVENV + ' %s /project %s ' \
                 '/projectconfig "%s|x64" /build %s'
             WINARCH = '64bit'
+            WINARCH_STR = 'x64'
 
         SO_EXT = '.dll'
         PYE_EXT = '.pyd'
