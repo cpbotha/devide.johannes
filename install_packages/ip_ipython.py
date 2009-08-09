@@ -49,7 +49,7 @@ class IPython(InstallPackage):
                         (PYRL_ARCHIVE,))
             else:
                 utils.goto_archive()
-                utils.urlget(PYRL_ARCHIVE)
+                utils.urlget(PYRL_URL)
 
     def unpack(self):
         if os.path.isdir(self.ipy_build_dir):
