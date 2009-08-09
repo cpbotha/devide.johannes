@@ -214,6 +214,7 @@ def main():
         from install_packages import ip_numpy, ip_matplotlib
         from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
         from install_packages import ip_vtk
+        from install_packages import ip_ipython
         from install_packages import ip_vtktudoss, ip_vtkdevide
         from install_packages import ip_itk
         from install_packages import ip_itkvtkglue, ip_itkpybuffer
@@ -256,6 +257,7 @@ def main():
                             ip_cmake.CMake(),
                             ip_dcmtk.DCMTK(),
                             ip_vtk.VTK(),
+                            ip_ipython.IPython(),
                             ip_vtktudoss.VTKTUDOSS(),
                             ip_vtkdevide.VTKDEVIDE(),
                             ip_itk.ITK(),
