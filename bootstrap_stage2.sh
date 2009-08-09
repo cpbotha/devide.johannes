@@ -43,6 +43,7 @@ cat > $DEPS_TEST_FN << EOF
 #include <bzlib.h>
 #include <sqlite3.h>
 #include <ncurses.h>
+#include <readline/readline.h>
 #include <gtk/gtkversion.h>
 #include <ft2build.h>
 #include <png.h>
