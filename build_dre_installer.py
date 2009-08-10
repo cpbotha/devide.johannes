@@ -182,8 +182,12 @@ def package_dist():
         if config.WINARCH_STR == 'x64':
             NSI_FILE = 'devide-re-x64.nsi'
             shutil.copy('devide-re.nsi', NSI_FILE)
+            # fix redist for win64
+            # also fix installation dir to "program files" and not "program
+            # files (x86)
             utils.re_sub_filter_file(
-                    [('vcredist_x86', 'vcredist_x64')],
+                    [('vcredist_x86', 'vcredist_x64'),
+                     ('\$PROGRAMFILES\\\\', '$PROGRAMFILES64\\\\')],
                     NSI_FILE)
 
         else:
@@ -360,7 +364,7 @@ def main():
 
     # 2. posix: strip / chrpath 
     #    nt: rebase
-    if os.name == 'nt':
+    if os.name == 'nt1':
         rebase_dlls()
     elif os.name == 'posix':
         postproc_sos()
