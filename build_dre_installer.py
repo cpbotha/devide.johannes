@@ -174,12 +174,28 @@ def package_dist():
         bits_str = '32'
 
     if os.name == 'nt':
+
+        nsi_dir = 'archive\dre\support'
+        os.chdir(os.path.join(
+            config.working_dir, nsi_dir))
+
+        if config.WINARCH_STR == 'x64':
+            NSI_FILE = 'devide-re-x64.nsi'
+            shutil.copy('devide-re.nsi', NSI_FILE)
+            utils.re_sub_filter_file(
+                    [('vcredist_x86', 'vcredist_x64')],
+                    NSI_FILE)
+
+        else:
+            NSI_FILE = 'devide-re.nsi'
+
         # go to working dir
         os.chdir(config.working_dir)
+
         # /nocd tells makensis not to change to the directory
         # containing the nsi file.
-        cmd = '%s /NOCD archive\dre\support\devide-re.nsi' \
-                % (MAKE_NSIS,)
+        cmd = '%s /NOCD archive\dre\support\%s' \
+                % (MAKE_NSIS, NSI_FILE)
         ret = os.system(cmd)
         if ret != 0:
             raise RuntimeError('Error running NSIS.')

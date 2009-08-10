@@ -59,6 +59,7 @@ SO_EXT = ''
 PYE_EXT = ''
 
 WINARCH = ''
+WINARCH_STR = ''
 
 # together with CMAKE_BIN_PATH, these will be used by the utils
 # modules to build up a cmake command.
