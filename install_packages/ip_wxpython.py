@@ -65,17 +65,6 @@ class WXPython(InstallPackage):
                         self.patch1_src,
                         self.patch1_dst)
 
-                # always try to apply patch if we've just copied it
-                utils.output("Applying wxp28101 patch")
-
-                os.chdir(self.build_dir)
-                ret = os.system(
-                    "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
-
-                if ret != 0:
-                    utils.error(
-                        "Could not apply WXP28101 patch.  Fix and try again.")
-
     def unpack(self):
         if os.name == 'posix':
             if os.path.isdir(self.build_dir):
