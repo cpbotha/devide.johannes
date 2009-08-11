@@ -11,7 +11,7 @@ import utils
 dependencies = []
 
 DRE_BASENAME = "dre"
-DRE_SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + DRE_BASENAME
+DRE_SVN_REPO = "http://devide.googlecode.com/svn/branches/v9-8/" + DRE_BASENAME
 # this should be the same release as johannes and the rest of devide
 DRE_SVN_REL = config.DEVIDE_REL
 
