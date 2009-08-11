@@ -132,6 +132,13 @@ class matplotlib(InstallPackage):
             else:
                 self.install_posix()
 
+            # make sure the backend is set to WXAgg
+            rcfn = os.path.join(
+                    config.PYTHON_SITE_PACKAGES,
+                    'matplotlib', 'mpl-data', 'matplotlibrc')
+            utils.re_sub_filter_file(
+                    [("(\s*backend\s*\:).*", "\\1 WXAgg")], rcfn)
+
     def install_nt(self):
         sp_dir = sysconfig.get_python_lib()
         os.chdir(sp_dir)
