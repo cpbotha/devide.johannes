@@ -133,11 +133,13 @@ class matplotlib(InstallPackage):
                 self.install_posix()
 
             # make sure the backend is set to WXAgg
+            # and that interactive is set to True
             rcfn = os.path.join(
                     config.PYTHON_SITE_PACKAGES,
                     'matplotlib', 'mpl-data', 'matplotlibrc')
             utils.re_sub_filter_file(
-                    [("(\s*backend\s*\:).*", "\\1 WXAgg")], rcfn)
+                    [("(\s*backend\s*\:).*", "\\1 WXAgg"),
+                     ("#*(\s*interactive\s:).*","\\1 True")], rcfn)
 
     def install_nt(self):
         sp_dir = sysconfig.get_python_lib()
