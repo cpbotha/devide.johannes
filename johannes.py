@@ -31,12 +31,12 @@ Options are as follows:
 -m, --mode             : working mode, 'everything' (default),
                          'clean_build', 'get_only' or 'configure_only'
 -p, --install-packages : specify comma-separated list of packages to work on,
-                         default all.  Example: -p "cmake,cableswig"
---package-set          : preset collections of packages; vtkitk
+                         default all.  Example: -p "CMake,CableSwig"
+                         Correct capitalisation IS important!
 --no-win-prereq        : do NOT do Windows prerequisites check.
 -v, --versions         : display installed versions of all packages.
 
-All of this ugliness is copyright 2006-2008 Charl P. Botha http://cpbotha.net/
+All of this ugliness is copyright 2006-2010 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
 """
 
@@ -146,6 +146,47 @@ def main():
         usage()
 
     else:
+
+        # this is the default list of install packages
+        #
+        # you can override this by:
+        # - specifying packages on the johannes command line
+        # - specifying packages in the working dir johannes.py
+        # (command line has preference over config file)
+        #
+        # capitalisation has to match the capitalisation of your
+        # install package class, name of install package module is
+        # exactly that, but all lower case, so e.g. MyModule will
+        # become: install_packages.ip_mymodule.MyModule()
+        #
+        # johannes will:
+        # - attempt to import the ip_name from install_packages
+        # - instantiate ip_name.Name
+        #
+        ip_names = [
+                'NumPy', 
+                'WXPython',
+                'matplotlib', 
+                'CMake', 
+                'DCMTK',
+                'VTK', 
+                'IPython', 
+                'VTKTUDOSS', 
+                'VTKDEVIDE', 
+                'ITK', 
+                'SWIG',
+                'CableSwig',
+                'WrapITK',
+                'ItkVtkGlue', 
+                'itkPyBuffer', 
+                'ITKTUDOSS',
+                'GDCM',  
+                'DeVIDE',
+                'SetupEnvironment', 
+                ]
+
+
+
         rpad = 60
         rpad_char = '+'
 
@@ -153,7 +194,7 @@ def main():
             optlist, args = getopt.getopt(
                 sys.argv[1:], 'hm:p:w:v',
                 ['help', 'mode=', 'install-packages=', 
-                    'package-set', 'working-dir=',
+                    'working-dir=',
                     'no-prereq-check', 'versions'])
 
         except getopt.GetoptError,e:
@@ -161,7 +202,7 @@ def main():
             return
 
         mode = 'everything'
-        ip_names = None
+        #ip_names = None
         working_dir = None
         profile = 'default'
         no_prereq_check = False
@@ -180,16 +221,7 @@ def main():
 
             elif o in ('--install-packages'):
                 # list of package name to perform the action on
-                ip_names = [i.strip().lower() for i in a.split(',')]
-
-            elif o in ('--package-set'):
-                if a in ('vtkitk'):
-                    ip_names = ['vtk', 'vtktudoss', 'vtkdevide',
-                                        'itk', 'itkvtkglue',
-                                        'itktudoss',
-                                        'swig', 'gdcm',
-                                        'installer', 'setupenvironment',
-                                        'devide']
+                ip_names = [i.strip() for i in a.split(',')]
 
             elif o in ('-w', '--working-dir'):
                 working_dir = a
@@ -211,19 +243,20 @@ def main():
         # init config (DURR)
         config.init(working_dir, profile)
 
-        from install_packages import ip_numpy, ip_matplotlib
-        from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
-        from install_packages import ip_vtk
-        from install_packages import ip_ipython
-        from install_packages import ip_vtktudoss, ip_vtkdevide
-        from install_packages import ip_itk
-        from install_packages import ip_itkvtkglue, ip_itkpybuffer
-        from install_packages import ip_itktudoss
-        from install_packages import ip_cableswig
-        from install_packages import ip_swig, ip_gdcm
-        from install_packages import ip_wrapitk
-        from install_packages import ip_installer
-        from install_packages import ip_setupenvironment, ip_devide
+       
+        #from install_packages import ip_numpy, ip_matplotlib
+        #from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
+        #from install_packages import ip_vtk
+        #from install_packages import ip_ipython
+        #from install_packages import ip_vtktudoss, ip_vtkdevide
+        #from install_packages import ip_itk
+        #from install_packages import ip_itkvtkglue, ip_itkpybuffer
+        #from install_packages import ip_itktudoss
+        #from install_packages import ip_cableswig
+        #from install_packages import ip_swig, ip_gdcm
+        #from install_packages import ip_wrapitk
+        #from install_packages import ip_installer
+        #from install_packages import ip_setupenvironment, ip_devide
 
         # if user is asking for versions, we don't do the
         # prerequisites check as we're not going to build anything
@@ -251,33 +284,48 @@ def main():
                         'Posix prerequisites all good.', 70, '-')
 
 
-        ip_instance_list = [ip_numpy.NumPy(),
-                            ip_wxpython.WXPython(),
-                            ip_matplotlib.matplotlib(),
-                            ip_cmake.CMake(),
-                            ip_dcmtk.DCMTK(),
-                            ip_vtk.VTK(),
-                            ip_ipython.IPython(),
-                            ip_vtktudoss.VTKTUDOSS(),
-                            ip_vtkdevide.VTKDEVIDE(),
-                            ip_itk.ITK(),
-                            ip_swig.SWIG(),
-                            ip_cableswig.CableSwig(),
-                            ip_wrapitk.WrapITK(),
-                            ip_itkvtkglue.ItkVtkGlue(),
-                            ip_itkpybuffer.itkPyBuffer(),
-                            ip_itktudoss.ITKTUDOSS(),
-                            ip_gdcm.GDCM(),
-                            ip_devide.DeVIDE(),
-                            ip_setupenvironment.SetupEnvironment()
-                            ]
+        ip_instance_list = []
+        for ip_name in ip_names:
+            # turn Name into ip_name
+            ip_name_l = 'ip_' + ip_name.lower()
+            # emulate:
+            # from install_packages import ip_name
+            ips_m = __import__('install_packages', globals(), locals(),
+                    [ip_name_l])
+            # this still gives you install_packages, with ip_name ivar
+            # so now get out the the ip_name module itself
+            ip_m = getattr(ips_m, ip_name_l)
+            # instantiate
+            ip_instance_list.append(getattr(ip_m, ip_name)())
 
-        if ip_names is None:
+
+        #ip_instance_list = [ip_numpy.NumPy(),
+        #                    ip_wxpython.WXPython(),
+        #                    ip_matplotlib.matplotlib(),
+        #                    ip_cmake.CMake(),
+        #                    ip_dcmtk.DCMTK(),
+        #                    ip_vtk.VTK(),
+        #                    ip_ipython.IPython(),
+        #                    ip_vtktudoss.VTKTUDOSS(),
+        #                    ip_vtkdevide.VTKDEVIDE(),
+        #                    ip_itk.ITK(),
+        #                    ip_swig.SWIG(),
+        #                    ip_cableswig.CableSwig(),
+        #                    ip_wrapitk.WrapITK(),
+        #                    ip_itkvtkglue.ItkVtkGlue(),
+        #                    ip_itkpybuffer.itkPyBuffer(),
+        #                    ip_itktudoss.ITKTUDOSS(),
+        #                    ip_gdcm.GDCM(),
+        #                    ip_devide.DeVIDE(),
+        #                    ip_setupenvironment.SetupEnvironment()
+        #                    ]
+
+        #if ip_names is None:
             # iow the user didn't touch this
             # this only works because module and class names differ
             # ONLY w.r.t. case
-            ip_names = [i.__class__.__name__.lower()
-                        for i in ip_instance_list]
+        #    ip_names = [i.__class__.__name__.lower()
+        #                for i in ip_instance_list]
 
         print 'Building install_packages:', str(ip_names)
 
@@ -319,34 +367,33 @@ def main():
             
         
         for ip in ip_instance_list:
-            n = ip.__class__.__name__.lower()
-            if n in ip_names:
+            n = ip.__class__.__name__
 
-                if mode == 'get_only':
-                    utils.output("%s GET_ONLY" % (n,), 70, '#')
-                    utils.output("%s" % (n,), 70, '#')
-                    get_stage(ip, n)
+            if mode == 'get_only':
+                utils.output("%s GET_ONLY" % (n,), 70, '#')
+                utils.output("%s" % (n,), 70, '#')
+                get_stage(ip, n)
 
-                elif mode == 'unpack_only':
-                    utils.output("%s UNPACK_ONLY" % (n,), 70, '#')
-                    utils.output("%s" % (n,), 70, '#')
-                    unpack_stage(ip, n)
+            elif mode == 'unpack_only':
+                utils.output("%s UNPACK_ONLY" % (n,), 70, '#')
+                utils.output("%s" % (n,), 70, '#')
+                unpack_stage(ip, n)
 
-                elif mode == 'configure_only':
-                    utils.output("%s CONFIGURE_ONLY" % (n,), 70, '#')
-                    utils.output("%s" % (n,), 70, '#')
-                    configure_stage(ip, n)
+            elif mode == 'configure_only':
+                utils.output("%s CONFIGURE_ONLY" % (n,), 70, '#')
+                utils.output("%s" % (n,), 70, '#')
+                configure_stage(ip, n)
 
-                elif mode == 'everything':
-                    utils.output("%s" % (n,), 70, '#')
-                    all_stages(ip, n)
+            elif mode == 'everything':
+                utils.output("%s" % (n,), 70, '#')
+                all_stages(ip, n)
 
-                elif mode == 'clean_build':
-                    utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
-                    ip.clean_build()
+            elif mode == 'clean_build':
+                utils.output("%s CLEAN_BUILD" % (n,), 70, '#')
+                ip.clean_build()
 
-                elif mode == 'show_versions':
-                    print '%s: %s' % (n, ip.get_installed_version())
+            elif mode == 'show_versions':
+                print '%s: %s' % (n, ip.get_installed_version())
 
         if mode != 'show_versions':
             utils.output("Now please read the RESULTS section of README.txt!")
