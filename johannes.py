@@ -252,8 +252,13 @@ def main():
         # returns list of filenames successfully parsed
         cfgfns = cp.read(os.path.join(working_dir, 'johannes.cfg'))
         if cfgfns:
-            # first packages that need to be installed
-            ip_names = [i.strip() for i in cp.get('default', 'packages').split(',')]
+            if not ip_names_cli:
+                # first packages that need to be installed
+                # we only do this if the user has NOT specified install
+                # packages on the command line.
+                ip_names = [i.strip() 
+                        for i in cp.get('default', 'packages').split(',')]
+
             # also try to read extra install package paths
             # FIXME
 
