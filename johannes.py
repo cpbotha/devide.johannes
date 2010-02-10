@@ -2,6 +2,7 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+import ConfigParser
 import config
 import getopt
 import os
@@ -146,6 +147,8 @@ def main():
         usage()
 
     else:
+        rpad = 60
+        rpad_char = '+'
 
         # this is the default list of install packages
         #
@@ -187,8 +190,6 @@ def main():
 
 
 
-        rpad = 60
-        rpad_char = '+'
 
         try:
             optlist, args = getopt.getopt(
@@ -206,6 +207,7 @@ def main():
         working_dir = None
         profile = 'default'
         no_prereq_check = False
+        ip_names_cli = False
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -222,6 +224,8 @@ def main():
             elif o in ('--install-packages'):
                 # list of package name to perform the action on
                 ip_names = [i.strip() for i in a.split(',')]
+                # remember that the user has specified ip_names on the command-line
+                ip_names_cli = True
 
             elif o in ('-w', '--working-dir'):
                 working_dir = a
@@ -243,20 +247,15 @@ def main():
         # init config (DURR)
         config.init(working_dir, profile)
 
-       
-        #from install_packages import ip_numpy, ip_matplotlib
-        #from install_packages import ip_wxpython, ip_cmake, ip_dcmtk
-        #from install_packages import ip_vtk
-        #from install_packages import ip_ipython
-        #from install_packages import ip_vtktudoss, ip_vtkdevide
-        #from install_packages import ip_itk
-        #from install_packages import ip_itkvtkglue, ip_itkpybuffer
-        #from install_packages import ip_itktudoss
-        #from install_packages import ip_cableswig
-        #from install_packages import ip_swig, ip_gdcm
-        #from install_packages import ip_wrapitk
-        #from install_packages import ip_installer
-        #from install_packages import ip_setupenvironment, ip_devide
+        # now try to read johannes config file from the working dir
+        cp = ConfigParser.ConfigParser()
+        # returns list of filenames successfully parsed
+        cfgfns = cp.read(os.path.join(working_dir, 'johannes.cfg'))
+        if cfgfns:
+            # first packages that need to be installed
+            ip_names = [i.strip() for i in cp.get('default', 'packages').split(',')]
+            # also try to read extra install package paths
+            # FIXME
 
         # if user is asking for versions, we don't do the
         # prerequisites check as we're not going to build anything
@@ -282,6 +281,7 @@ def main():
             else:
                 utils.output(
                         'Posix prerequisites all good.', 70, '-')
+
 
 
         ip_instance_list = []
