@@ -18,6 +18,7 @@ import shutil
 import stat
 import sys
 import utils
+import glob
 
 nt_python = """
 @echo off
@@ -158,12 +159,19 @@ def main():
                 astr = 'x86'
 
             mbase = '%s_Microsoft.VC90.CRT_1fc8b3b9a1e18e3b_'+ \
-                    '9.0.21022.8_x-ww_d08d0375'
+                    '9.0.21022.8_*'
             mbase = mbase % (astr,)
 
             mfn = os.path.join(
                     sxsd, 'Manifests',
                     '%s.manifest' % (mbase,))
+            mfns = glob.glob(mfn)
+            if len(mfns) == 0:
+                utils.error('No manifest file found that matches %s' % mfn)
+            if len(mfns) > 1:
+                utils.error('Multiple manifest files found that match %s' % mfn)
+            mfn = mfns[0]
+            mbase = os.path.splitext(os.path.split(mfn)[-1])[0]
 
             # copy the manifest  file
             shutil.copy(
