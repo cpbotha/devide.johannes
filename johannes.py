@@ -3,6 +3,7 @@
 # See COPYRIGHT for details.
 
 import ConfigParser
+from ConfigParser import NoOptionError
 import config
 import getopt
 import os
@@ -36,6 +37,10 @@ Options are as follows:
                          Correct capitalisation IS important!
 --no-win-prereq        : do NOT do Windows prerequisites check.
 -v, --versions         : display installed versions of all packages.
+
+You can also specify project-specific options (for example specifying
+extra install packages) in a johannes.cfg file placed at the top-level
+of your working directory.  See the README.txt for more info.
 
 All of this ugliness is copyright 2006-2010 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
@@ -247,20 +252,34 @@ def main():
         # init config (DURR)
         config.init(working_dir, profile)
 
+
+        # set some variables we'll need to check later depending on
+        # the configuration
+        ip_dirs = []
         # now try to read johannes config file from the working dir
         cp = ConfigParser.ConfigParser()
         # returns list of filenames successfully parsed
         cfgfns = cp.read(os.path.join(working_dir, 'johannes.cfg'))
-        if cfgfns:
+        if cfgfns and cp.has_section('default'):
             if not ip_names_cli:
                 # first packages that need to be installed
                 # we only do this if the user has NOT specified install
                 # packages on the command line.
-                ip_names = [i.strip() 
-                        for i in cp.get('default', 'packages').split(',')]
+                try:
+                    ip_names = [i.strip() 
+                            for i in cp.get(
+                                'default', 'packages').split(',')]
+                except NoOptionError:
+                    pass
 
             # also try to read extra install package paths
-            # FIXME
+            # this is also a comma separated list
+            try:
+                ip_dirs = [i.strip()
+                        for i in cp.get(
+                            'default', 'ip_dirs').split(',')]
+            except NoOptionError:
+                pass
 
         # if user is asking for versions, we don't do the
         # prerequisites check as we're not going to build anything
@@ -287,53 +306,27 @@ def main():
                 utils.output(
                         'Posix prerequisites all good.', 70, '-')
 
+        # we're going to do some imports, so let's set the sys.path
+        # correctly.
+        # 1. first the default install packages dir config.ip_dir
+        sys.path.insert(0, config.ip_dir)
 
+        # 2. insert the extra specified paths BEFORE that, so they get
+        # preference
+        for uip_dir in ip_dirs:
+            sys.path.insert(0, uip_dir)
 
+        # now import only the specified packages
         ip_instance_list = []
         for ip_name in ip_names:
             # turn Name into ip_name
             ip_name_l = 'ip_' + ip_name.lower()
-            # emulate:
-            # from install_packages import ip_name
-            ips_m = __import__('install_packages', globals(), locals(),
-                    [ip_name_l])
-            # this still gives you install_packages, with ip_name ivar
-            # so now get out the the ip_name module itself
-            ip_m = getattr(ips_m, ip_name_l)
-            # instantiate
+            # then import ip_name
+            ip_m = __import__(ip_name_l)
+            # instantiate ip_name.Name
             ip_instance_list.append(getattr(ip_m, ip_name)())
-
-
-        #ip_instance_list = [ip_numpy.NumPy(),
-        #                    ip_wxpython.WXPython(),
-        #                    ip_matplotlib.matplotlib(),
-        #                    ip_cmake.CMake(),
-        #                    ip_dcmtk.DCMTK(),
-        #                    ip_vtk.VTK(),
-        #                    ip_ipython.IPython(),
-        #                    ip_vtktudoss.VTKTUDOSS(),
-        #                    ip_vtkdevide.VTKDEVIDE(),
-        #                    ip_itk.ITK(),
-        #                    ip_swig.SWIG(),
-        #                    ip_cableswig.CableSwig(),
-        #                    ip_wrapitk.WrapITK(),
-        #                    ip_itkvtkglue.ItkVtkGlue(),
-        #                    ip_itkpybuffer.itkPyBuffer(),
-        #                    ip_itktudoss.ITKTUDOSS(),
-        #                    ip_gdcm.GDCM(),
-        #                    ip_devide.DeVIDE(),
-        #                    ip_setupenvironment.SetupEnvironment()
-        #                    ]
-
-        #if ip_names is None:
-            # iow the user didn't touch this
-            # this only works because module and class names differ
-            # ONLY w.r.t. case
-        #    ip_names = [i.__class__.__name__.lower()
-        #                for i in ip_instance_list]
-
-        print 'Building install_packages:', str(ip_names)
-
+            print "%s from %s." % \
+                    (ip_name, ip_m.__file__)
 
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)

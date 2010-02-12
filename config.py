@@ -112,9 +112,10 @@ def init(wd, the_profile):
 
     # we will also need directory where johannes finds itself, in
     # order to retrieve patches.
-    global johannes_dir, patches_dir
+    global johannes_dir, patches_dir, ip_dir
     johannes_dir = os.path.dirname(__file__)
     patches_dir = os.path.join(johannes_dir, 'patches')
+    ip_dir = os.path.join(johannes_dir, 'install_packages')
 
     global profile
     profile = the_profile
