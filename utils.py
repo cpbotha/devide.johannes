@@ -9,6 +9,7 @@ import sys, urllib
 import shutil
 import tarfile
 import zipfile
+import subprocess
 
 def cmake_command(build_dir, source_dir, cmake_params):
     """Invoke correct cmake commands to configure a build directory.
@@ -324,3 +325,32 @@ def re_sub_filter_file(repls, filename):
     ofile.close()
             
     shutil.copyfile(newfilename, filename)
+
+def execute_in_vs_environment(post_commands, pre_commands='', communicate=''):
+    """ Executes the specified commands as if from the Visual Studio 
+        command prompt. "vcvarsall.bat" needs to be on the PATH for this.
+        post_commands: Commands executed after setting up the environment.
+                       This should be one string (separate using '&').
+        pre_commands:  Executed before setting the environment.
+        communicate:   Command sent to stdin after post_commands. 
+    """
+    if config.WINARCH == '64bit':
+        astr = 'amd64'
+    else:
+        astr = 'x86'
+    
+    if pre_commands:
+        if pre_commands[-1] != '&':
+            pre_commands += '&'
+    if post_commands:
+        if post_commands[0] != '&':
+            post_commands = '&' + post_commands
+    p = subprocess.Popen('%s%s %s%s' % (
+                pre_commands,
+                "vcvarsall.bat",
+                astr,
+                post_commands),
+              shell=True, stdin=subprocess.PIPE)
+    if communicate:
+        p.communicate(communicate)
+    return p.wait()
