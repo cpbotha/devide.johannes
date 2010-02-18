@@ -1,11 +1,11 @@
 Index: vtkProperty.h
 ===================================================================
 RCS file: /cvsroot/VTK/VTK/Rendering/vtkProperty.h,v
-retrieving revision 1.72
-diff -u -r1.72 vtkProperty.h
---- vtkProperty.h	18 Oct 2006 16:38:48 -0000	1.72
-+++ vtkProperty.h	26 Aug 2007 08:39:03 -0000
-@@ -322,6 +322,56 @@
+retrieving revision 1.82
+diff -u -r1.82 vtkProperty.h
+--- vtkProperty.h	10 Mar 2009 15:51:25 -0000	1.82
++++ vtkProperty.h	18 Feb 2010 16:38:38 -0000
+@@ -330,6 +330,71 @@
      }
  
    // Description:
@@ -28,6 +28,11 @@ diff -u -r1.72 vtkProperty.h
 +    this->AddShaderVariable(name, v1, v2, v3);
 +  }
 +  
++  void AddShaderVariableFloat(const char* name, float v1, float v2, float v3, float v4)
++  {
++    this->AddShaderVariable(name, v1, v2, v3, v4);
++  }
++
 +  void AddShaderVariableDouble(const char* name, double v1)
 +  {
 +    this->AddShaderVariable(name, v1);
@@ -43,6 +48,11 @@ diff -u -r1.72 vtkProperty.h
 +    this->AddShaderVariable(name, v1, v2, v3);
 +  }
 +  
++  void AddShaderVariableDouble(const char* name, double v1, double v2, double v3, double v4)
++  {
++    this->AddShaderVariable(name, v1, v2, v3, v4);
++  }
++
 +  void AddShaderVariableInt(const char* name, int v1)
 +  {
 +    this->AddShaderVariable(name, v1);
@@ -58,6 +68,11 @@ diff -u -r1.72 vtkProperty.h
 +    this->AddShaderVariable(name, v1, v2, v3);
 +  }
 +  
++  void AddShaderVariableInt(const char* name, int v1, int v2, int v3, int v4)
++  {
++    this->AddShaderVariable(name, v1, v2, v3, v4);
++  }
++
 +  // Description:
    // Set/Get the texture object to control rendering texture maps.  This will
    // be a vtkTexture object. A property does not need to have an associated
