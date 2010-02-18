@@ -4,11 +4,45 @@ RCS file: /cvsroot/VTK/VTK/Rendering/vtkProperty.h,v
 retrieving revision 1.82
 diff -u -r1.82 vtkProperty.h
 --- vtkProperty.h	10 Mar 2009 15:51:25 -0000	1.82
-+++ vtkProperty.h	18 Feb 2010 16:38:38 -0000
-@@ -330,6 +330,71 @@
++++ vtkProperty.h	18 Feb 2010 19:26:41 -0000
+@@ -329,6 +329,104 @@
+     this->AddShaderVariable(name, 3, v);
      }
  
-   // Description:
++  // also need four element variables
++  void AddShaderVariable(const char* name, int v1, int v2, int v3, int v4)
++    {
++    int v[4];
++    v[0] = v1;
++    v[1] = v2;
++    v[2] = v3;
++    v[3] = v4;
++    this->AddShaderVariable(name, 4, v);
++    }
++  void AddShaderVariable(const char* name, float v1, float v2, float v3, float v4)
++    {
++    float v[4];
++    v[0] = v1;
++    v[1] = v2;
++    v[2] = v3;
++    v[3] = v4;
++    this->AddShaderVariable(name, 4, v);
++    }
++  void AddShaderVariable(const char* name, double v1, double v2, double v3, double v4)
++    {
++    double v[4];
++    v[0] = v1;
++    v[1] = v2;
++    v[2] = v3;
++    v[3] = v4;
++    this->AddShaderVariable(name, 4, v);
++    }
++
++
++
++
++
++  // Description:
 +  // more methods for Python, it seems the wrapping can only
 +  // distinguish overloaded methods by number of parameters and not by
 +  // type, so in Python only the integer versions of the methods above
@@ -73,7 +107,6 @@ diff -u -r1.82 vtkProperty.h
 +    this->AddShaderVariable(name, v1, v2, v3, v4);
 +  }
 +
-+  // Description:
+   // Description:
    // Set/Get the texture object to control rendering texture maps.  This will
    // be a vtkTexture object. A property does not need to have an associated
-   // texture map and multiple properties can share one texture. Textures
