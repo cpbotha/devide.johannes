@@ -62,8 +62,8 @@ class VTKTUD(InstallPackage):
 
         # we only add this under posix as a work-around to compile the
         # STLib code under g++
-        #if os.name == 'posix':
-        #    cmake_params = cmake_params + " -DCMAKE_CXX_FLAGS=-fpermissive "
+        if os.name == 'posix':
+            cmake_params = cmake_params + " -DCMAKE_CXX_FLAGS=-fpermissive "
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
