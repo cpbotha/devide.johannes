@@ -83,24 +83,24 @@ class VTKTUD(InstallPackage):
 
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('VTKTUDOSS.sln')
+            ret = utils.make_command('VTKTUD.sln')
 
             if ret != 0:
                 utils.error("Could not build vtktud.  Fix and try again.")
         
 
     def install(self):
-        config.VTKTUDOSS_PYTHON = os.path.join(
+        config.VTKTUD_PYTHON = os.path.join(
             self.inst_dir, 'lib')
 
-        config.VTKTUDOSS_LIB = os.path.join(self.inst_dir, 'lib')
+        config.VTKTUD_LIB = os.path.join(self.inst_dir, 'lib')
 
-        test_file = os.path.join(config.VTKTUDOSS_LIB, 'vtktud.py')
+        test_file = os.path.join(config.VTKTUD_LIB, 'vtktud.py')
         if os.path.exists(test_file):
             utils.output("vtktud already installed, skipping step.")
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('VTKTUDOSS.sln', install=True)
+            ret = utils.make_command('VTKTUD.sln', install=True)
 
             if ret != 0:
                 utils.error(
