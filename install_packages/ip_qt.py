@@ -103,5 +103,6 @@ class Qt(InstallPackage):
             shutil.rmtree(self.build_dir)
         
     def get_installed_version(self):
-        #TODO: 
-        return ""
+        # This only works when PyQt is installed
+        import qt 
+        return qt.qVersion()

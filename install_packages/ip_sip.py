@@ -93,5 +93,8 @@ class SIP(InstallPackage):
         # TODO: can we uninstall it?
         
     def get_installed_version(self):
-       #TODO: 
-        return ""
+        python_dir = os.path.dirname(config.PYTHON_EXECUTABLE)
+        reader = os.popen(os.path.join(python_dir, 'sip -V'))
+        sipversion = reader.read()[:-1] # Cut off newline
+        reader.close()
+        return sipversion
