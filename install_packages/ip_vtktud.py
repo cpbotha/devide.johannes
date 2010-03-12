@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "vtktud"
 SVN_REPO = "https://graphics.tudelft.nl/svn/tudvis/trunk/vtktud"
-SVN_REL = 2876
+SVN_REL = 3053
 
 dependencies = ['vtk']
 
