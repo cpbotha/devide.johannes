@@ -43,7 +43,7 @@ class SOAPpy(InstallPackage):
         ret = call("%s setup.py build" % config.PYTHON_EXECUTABLE, shell=True) 
         
         if ret != 0:
-            utils.error("Could not install %s.  Fix and try again." % BASENAME)
+            utils.error("Could not build %s.  Fix and try again." % BASENAME)
     
     def install(self):
         if os.path.exists(os.path.join(self.site_packages, 'SOAPpy')):
