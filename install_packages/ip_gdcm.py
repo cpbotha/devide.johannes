@@ -2,6 +2,8 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+# FIXME: fish patch probably not necessary for post 2.0.12
+
 import config
 from install_package import InstallPackage
 import os
@@ -9,10 +11,10 @@ import shutil
 import utils
 
 BASENAME = "gdcm"
-SVN_REPO = \
-        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/tags/gdcm-2-0-12"
 #SVN_REPO = \
-#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
+#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/tags/gdcm-2-0-12"
+SVN_REPO = \
+        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
 #SVN_REPO = \
 #        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
 
@@ -52,7 +54,7 @@ class GDCM(InstallPackage):
                         self.fish_patch_dst_filename)
 
             # always try to apply patch if we've just copied it
-            utils.output("Applying bigobj wrapitk030 patch")
+            utils.output("Applying FISH patch (Toshiba 320 and gdcm 2.0.12)")
             os.chdir(os.path.join(
                 self.source_dir, 'Source', 'MediaStorageAndFileFormat'))
 
