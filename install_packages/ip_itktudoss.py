@@ -17,7 +17,7 @@ BASENAME = "itktudoss"
 SVN_REPO = "http://itktudoss.googlecode.com/svn/trunk/"
 SVN_REL = 9
 
-dependencies = ['cmake', 'itk', 'wrapitk', 'swig']
+dependencies = ['CMake', 'ITK', 'WrapITK', 'SWIG']
 
 class ITKTUDOSS(InstallPackage):
     

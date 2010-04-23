@@ -37,7 +37,7 @@ VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 
 VTKFT_PATCH = "vtkfreetype_segfault.diff"
 
-dependencies = ['cmake']
+dependencies = ['CMake']
                   
 class VTK(InstallPackage):
     
@@ -236,7 +236,12 @@ class VTK(InstallPackage):
 
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
-
+        
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+    
     def get_installed_version(self):
         import vtk
         return vtk.vtkVersion.GetVTKVersion()

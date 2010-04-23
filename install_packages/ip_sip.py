@@ -5,7 +5,7 @@ import shutil
 import utils
 from subprocess import call
 
-VERSION = "4.10"
+VERSION = "4.10.1"
 BASENAME = "sip"
 
 if os.name == "nt":

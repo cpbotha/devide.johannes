@@ -17,7 +17,7 @@ BASENAME = "vtktudoss"
 SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
 SVN_REL = 28 
 
-dependencies = ['vtk']
+dependencies = ['VTK']
 
 class VTKTUDOSS(InstallPackage):
     

@@ -14,7 +14,7 @@ BASENAME = "CableSwig"
 CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ITK-3-14"
 
-dependencies = ['cmake']
+dependencies = ['CMake']
 
 class CableSwig(InstallPackage):
     

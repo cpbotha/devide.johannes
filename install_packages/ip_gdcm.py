@@ -20,7 +20,7 @@ SVN_REPO = \
 
 FISH_PATCH = "gdcm2012_fish320.diff"
 
-dependencies = ['swig', 'vtk']
+dependencies = ['SWIG', 'VTK']
 
 class GDCM(InstallPackage):
     

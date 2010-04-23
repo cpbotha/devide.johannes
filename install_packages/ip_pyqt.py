@@ -4,7 +4,7 @@ import os
 import shutil
 import utils
 
-VERSION = "4.7"
+VERSION = "4.7.2"
 BASENAME = "PyQt"
 
 if os.name == "nt":
@@ -16,7 +16,7 @@ else:
 
 URL = "http://www.riverbankcomputing.com/static/Downloads/PyQt4/%s" % (ARCHIVE_NAME,)
 
-dependencies = ['sip', 'qt']
+dependencies = ['SIP', 'Qt']
 
 class PyQt(InstallPackage):
     

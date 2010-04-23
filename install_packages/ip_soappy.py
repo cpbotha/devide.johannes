@@ -10,7 +10,7 @@ BASENAME = "SOAPpy"
 SVN_REPO = \
         "http://devide.googlecode.com/svn/trunk/johannes-extra/soappy-cvp"
 
-dependencies = ['fpconst']
+dependencies = ['FPConst']
 
 class SOAPpy(InstallPackage):
     

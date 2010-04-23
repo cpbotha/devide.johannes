@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "itkPyBuffer"
 
-dependencies = ['cmake', 'itk', 'wrapitk', 'swig']
+dependencies = ['CMake', 'ITK', 'WrapITK', 'SWIG']
 
 WIN64 = False
 if os.name == 'nt':

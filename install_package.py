@@ -32,3 +32,9 @@ class InstallPackage:
         and onwards.
         """
         pass
+    
+    def clean_install(self):
+        """ Only cleans up the install directory.
+        """
+        pass
+    

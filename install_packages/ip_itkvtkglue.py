@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "ItkVtkGlue"
 
-dependencies = ['cmake', 'itk', 'vtk', 'wrapitk', 'swig']
+dependencies = ['CMake', 'ITK', 'VTK', 'WrapITK', 'SWIG']
 
 class ItkVtkGlue(InstallPackage):
     

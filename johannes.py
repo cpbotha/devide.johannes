@@ -223,7 +223,7 @@ def main():
                 if a in ('clean', 'clean_build'):
                     mode = 'clean_build'
                 elif a in ['get_only', 'unpack_only',
-                        'configure_only']:
+                        'configure_only', 'rebuild', 'reinstall']:
                     mode = a
 
             elif o in ('--install-packages'):
@@ -318,16 +318,28 @@ def main():
 
         # now import only the specified packages
         ip_instance_list = []
-        for ip_name in ip_names:
+        imported_names = []
+        def import_ip(ip_name):
+            # don't import more than once
+            if ip_name in imported_names:
+                return
             # turn Name into ip_name
             ip_name_l = 'ip_' + ip_name.lower()
-            # then import ip_name
+            # import the module, but don't instantiate the ip class yet
             ip_m = __import__(ip_name_l)
+            # import dependencies first
+            for dep in ip_m.dependencies:
+                import_ip(dep)
             # instantiate ip_name.Name
-            ip_instance_list.append(getattr(ip_m, ip_name)())
+            ip = getattr(ip_m, ip_name)()
+            ip_instance_list.append(ip)
+            imported_names.append(ip_name)
             print "%s from %s." % \
                     (ip_name, ip_m.__file__)
-
+        # import all ip_names, including dependencies
+        for ip_name in ip_names:
+            import_ip(ip_name)
+        
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()
@@ -343,7 +355,11 @@ def main():
         def build_stage(ip, n):
             utils.output("%s :: build()" % (n,), rpad, rpad_char)
             ip.build()
-
+            
+        def install_stage(ip, n):
+            utils.output("%s :: install()" % (n,), rpad, rpad_char)
+            ip.install()
+            
         def all_stages(ip, n):
             get_stage(ip, n)
 
@@ -353,21 +369,23 @@ def main():
 
             build_stage(ip, n)
             
-            utils.output("%s :: install()" % (n,), rpad, rpad_char)
-            ip.install()
-
+            install_stage(ip, n)
+            
         if mode == 'show_versions':
             utils.output('Extracting all install_package versions.')
             print "python: %d.%d.%d (%s)" % \
                     (sys.version_info[0:3] +
                             (config.PYTHON_EXECUTABLE,))
-
-            
         
         for ip in ip_instance_list:
             n = ip.__class__.__name__
-
-            if mode == 'get_only':
+            
+            if not n in ip_names:
+                # n is a dependency, so do everything
+                utils.output("%s (DEPENDENCY)" % (n,), 70, '#')
+                all_stages(ip, n)
+            
+            elif mode == 'get_only':
                 utils.output("%s GET_ONLY" % (n,), 70, '#')
                 utils.output("%s" % (n,), 70, '#')
                 get_stage(ip, n)
@@ -392,7 +410,23 @@ def main():
 
             elif mode == 'show_versions':
                 print '%s: %s' % (n, ip.get_installed_version())
-
+                
+            elif mode == 'rebuild':
+                utils.output("%s REBUILD" % (n,), 70, '#')
+                # clean up
+                ip.clean_build()
+                # rebuild (executes all stages, as previous 
+                # stages are required and user will likely 
+                # need an install also)
+                all_stages(ip, n)
+                
+            elif mode == 'reinstall':
+                utils.output("%s REINSTALL" % (n,), 70, '#')
+                # clean up
+                ip.clean_install()
+                # reinstall
+                all_stages(ip, n)
+                
         if mode != 'show_versions':
             utils.output("Now please read the RESULTS section of README.txt!")
 

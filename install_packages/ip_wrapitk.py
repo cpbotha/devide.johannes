@@ -14,7 +14,7 @@ SVN_REPO = \
 
 BO_PATCH = "wrapitk030_bigobj.diff"
 
-dependencies = ['cmake', 'itk', 'cableswig', 'swig']
+dependencies = ['CMake', 'ITK', 'CableSwig', 'SWIG']
 
 class WrapITK(InstallPackage):
     

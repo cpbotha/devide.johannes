@@ -24,7 +24,7 @@ CABLESWIG_CVS_VERSION = "-r ITK-3-14"
 VNOI_PATCH = \
 "itk314_wrapitk030_itkVoronoiSegmentationImageFilterBase_h.diff"
 
-dependencies = ['cmake']
+dependencies = ['CMake']
 
 
 class ITK(InstallPackage):
