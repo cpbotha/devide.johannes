@@ -4,14 +4,14 @@ import os
 import shutil
 import utils
 
-VERSION = "4.4.3"
+VERSION = "4.6.2"
 BASENAME = "qt"
 
 if os.name == "nt":
-    ARCHIVE_BASENAME = "%s-all-opensource-src-%s" % (BASENAME, VERSION)
+    ARCHIVE_BASENAME = "%s-everywhere-opensource-src-%s" % (BASENAME, VERSION)
     ARCHIVE_NAME = "%s.zip" % (ARCHIVE_BASENAME,)
 else:
-    ARCHIVE_BASENAME = "%s-all-opensource-src-%s" % (BASENAME, VERSION)
+    ARCHIVE_BASENAME = "%s-everywhere-opensource-src-%s" % (BASENAME, VERSION)
     ARCHIVE_NAME = "%s.tar.gz" % (ARCHIVE_BASENAME,)
 
 URL = "http://get.qt.nokia.com/qt/source/%s" % (ARCHIVE_NAME,)
@@ -66,7 +66,7 @@ class Qt(InstallPackage):
                                    # or nmake will not be on the PATH 
                     config.QT_DIR)
         post_commands = 'configure -platform win32-msvc2008'
-        communicate = 'y\n'
+        communicate = 'o\ny\n' # Select open-source, say yes to agree
         ret = utils.execute_in_vs_environment(post_commands, pre_commands,
                                               communicate)
         
