@@ -12,17 +12,12 @@ import sys
 BASENAME = "Insight"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ITK-3-14" # 
+CVS_VERSION = "-r ITK-3-20" # 
 
 CS_BASENAME = "CableSwig"
 # password part of REPO spec
 CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
-CABLESWIG_CVS_VERSION = "-r ITK-3-14"
-
-# we need this patch to be able to build WrapITK 0.3.0 for ITK 3.14 on
-# Visual Studio 2008.  Gaetan Lehman has already applied to ITK CVS.
-VNOI_PATCH = \
-"itk314_wrapitk030_itkVoronoiSegmentationImageFilterBase_h.diff"
+CABLESWIG_CVS_VERSION = "-r ITK-3-20"
 
 dependencies = ['CMake']
 
@@ -35,12 +30,6 @@ class ITK(InstallPackage):
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
-        self.vnoi_patch_src_filename = os.path.join(
-                config.patches_dir, VNOI_PATCH)
-        self.vnoi_patch_dst_filename = os.path.join(
-                config.archive_dir, VNOI_PATCH)
-
-
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("ITK already checked out, skipping step.")
@@ -52,23 +41,6 @@ class ITK(InstallPackage):
             
             if ret != 0:
                 utils.error("Could not CVS checkout ITK.  Fix and try again.")
-
-        # only download patch if we don't have it
-        if not os.path.exists(self.vnoi_patch_dst_filename):
-            shutil.copy(self.vnoi_patch_src_filename,
-                        self.vnoi_patch_dst_filename)
-
-            # always try to apply patch if we've just copied it
-            utils.output("Applying VORONOI itk314 patch")
-            os.chdir(os.path.join(
-                self.source_dir, 'Code', 'Algorithms'))
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.vnoi_patch_dst_filename))
-
-            if ret != 0:
-                utils.error(
-                    "Could not apply EXC patch.  Fix and try again.")
-
 
         # also the source dir for other installpackages that wish to build
         # WrapITK external projects
@@ -98,8 +70,9 @@ class ITK(InstallPackage):
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_USE_REVIEW=ON " \
+                       "-DITK_USE_REVIEW_STATISTICS=ON " \
                        % (self.inst_dir,)
-
+        
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
 
@@ -165,6 +138,11 @@ class ITK(InstallPackage):
 
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
+
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
 
     def get_installed_version(self):
         import itk

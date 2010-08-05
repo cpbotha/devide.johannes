@@ -10,9 +10,8 @@ import utils
 
 BASENAME = "wrapitk"
 SVN_REPO = \
-        "http://wrapitk.googlecode.com/svn/tags/0.3.0"
-
-BO_PATCH = "wrapitk030_bigobj.diff"
+        "http://wrapitk.googlecode.com/svn/trunk"
+SVN_REL = 526
 
 dependencies = ['CMake', 'ITK', 'CableSwig', 'SWIG']
 
@@ -24,11 +23,6 @@ class WrapITK(InstallPackage):
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
-        self.bo_patch_src_filename = os.path.join(
-                config.patches_dir, BO_PATCH)
-        self.bo_patch_dst_filename = os.path.join(
-                config.archive_dir, BO_PATCH)
-
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("wrapitk already checked out, skipping step.")
@@ -36,25 +30,10 @@ class WrapITK(InstallPackage):
         else:
             os.chdir(config.archive_dir)
             # checkout trunk into directory vtktudoss
-            ret = os.system("%s co %s %s" % (config.SVN,
-                SVN_REPO, BASENAME))
+            ret = os.system("%s co %s %s -r%s" % (config.SVN,
+                SVN_REPO, BASENAME, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
-
-        # only download patch if we don't have it
-        if not os.path.exists(self.bo_patch_dst_filename):
-            shutil.copy(self.bo_patch_src_filename,
-                        self.bo_patch_dst_filename)
-
-            # always try to apply patch if we've just copied it
-            utils.output("Applying bigobj wrapitk030 patch")
-            os.chdir(self.source_dir)
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.bo_patch_dst_filename))
-
-            if ret != 0:
-                utils.error(
-                    "Could not apply BO patch.  Fix and try again.")
 
     def unpack(self):
         # no unpack step
@@ -173,11 +152,17 @@ class WrapITK(InstallPackage):
                 "Could not install WrapITK.  Fix and try again.")
  
     def clean_build(self):
-        # nuke the build dir, the source dir is pristine and there is
-        # no installation
-        utils.output("Removing build dir.")
+        utils.output("Removing build and installation directories.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
+
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
 
     def get_installed_version(self):
         import itk
