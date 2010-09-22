@@ -10,20 +10,18 @@ import sys
 import utils
 from distutils import sysconfig
 
-MPL_VER = "0.98.5.3"
-
-WIN64 = False
+MPL_VER = "1.0.0"
 
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
 elif os.name == 'nt':
-    MPL_ARCHIVE = "matplotlib-%s_r0-py2.6-win32.egg" % (MPL_VER,)
+    if config.WINARCH == 'win64':
+        bits = 64
+    else:
+        bits = 32
+    
+    MPL_ARCHIVE = "matplotlib-%s.win%d-py2.6.exe" % (MPL_VER, bits)
 
-    import platform
-    a = platform.architecture()[0]
-    if a == '64bit':
-        WIN64 = True
- 
 MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
           (MPL_ARCHIVE,)
 
@@ -41,7 +39,7 @@ class matplotlib(InstallPackage):
         self.inst_dir = os.path.join(config.inst_dir, 'matplotlib')
 
     def get(self):
-        if WIN64:
+        if config.WINARCH == 'win64':
             utils.output("matplotlib not yet supported on Win64.")
             return
 
