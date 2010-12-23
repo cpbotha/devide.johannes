@@ -8,7 +8,7 @@ import os
 import shutil
 import utils
 
-CMAKE_VER = "2.6.4"
+CMAKE_VER = "2.8.3"
 
 
 if os.name == 'posix':
@@ -18,7 +18,7 @@ elif os.name == 'nt':
     CMAKE_DIRBASE = "cmake-%s-win32-x86" % (CMAKE_VER,)
     CMAKE_ARCHIVE = "%s.zip" % (CMAKE_DIRBASE,)
 
-CMAKE_URL = "http://www.cmake.org/files/v2.6/%s" % (CMAKE_ARCHIVE,)
+CMAKE_URL = "http://www.cmake.org/files/v2.8/%s" % (CMAKE_ARCHIVE,)
 
 dependencies = []
 
