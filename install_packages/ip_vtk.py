@@ -56,6 +56,30 @@ class VTK(InstallPackage):
         self.vtkft_patch_dst_filename = os.path.join(
                 config.archive_dir, VTKFT_PATCH)
 
+        config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
+
+        # whatever the case may be, we have to register VTK variables
+        if os.name == 'nt':
+            # on Win, inst/VTK/bin contains the so files
+            config.VTK_SODIR = os.path.join(self.inst_dir, 'bin')
+            # inst/VTK/lib/site-packages the VTK python package
+            config.VTK_PYTHON = os.path.join(
+                    config.VTK_LIB, 'site-packages')
+
+        else:
+            # on *ix, inst/VTK/lib contains DLLs
+            config.VTK_SODIR = os.path.join(
+                    config.VTK_LIB, VTK_BASE_VERSION)
+            # on *ix, inst/lib/python2.5/site-packages contains the
+            # VTK python package
+            # sys.version is (2, 5, 0, 'final', 0)
+            config.VTK_PYTHON = os.path.join(
+                config.VTK_LIB, 'python%d.%d/site-packages' % \
+                sys.version_info[0:2])
+
+        # this contains the VTK cmake config (same on *ix and Win)
+        config.VTK_DIR = os.path.join(config.VTK_LIB, VTK_BASE_VERSION)
+
     def update_wpvi(self):
         """Update Wrapping/Python/vtk/__init__.py to fix nasty DL bug
         on AMD64.  Thanks to Mathieu Malaterre for finding this!
@@ -176,31 +200,6 @@ class VTK(InstallPackage):
                 utils.error("Error building VTK.  Fix and try again.")
 
     def install(self):
-        config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
-
-        # whatever the case may be, we have to register VTK variables
-        if os.name == 'nt':
-            # on Win, inst/VTK/bin contains the so files
-            config.VTK_SODIR = os.path.join(self.inst_dir, 'bin')
-            # inst/VTK/lib/site-packages the VTK python package
-            config.VTK_PYTHON = os.path.join(
-                    config.VTK_LIB, 'site-packages')
-
-        else:
-            # on *ix, inst/VTK/lib contains DLLs
-            config.VTK_SODIR = os.path.join(
-                    config.VTK_LIB, VTK_BASE_VERSION)
-            # on *ix, inst/lib/python2.5/site-packages contains the
-            # VTK python package
-            # sys.version is (2, 5, 0, 'final', 0)
-            config.VTK_PYTHON = os.path.join(
-                config.VTK_LIB, 'python%d.%d/site-packages' % \
-                sys.version_info[0:2])
-
-        # this contains the VTK cmake config (same on *ix and Win)
-        config.VTK_DIR = os.path.join(config.VTK_LIB, VTK_BASE_VERSION)
-
-
         posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
         nt_file = os.path.join(self.inst_dir, 'bin', 'vtkpython.exe')
 

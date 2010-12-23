@@ -20,6 +20,8 @@ class Elastix(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-%s' %
                                       (BASENAME, VERSION))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+        
+        config.ELASTIX_BIN = self.inst_dir
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -49,7 +51,8 @@ class Elastix(InstallPackage):
                 "-DCMAKE_BACKWARDS_COMPATIBILITY=2.6 " \
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                 "-DCMAKE_INSTALL_PREFIX=%s " \
-                "-DITK_DIR=%s " % (
+                "-DITK_DIR=%s " \
+                '-DCMAKE_CXX_FLAGS="/DWIN32 /D_WINDOWS /W3 /Zm1000 /EHsc /GR /bigobj" ' % (
                                    self.inst_dir,
                                    config.ITK_DIR)
                 

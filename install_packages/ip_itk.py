@@ -29,7 +29,22 @@ class ITK(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
+        
+        # ITK external packages will need this
+        config.ITK_INSTALL_PREFIX = os.path.join(self.inst_dir)
+        # on Windows, contains the main ITK dlls
+        config.ITK_BIN = os.path.join(self.inst_dir, 'bin')
+        # this is the dir with the cmake config and on *ix the main
+        # SOs (on Win these are in ITK_BIN)
+        config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
+        if os.name == 'posix':
+            itd = 'itkTestDriver'
+        elif os.name == 'nt':
+            itd = 'itkTestDriver.exe'
 
+        config.ITK_TEST_DRIVER = os.path.join(
+                config.ITK_BIN, itd)
+    
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("ITK already checked out, skipping step.")
@@ -101,22 +116,6 @@ class ITK(InstallPackage):
                 utils.error("Error building ITK.  Fix and try again.")
 
     def install(self):
-        # ITK external packages will need this
-        config.ITK_INSTALL_PREFIX = os.path.join(self.inst_dir)
-        # on Windows, contains the main ITK dlls
-        config.ITK_BIN = os.path.join(self.inst_dir, 'bin')
-        # this is the dir with the cmake config and on *ix the main
-        # SOs (on Win these are in ITK_BIN)
-        config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
-        if os.name == 'posix':
-            itd = 'itkTestDriver'
-        elif os.name == 'nt':
-            itd = 'itkTestDriver.exe'
-
-        config.ITK_TEST_DRIVER = os.path.join(
-                config.ITK_BIN, itd)
-
-
         nt_file = os.path.join(config.ITK_BIN, 'ITKCommon.dll')
         posix_file = os.path.join(
                 config.ITK_DIR, 'libITKCommon.so')
