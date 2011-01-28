@@ -197,9 +197,12 @@ def make_command(solution_file, install=False, project=None,
 
     return os.system(make_command)
 
-def urlget(url):
+def urlget(url, output_filename=None):
     """Simple method to retrieve URL.  It will get the file in the current
     directory.
+
+    If urlget guesses the wrong download filename based on the URL, pass
+    the output_filename parameter.
     """
     
     def reporthook(blocknum, blocksize, totalsize):
@@ -209,8 +212,12 @@ def urlget(url):
             '% 4.0f %% (%d Kbytes) downloaded\r' %
             (current_size / float(totalsize) * 100.0, current_size_kb))
 
-    i = url.rfind('/')
-    filename = url[i+1:]
+    if output_filename:
+        filename = output_filename
+    else:
+        i = url.rfind('/')
+        filename = url[i+1:]
+
     print url, "->", filename
     if os.path.exists(filename):
         output("%s already present, skipping download." % (filename,))
