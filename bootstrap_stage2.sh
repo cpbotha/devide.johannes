@@ -3,6 +3,7 @@
 # this will build and install python in the johannes working directory
 # copyright cpbotha.net
 
+PYVER=2.7.1
 
 # change this to 0 if you DON'T want this script to do its
 # rudimentary dependency checking.
@@ -85,8 +86,8 @@ fi
 
 
 cd build
-tar xjvf ../archive/Python-2.6.2.tar.bz2
-cd Python-2.6.2
+tar xjvf ../archive/Python-$PYVER.tar.bz2
+cd Python-$PYVER
 ./configure --enable-shared --prefix=$WD/inst/python
 
 if [ "$?" -ne "0" ]; then

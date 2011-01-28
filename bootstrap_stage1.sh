@@ -3,6 +3,8 @@
 # this will create the working directory tree and download the python tarball
 # copyright cpbotha.net
 
+PYVER="2.7.1"
+
 if [ -z $1 ]; then
 echo "Specify working directory as first parameter."
 exit;
@@ -33,7 +35,7 @@ mkdir flags
 mkdir inst
 
 cd archive
-wget -c http://python.org/ftp/python/2.6.2/Python-2.6.2.tar.bz2
+wget -c http://python.org/ftp/python/$PYVER/Python-$PYVER.tar.bz2
 
 cd ../flags
 touch stage1_complete
