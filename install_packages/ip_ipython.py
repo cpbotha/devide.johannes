@@ -9,9 +9,9 @@ import shutil
 import sys
 import utils
 
-URL_BASE = "http://ipython.scipy.org/dist/0.10/"
+URL_BASE = "http://ipython.scipy.org/dist/0.10.1/"
 
-IPY_BASENAME = "ipython-0.10"
+IPY_BASENAME = "ipython-0.10.1"
 IPY_ARCHIVE = IPY_BASENAME + '.tar.gz'
 IPY_URL = URL_BASE + IPY_ARCHIVE
 
