@@ -9,12 +9,14 @@ import shutil
 import sys
 import utils
 
-NUMPY_BASENAME = "numpy-1.3.0"
+NUMPY_VER = "1.5.1"
+NUMPY_BASENAME = "numpy-" + NUMPY_VER
+NUMPY_DIRBASE = NUMPY_BASENAME 
 
 WIN64 = False
 if os.name == 'posix':
-    NUMPY_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/numpy/%s"
     NUMPY_ARCHIVE = "%s.tar.gz" % (NUMPY_BASENAME,)
+    NUMPY_URL = "http://sourceforge.net/projects/numpy/files/NumPy/%s/%s/download" % (NUMPY_VER, NUMPY_ARCHIVE)
 elif os.name == 'nt':
     NUMPY_URL_BASE = "http://visualisation.tudelft.nl/~cpbotha/files/devide/johannes_support/%s"
 
@@ -26,9 +28,6 @@ elif os.name == 'nt':
         NUMPY_ARCHIVE = "%s-win64py26.zip" % (NUMPY_BASENAME,)   
         WIN64 = True
     
-NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
-
-NUMPY_DIRBASE = NUMPY_BASENAME 
 
 dependencies = []
 
@@ -49,7 +48,7 @@ class NumPy(InstallPackage):
                          (NUMPY_ARCHIVE,))
         else:
             utils.goto_archive()
-            utils.urlget(NUMPY_URL)
+            utils.urlget(NUMPY_URL, NUMPY_ARCHIVE)
 
     def unpack(self):
         if os.name == 'posix':
