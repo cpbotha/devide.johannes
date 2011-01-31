@@ -35,14 +35,18 @@ Options are as follows:
 -p, --install-packages : specify comma-separated list of packages to work on,
                          default all.  Example: -p "CMake,CableSwig"
                          Correct capitalisation IS important!
+-d, --auto-deps        : Automatically build per install package dependencies.
+                         The default is not to do this, i.e. you have to
+                         specify all required packages on the command-line
+                         or in the johannes.cfg project file.
 --no-win-prereq        : do NOT do Windows prerequisites check.
 -v, --versions         : display installed versions of all packages.
 
 You can also specify project-specific options (for example specifying
-extra install packages) in a johannes.cfg file placed at the top-level
-of your working directory.  See the README.txt for more info.
+install packages) in a johannes.cfg file placed at the top-level
+of your working directory.  See example-johannes.cfg for more info.
 
-All of this ugliness is copyright 2006-2010 Charl P. Botha http://cpbotha.net/
+All of this ugliness is copyright 2006-2011 Charl P. Botha http://cpbotha.net/
 and is hereby put under a BSD license.
 """
 
@@ -198,8 +202,9 @@ def main():
 
         try:
             optlist, args = getopt.getopt(
-                sys.argv[1:], 'hm:p:w:v',
+                sys.argv[1:], 'hm:p:dw:v',
                 ['help', 'mode=', 'install-packages=', 
+                    'auto-deps',
                     'working-dir=',
                     'no-prereq-check', 'versions'])
 
@@ -213,6 +218,7 @@ def main():
         profile = 'default'
         no_prereq_check = False
         ip_names_cli = False
+        auto_deps = False
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -231,6 +237,9 @@ def main():
                 ip_names = [i.strip() for i in a.split(',')]
                 # remember that the user has specified ip_names on the command-line
                 ip_names_cli = True
+
+            elif o in ('-d', '--auto-deps'):
+                auto_deps = True
 
             elif o in ('-w', '--working-dir'):
                 working_dir = a
@@ -319,23 +328,30 @@ def main():
         # now import only the specified packages
         ip_instance_list = []
         imported_names = []
+
         def import_ip(ip_name):
             # don't import more than once
             if ip_name in imported_names:
                 return
+
             # turn Name into ip_name
             ip_name_l = 'ip_' + ip_name.lower()
             # import the module, but don't instantiate the ip class yet
             ip_m = __import__(ip_name_l)
-            # import dependencies first
-            for dep in ip_m.dependencies:
-                import_ip(dep)
+
+            # import dependencies first if user has specified
+            # auto-deps.
+            if auto_deps:
+                for dep in ip_m.dependencies:
+                    import_ip(dep)
+
             # instantiate ip_name.Name
             ip = getattr(ip_m, ip_name)()
             ip_instance_list.append(ip)
             imported_names.append(ip_name)
             print "%s from %s." % \
                     (ip_name, ip_m.__file__)
+
         # import all ip_names, including dependencies
         for ip_name in ip_names:
             import_ip(ip_name)
