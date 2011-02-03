@@ -228,8 +228,7 @@ def main():
             elif o in ('-m', '--mode'):
                 if a in ('clean', 'clean_build'):
                     mode = 'clean_build'
-                elif a in ['get_only', 'unpack_only',
-                        'configure_only', 'rebuild', 'reinstall']:
+                else:
                     mode = a
 
             elif o in ('--install-packages'):
@@ -442,6 +441,14 @@ def main():
                 ip.clean_install()
                 # reinstall
                 all_stages(ip, n)
+                
+            else:
+                utils.output("%s CUSTOM MODE" % (n,), 70, '#')
+                if hasattr(ip, mode):
+                    utils.output("%s :: %s()" % (n, mode), rpad, rpad_char)                
+                    getattr(ip, mode)()
+                else:
+                    utils.error("Mode not found: %s" % (mode,))
                 
         if mode != 'show_versions':
             utils.output("Now please read the RESULTS section of README.txt!")
