@@ -2,8 +2,6 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
-# FIXME: fish patch probably not necessary for post 2.0.12
-
 import config
 from install_package import InstallPackage
 import os
@@ -11,14 +9,8 @@ import shutil
 import utils
 
 BASENAME = "gdcm"
-#SVN_REPO = \
-#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/tags/gdcm-2-0-12"
-SVN_REPO = \
-        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/branches/gdcm-2-0"
-#SVN_REPO = \
-#        "https://gdcm.svn.sourceforge.net/svnroot/gdcm/trunk"
-
-FISH_PATCH = "gdcm2012_fish320.diff"
+GIT_REPO = "git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm"
+GIT_TAG = "v2.0.17"
 
 dependencies = ['SWIG', 'VTK']
 
@@ -30,11 +22,6 @@ class GDCM(InstallPackage):
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
-        self.fish_patch_src_filename = os.path.join(
-                config.patches_dir, FISH_PATCH)
-        self.fish_patch_dst_filename = os.path.join(
-                config.archive_dir, FISH_PATCH)
-
 
     def get(self):
         if os.path.exists(self.source_dir):
@@ -42,28 +29,15 @@ class GDCM(InstallPackage):
 
         else:
             os.chdir(config.archive_dir)
-            # checkout trunk into directory vtktudoss
-            ret = os.system("%s co %s %s" % (config.SVN,
-                SVN_REPO, BASENAME))
+            ret = os.system("git clone %s" % (GIT_REPO,))
             if ret != 0:
-                utils.error("Could not SVN checkout.  Fix and try again.")
+                utils.error("Could not clone GDCM repo.  Fix and try again.")
 
-        # only download patch if we don't have it
-        if not os.path.exists(self.fish_patch_dst_filename):
-            shutil.copy(self.fish_patch_src_filename,
-                        self.fish_patch_dst_filename)
-
-            # always try to apply patch if we've just copied it
-            utils.output("Applying FISH patch (Toshiba 320 and gdcm 2.0.12)")
-            os.chdir(os.path.join(
-                self.source_dir, 'Source', 'MediaStorageAndFileFormat'))
-
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.fish_patch_dst_filename))
-
+            os.chdir(self.source_dir)
+            ret = os.system("git checkout %s" % (GIT_TAG,))
             if ret != 0:
-                utils.error(
-                    "Could not apply FISH patch.  Fix and try again.")
+                utils.error("Could not checkout GDCM %s.  Fix and try again." % (GIT_TAG,))
+
 
     def unpack(self):
         # no unpack step
