@@ -72,7 +72,7 @@ class VTK56(InstallPackage):
         else:
             utils.goto_archive()
 
-            ret = os.system("git clone %s %s" % (GIT_REPO, BASENAME)
+            ret = os.system("git clone %s %s" % (GIT_REPO, BASENAME))
             if ret != 0:
                 utils.error("Could not clone VTK repo.  Fix and try again.")
 
