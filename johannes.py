@@ -348,12 +348,28 @@ def main():
             ip = getattr(ip_m, ip_name)()
             ip_instance_list.append(ip)
             imported_names.append(ip_name)
-            print "%s from %s." % \
+            print "%s imported from %s." % \
                     (ip_name, ip_m.__file__)
 
         # import all ip_names, including dependencies
         for ip_name in ip_names:
             import_ip(ip_name)
+
+        # now check for dependencies and error if necessary
+        # (in the case of auto_deps this will obviously be fine)
+        deps_errors = []
+        for ip in ip_instance_list:
+            n = ip.__class__.__name__
+            # there must be a more elegant way to get the module instance?
+            deps = sys.modules[ip.__module__].dependencies
+            for d in deps:
+                if d not in imported_names:
+                    deps_errors.append('>>>>> Unsatisfied dependency: %s requires %s' % (n, d))
+
+        if deps_errors:
+            print "\n".join(deps_errors)
+            utils.error("Unsatisfied dependencies. Fix and try again.")
+
         
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
