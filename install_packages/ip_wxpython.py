@@ -11,7 +11,7 @@ from install_package import InstallPackage
 import utils
 from distutils import sysconfig
 
-WXP_VER = '2.8.10.1'
+WXP_VER = '2.8.11.0'
 WXP_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s"
 
 if os.name == 'posix':
@@ -73,15 +73,15 @@ class WXPython(InstallPackage):
                 utils.unpack_build(self.afilename)
 
                 # try to apply patch
-                utils.output("Applying wxp28101 patch")
+                #utils.output("Applying wxp28101 patch")
 
-                os.chdir(self.build_dir)
-                ret = os.system(
-                    "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
+                #os.chdir(self.build_dir)
+                #ret = os.system(
+                #    "%s -p0 < %s" % (config.PATCH, self.patch1_dst))
 
-                if ret != 0:
-                    utils.error(
-                        "Could not apply WXP28101 patch.  Fix and try again.")
+                #if ret != 0:
+                #    utils.error(
+                #        "Could not apply WXP28101 patch.  Fix and try again.")
 
 
     def configure(self):
@@ -96,7 +96,7 @@ class WXPython(InstallPackage):
         os.chdir('bld')
 
         # now we have to fix the IDIOTIC wxWidgets configure; on an FC3
-        # machine with openwin on (don't ask, it's amterdam), gl.h is
+        # machine with openwin on (don't ask, it's amsterdam), gl.h is
         # found in /usr/openwin instead of /usr/include.  We prepend
         # /usr/include to this list, we don't care about solaris machines
         # at the moment...
