@@ -10,7 +10,7 @@ import sys
 import utils
 from distutils import sysconfig
 
-MPL_VER = "1.0.0"
+MPL_VER = "1.0.1"
 
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
@@ -108,7 +108,7 @@ class matplotlib(InstallPackage):
                 utils.error('matplotlib build failed.  Please fix and try again.')
 
     def install(self):
-        if WIN64:
+        if config.WINARCH == 'win64':
             utils.output("matplotlib not yet supported on Win64.")
             return
 
