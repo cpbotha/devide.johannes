@@ -9,9 +9,10 @@ import shutil
 import utils
 
 BASENAME = "wrapitk"
+# use the "maint" branche, trunk is now meant for ITK 4 (in development)
 SVN_REPO = \
-        "http://wrapitk.googlecode.com/svn/trunk"
-SVN_REL = 526
+        "http://wrapitk.googlecode.com/svn/branches/maint"
+SVN_REL = 527
 
 dependencies = ['CMake', 'ITK', 'CableSwig', 'SWIG']
 
