@@ -12,7 +12,7 @@ import sys
 BASENAME = "CableSwig"
 # password part of REPO spec
 CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + BASENAME
-CVS_VERSION = "-r ITK-3-14"
+CVS_VERSION = "-r ITK-3-20"
 
 dependencies = ['CMake']
 
