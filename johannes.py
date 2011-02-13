@@ -371,8 +371,15 @@ def main():
                         # we don't have to finish more loops
                         break
 
+                    elif ip_name == n:
+                        # this means we have reached the module whose deps
+                        # we're checking without satisfying dependency d,
+                        # which also means dependency problems, so we
+                        # can jut break out of the for loop
+                        break
+
                 if not d_satisfied:
-                    deps_errors.append('>>>>> Unsatisfied dependency: %s requires %s' % (n, d))
+                    deps_errors.append('>>>>> Unsatisfied dependency: %s should be specified before %s' % (d, n))
 
         if deps_errors:
             print "\n".join(deps_errors)
