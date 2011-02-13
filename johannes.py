@@ -363,7 +363,15 @@ def main():
             # there must be a more elegant way to get the module instance?
             deps = sys.modules[ip.__module__].dependencies
             for d in deps:
-                if d not in imported_names:
+                # remember that if a package asks for "VTK", "VTK561" is also fine
+                d_satisfied = False
+                for ip_name in imported_names:
+                    if ip_name.startswith(d):
+                        d_satisfied = True
+                        # we don't have to finish more loops
+                        break
+
+                if not d_satisfied:
                     deps_errors.append('>>>>> Unsatisfied dependency: %s requires %s' % (n, d))
 
         if deps_errors:
