@@ -27,6 +27,9 @@ EXC_PATCH = "pyvtk561_tryexcept_and_pyexceptions.diff"
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 
+# recent segfault with vtk 5.6.1 and wxPython 2.8.11.0
+WXVTKRWI_DISPLAYID_SEGFAULT_PATCH = "wxvtkrwi_displayid_segfault.diff"
+
 dependencies = ['CMake']
                   
 class VTK56(InstallPackage):
@@ -40,6 +43,10 @@ class VTK56(InstallPackage):
                                                EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.patches_dir,
                                                  VTKPRPRTY_PATCH)
+
+        self.wxvtkrwi_displayid_segfault_patch_filename = os.path.join(
+                config.patches_dir,
+                WXVTKRWI_DISPLAYID_SEGFAULT_PATCH)
 
         config.VTK_LIB = os.path.join(self.inst_dir, 'lib')
 
@@ -85,8 +92,9 @@ class VTK56(InstallPackage):
             # EXC PATCH
             utils.output("Applying EXC patch")
             os.chdir(self.source_dir)
+            # default git-generated patch, so needs -p1
             ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.exc_patch_filename))
+                "%s -p1 < %s" % (config.PATCH, self.exc_patch_filename))
             if ret != 0:
                 utils.error(
                     "Could not apply EXC patch.  Fix and try again.")
@@ -99,6 +107,18 @@ class VTK56(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply VTKPRPRTY patch.  Fix and try again.")
+
+            # WXVTKRWI_DISPLAYID_SEGFAULT patch
+            utils.output("Applying VTKWXRWI_DISPLAYID_SEGFAULT patch")
+            os.chdir(self.source_dir)
+            # default git-generated patch, so needs -p1
+            ret = os.system(
+                "%s -p1 < %s" % (config.PATCH, 
+                    self.wxvtkrwi_displayid_segfault_patch_filename))
+            if ret != 0:
+                utils.error(
+                    "Could not apply WXVTKRWI_DISPLAYID_SEGFAULT patch.  Fix and try again.")
+
 
     def unpack(self):
         pass               
