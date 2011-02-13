@@ -28,6 +28,8 @@ EXC_PATCH = "pyvtk561_tryexcept_and_pyexceptions.diff"
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 
 # recent segfault with vtk 5.6.1 and wxPython 2.8.11.0
+# see here for more info:
+# http://vtk.1045678.n5.nabble.com/wx-python-scripts-segfault-td1234471.html  
 WXVTKRWI_DISPLAYID_SEGFAULT_PATCH = "wxvtkrwi_displayid_segfault.diff"
 
 dependencies = ['CMake']
