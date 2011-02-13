@@ -104,8 +104,13 @@ class WXPython(InstallPackage):
                   'SEARCH_INCLUDE="\\\\\n    /usr/include        \\\\')]
         utils.re_sub_filter_file(repls, '../configure')
 
-        ret = os.system('../configure --prefix=%s --with-gtk --with-opengl '
-                        '--enable-unicode' %
+        # changed to follow wxPython 2.8.11.0 documentation better
+        # we're still missing:
+        # --enable-sound --with-sdl
+        # and the debug thingies
+        ret = os.system('../configure --prefix=%s --with-gtk --with-gnomeprint'
+                        '--with-opengl --enable-geometry --enable-graphics_ctx'
+                        '--enable-mediactrl --enable-display --enable-unicode' %
                         (self.inst_dir,))
         if ret != 0:
             raise RuntimeError(
