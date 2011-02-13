@@ -108,8 +108,8 @@ class WXPython(InstallPackage):
         # we're still missing:
         # --enable-sound --with-sdl
         # and the debug thingies
-        ret = os.system('../configure --prefix=%s --with-gtk --with-gnomeprint'
-                        '--with-opengl --enable-geometry --enable-graphics_ctx'
+        ret = os.system('../configure --prefix=%s --with-gtk --with-gnomeprint '
+                        '--with-opengl --enable-geometry --enable-graphics_ctx '
                         '--enable-mediactrl --enable-display --enable-unicode' %
                         (self.inst_dir,))
         if ret != 0:
