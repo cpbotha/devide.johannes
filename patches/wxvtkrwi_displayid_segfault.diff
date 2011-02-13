@@ -1,0 +1,17 @@
+diff --git a/Wrapping/Python/vtk/wx/wxVTKRenderWindowInteractor.py b/Wrapping/Python/vtk/wx/wxVTKRenderWindowInteractor.py
+index d3807cb..dd99705 100644
+--- a/Wrapping/Python/vtk/wx/wxVTKRenderWindowInteractor.py
++++ b/Wrapping/Python/vtk/wx/wxVTKRenderWindowInteractor.py
+@@ -383,7 +383,11 @@ class wxVTKRenderWindowInteractor(baseClass):
+ 
+             # on relevant platforms, set the X11 Display ID
+             d = self.GetDisplayId()
+-            if d:
++            # patch by Thiago Franco de Moraes to fix segfault with
++            # VTK 5.6.1 and wxPython 2.8.11.0
++            # we used to just check for d, but apparently can only
++            # use d AFTER the first paint has happened
++            if d and self.__has_painted:
+                 self._Iren.GetRenderWindow().SetDisplayId(d)
+ 
+             # store the handle
