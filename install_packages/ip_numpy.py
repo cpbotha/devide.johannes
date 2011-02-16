@@ -17,17 +17,18 @@ WIN64 = False
 if os.name == 'posix':
     NUMPY_ARCHIVE = "%s.tar.gz" % (NUMPY_BASENAME,)
     NUMPY_URL = "http://sourceforge.net/projects/numpy/files/NumPy/%s/%s/download" % (NUMPY_VER, NUMPY_ARCHIVE)
-elif os.name == 'nt':
-    NUMPY_URL_BASE = "http://visualisation.tudelft.nl/~cpbotha/files/devide/johannes_support/%s"
 
-    import platform
-    a = platform.architecture()[0]
-    if a == '32bit':
-        NUMPY_ARCHIVE = "%s-win32py26.zip" % (NUMPY_BASENAME,)   
+elif os.name == 'nt':
+    NUMPY_URL_BASE = "http://graphics.tudelft.nl/~cpbotha/files/devide/johannes_support/gohlke/%s"
+
+    if config.WINARCH == '32bit':
+        NUMPY_ARCHIVE = "%s-win32-py2.7.exe" % (NUMPY_BASENAME,)   
+
     else:
-        NUMPY_ARCHIVE = "%s-win64py26.zip" % (NUMPY_BASENAME,)   
-        WIN64 = True
-    
+        NUMPY_ARCHIVE = "%s-win-amd64-py2.7.zip" % (NUMPY_BASENAME,)   
+
+    # now construct the full URL
+    NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
 
 dependencies = []
 
@@ -39,10 +40,6 @@ class NumPy(InstallPackage):
         self.inst_dir = os.path.join(config.inst_dir, 'numpy')
 
     def get(self):
-        if WIN64:
-            utils.output("numpy not yet supported on Win64.")
-            return
-
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
                          (NUMPY_ARCHIVE,))
@@ -60,6 +57,9 @@ class NumPy(InstallPackage):
 
         else:
             utils.output("Nothing to unpack (Windows).")
+	    # make the build dir
+	    # unpack in there
+	    # copy contents of platlibs to python/Lib/site-packages
 
     def configure(self):
         pass
