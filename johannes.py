@@ -39,7 +39,7 @@ Options are as follows:
                          The default is not to do this, i.e. you have to
                          specify all required packages on the command-line
                          or in the johannes.cfg project file.
---no-win-prereq        : do NOT do Windows prerequisites check.
+--no-prereq-check      : do NOT do prerequisites check.
 -v, --versions         : display installed versions of all packages.
 
 You can also specify project-specific options (for example specifying
