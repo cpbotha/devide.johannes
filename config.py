@@ -9,6 +9,7 @@
 
 SVN = 'svn'
 CVS = 'cvs -z3'
+GIT = 'git'
 PATCH = 'patch'
 # only required on Windows
 DEVENV = 'devenv' 

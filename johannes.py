@@ -111,6 +111,10 @@ def windows_prereq_check(working_dir):
             'version\s+(.*)$')
 
     v = v and utils.find_command_with_ver(
+            'GIT', '%s --version' % (config.GIT,),
+            'version\s+(.*)$')
+
+    v = v and utils.find_command_with_ver(
             'patch', '%s -v' % (config.PATCH,),
             '^patch\s+(.*)$')
 
