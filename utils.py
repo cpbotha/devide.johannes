@@ -203,6 +203,9 @@ def urlget(url, output_filename=None):
 
     If urlget guesses the wrong download filename based on the URL, pass
     the output_filename parameter.
+
+    FIXME: this does not trap 404 errors. Seems the best way to do this is
+    to override FancyURLOpener with a new http_error_default
     """
     
     def reporthook(blocknum, blocksize, totalsize):
