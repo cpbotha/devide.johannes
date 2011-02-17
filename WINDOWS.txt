@@ -19,6 +19,11 @@ stuff, also automatically and nicely localised in a folder.
   variable.
 * patch: get from http://gnuwin32.sourceforge.net/packages/patch.htm
   and install.  Add its install directory to your path.
+  NB: On Windows 7, the gnuwin32 patch will segfault. Follow the instructions
+  on http://math.nist.gov/oommf/software-patchsets/patch_on_Windows7.html
+  to fix. The howto recommends installing the manifest IN the patch.exe
+  binary, it could already be sufficient just to store the patch.exe.manifest
+  in the same folder as patch.exe.
 * Get and install the NSIS installer builder from [3].  Put its install
   directory on your system PATH.
 * Visual Studio 2008: Make sure the latest service pack installed, SP1
