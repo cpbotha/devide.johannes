@@ -112,10 +112,10 @@ class NumPy(InstallPackage):
                 from distutils import sysconfig
                 spd = sysconfig.get_python_lib()
 
-                # copy self.build_dir/PLATLIB/numpy to python/libs/site-packages/numpy
-                # we're not copying *egg.info or SCRIPTS/f2py.py
+                # copy self.build_dir/PLATLIB/* to python/libs/site-packages/
+                # we're not copying SCRIPTS/f2py.py
                 pl_dir = os.path.join(self.build_dir, 'PLATLIB')
-                shutil.copytree(os.path.join(pl_dir,'numpy'), os.path.join(spd, 'numpy'), symlinks=True)
+                utils.copy_glob(os.path.join(pl_dir, '*'), spd)
 
     def clean_build(self):
         utils.output("Removing build and install directories.")
