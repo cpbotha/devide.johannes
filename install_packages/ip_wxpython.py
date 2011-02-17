@@ -21,9 +21,9 @@ if os.name == 'posix':
 elif os.name == 'nt':
     print config.WINARCH
     if config.WINARCH == '32bit':
-        WXP_ARCHIVE = "wxPython2.8-win32-unicode-%s-py26.exe" % (WXP_VER,)
+        WXP_ARCHIVE = "wxPython2.8-win32-unicode-%s-py27.exe" % (WXP_VER,)
     elif config.WINARCH == '64bit':
-        WXP_ARCHIVE = "wxPython2.8-win64-unicode-%s-py26.exe" % (WXP_VER,)
+        WXP_ARCHIVE = "wxPython2.8-win64-unicode-%s-py27.exe" % (WXP_VER,)
 
     WXP_URL =  WXP_URL_BASE % (WXP_ARCHIVE,)
 
