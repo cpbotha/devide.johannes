@@ -14,16 +14,19 @@ MPL_VER = "1.0.1"
 
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
+    MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
+          (MPL_ARCHIVE,)
+
 elif os.name == 'nt':
     if config.WINARCH == 'win64':
-        bits = 64
-    else:
-        bits = 32
-    
-    MPL_ARCHIVE = "matplotlib-%s.win%d-py2.6.exe" % (MPL_VER, bits)
+        WINTHINGY = 'win-amd64'
 
-MPL_URL = "http://surfnet.dl.sourceforge.net/sourceforge/matplotlib/%s" % \
-          (MPL_ARCHIVE,)
+    else:
+        WINTHINGY = 'win32'
+    
+    MPL_ARCHIVE = "matplotlib-%s.%s-py2.7.exe" % (MPL_VER, WINTHINGY)
+    MPL_URL = "http://graphics.tudelft.nl/~cpbotha/files/devide/johannes_support/gohlke/%s" % (MPL_ARCHIVE,)
+
 
 MPL_DIRBASE = "matplotlib-%s" % (MPL_VER,)
 
@@ -39,10 +42,6 @@ class matplotlib(InstallPackage):
         self.inst_dir = os.path.join(config.inst_dir, 'matplotlib')
 
     def get(self):
-        if config.WINARCH == 'win64':
-            utils.output("matplotlib not yet supported on Win64.")
-            return
-
         if os.path.exists(self.tbfilename):
             utils.output("%s already present, not downloading." %
                          (MPL_ARCHIVE,))
@@ -51,15 +50,18 @@ class matplotlib(InstallPackage):
             utils.urlget(MPL_URL)
 
     def unpack(self):
-        if os.name == 'nt':
-            utils.output("Skipping unpack (WINDOWS).")
-            return
-
         if os.path.isdir(self.build_dir):
             utils.output("MATPLOTLIB source already unpacked, not redoing.")
         else:
-            utils.output("Unpacking MATPLOTLIB source.")
-            utils.unpack_build(self.tbfilename)
+            if os.name == 'posix':
+                utils.output("Unpacking MATPLOTLIB source.")
+                utils.unpack_build(self.tbfilename)
+            else:
+                utils.output("Unpacking MATPLOTLIB binaries.")
+                os.mkdir(self.build_dir)
+                os.chdir(self.build_dir)
+                utils.unpack(self.tbfilename)
+                
 
     def configure(self):
         if os.name == 'nt':
@@ -108,10 +110,6 @@ class matplotlib(InstallPackage):
                 utils.error('matplotlib build failed.  Please fix and try again.')
 
     def install(self):
-        if config.WINARCH == 'win64':
-            utils.output("matplotlib not yet supported on Win64.")
-            return
-
         # to test for install, just do python -c "import matplotlib"
         # and test the result (we could just import directly, but that would
         # only work once our invoking python has been stopped and started
@@ -141,11 +139,7 @@ class matplotlib(InstallPackage):
 
     def install_nt(self):
         sp_dir = sysconfig.get_python_lib()
-        os.chdir(sp_dir)
-        # on windows, this is an egg file, we simply unpack.
-        utils.unpack(self.tbfilename)
-
-        # should we delete the EGG-INFO dir that gets created in site-packages?
+        utils.copy_glob(os.path.join(self.build_dir, 'PLATLIB', '*'), sp_dir)
 
     def install_posix(self):
         os.chdir(self.build_dir)
