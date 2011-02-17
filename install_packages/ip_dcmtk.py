@@ -14,7 +14,7 @@ if os.name == 'nt':
 else:
     DCMTK_ARCHIVE = "dcmtk-3.5.4.tar.gz"
 
-DCMTK_URL = "ftp://dicom.offis.de/pub/dicom/offis/software/dcmtk/" \
+DCMTK_URL = "http://dicom.offis.de/download/dcmtk/" \
             "dcmtk354/%s" % (DCMTK_ARCHIVE,)
 DCMTK_DIRBASE = "dcmtk-3.5.4"
 
