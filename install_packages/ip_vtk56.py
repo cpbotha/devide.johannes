@@ -10,7 +10,7 @@ import sys
 import utils
 
 BASENAME = "VTK"
-GIT_REPO = "git://vtk.org/VTK.git"
+GIT_REPO = "http://vtk.org/VTK.git"
 GIT_TAG = "v5.6.1"
 
 VTK_BASE_VERSION = "vtk-5.6"
