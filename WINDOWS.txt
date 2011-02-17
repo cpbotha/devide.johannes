@@ -10,8 +10,9 @@ stuff, also automatically and nicely localised in a folder.
   bootstrapping, so a Python 2.5 should also do.
 * SVN: get and install the command-line client from [2].
   The installer will modify your PATH variable. 
-* CVS: get the WinCVS ZIP from http://wincvs.org/download.html then
-  extract the CVSNT installer
+* CVS: get the WinCVS ZIP from 
+  http://sourceforge.net/projects/cvsgui/files/WinCvs/WinCvs%202.0.2-4/WinCvs2_0_2-4.zip/download
+  and then extract the CVSNT installer
   from there and install it.  The installer will modify your PATH
   variable.
 * patch: get from http://gnuwin32.sourceforge.net/packages/patch.htm
