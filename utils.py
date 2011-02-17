@@ -3,6 +3,7 @@
 # See COPYRIGHT for details.
 
 import config
+import glob
 import os
 import re
 import sys, urllib
@@ -40,6 +41,28 @@ def cmake_command(build_dir, source_dir, cmake_params):
                         (cmake, cmake_params, source_dir))
 
     return ret
+
+def copy_glob(src_glob, dst_dir):
+    """Copy all files and dirs included by src_glob into the directory specified in dst_dir.
+
+    e.g. usage: copy_glob('/etc/*', '/backup/my_etc/')
+    """
+
+    if not os.path.exists(dst_dir):
+        os.mkdir(dst_dir)
+
+    if not os.path.isdir(dst_dir):
+        raise RuntimeError('%s is not a directory.' % (dst_dir,))
+
+    for fn in glob.glob(src_glob):
+        if os.path.isdir(fn):
+            # copytree needs full path in srt and dst
+            # e.g. copytree('/build/dir/numpy', 'python/lib/site-packages/numpy')
+            shutil.copytree(fn,os.path.join(dst_dir,os.path.basename(fn)), symlinks=True)
+        else:
+            # shutil is clever enough to take a directory as destination
+            shutil.copy(fn, dst_dir)
+
 
 def find_command_with_ver(name, command, ver_re):
     """Try to run command, use ver_re regular expression to parse for
