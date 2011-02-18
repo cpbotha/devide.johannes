@@ -9,7 +9,9 @@ import shutil
 import utils
 import sys
 
-SWIG_VER = "1.3.39"
+# updated from 1.3.39 to see if that would fix wrapitk 3.20 issues
+# on win64
+SWIG_VER = "2.0.1"
 BASENAME = "swig"
 BASE_URL = \
         "http://surfnet.dl.sourceforge.net/sourceforge/swig/"
