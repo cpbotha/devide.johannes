@@ -99,7 +99,7 @@ class WrapITK(InstallPackage):
                 cmake_params)
 
         if ret != 0:
-            utils.error("Could not configure GDCM.  Fix and try again.")
+            utils.error("Could not configure WrapITK.  Fix and try again.")
         
 
     def build(self):
