@@ -79,13 +79,14 @@ class ITK(InstallPackage):
         # following types are wrapped:
         # complex_float, float, signed_short, unsigned long,
         # vector_float 
+        # I've removed "-DITK_USE_REVIEW_STATISTICS=ON " 
+        # for now, as this seems to cause problems on win64
         cmake_params = "-DBUILD_EXAMPLES=OFF " \
                        "-DBUILD_SHARED_LIBS=ON " \
                        "-DBUILD_TESTING=OFF " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_USE_REVIEW=ON " \
-                       "-DITK_USE_REVIEW_STATISTICS=ON " \
                        "-DITK_USE_ORIENTED_IMAGE_DIRECTION=ON " \
                        "-DITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE=ON " \
                        "_DITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY=ON " \
