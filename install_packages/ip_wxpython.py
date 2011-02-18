@@ -206,6 +206,9 @@ class WXPython(InstallPackage):
 
         utils.goto_archive()
         # innotek installer, run in unattended mode
+        # FIXME: put pythonpath in environment, else the installer
+        # complains at the end that it can't find the right python
+        # to byte compile
         cmd = '%s /DIR=%s /sp- /silent /norestart' % \
         (WXP_ARCHIVE, config.PYTHON_SITE_PACKAGES)
         ret = os.system(cmd)
