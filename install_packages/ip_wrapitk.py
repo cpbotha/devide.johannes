@@ -14,6 +14,8 @@ SVN_REPO = \
         "http://wrapitk.googlecode.com/svn/branches/maint"
 SVN_REL = 527
 
+BO_PATCH = "wrapitk_maint_bigobj_cl64.diff"
+
 dependencies = ['CMake', 'ITK', 'CableSwig', 'SWIG']
 
 class WrapITK(InstallPackage):
@@ -26,7 +28,7 @@ class WrapITK(InstallPackage):
 
     def get(self):
         if os.path.exists(self.source_dir):
-            utils.output("wrapitk already checked out, skipping step.")
+            utils.output("wrapitk already checked out, skipping checkout.")
 
         else:
             os.chdir(config.archive_dir)
@@ -35,6 +37,15 @@ class WrapITK(InstallPackage):
                 SVN_REPO, BASENAME, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
+				
+        # now apply patch if necessary
+        patch_dst = os.path.join(config.archive_dir, BO_PATCH)
+        if not os.path.exists(patch_dst):
+            utils.output("Applying PATCH: wrapitk maint /bigobj cl64")
+            patch_src = os.path.join(config.patches_dir,BO_PATCH)
+            shutil.copy(patch_src, patch_dst)
+            os.chdir(self.source_dir)
+            ret = os.system("%s -p0 < %s" % (config.PATCH, patch_dst))
 
     def unpack(self):
         # no unpack step
