@@ -98,6 +98,8 @@ PYTHON_EXECUTABLE = ''
 PYTHON_INCLUDE_PATH = ''
 PYTHON_LIBRARY = ''
 
+DEVIDE_INST_DIR = ''
+
 #######################################################################
 
 
