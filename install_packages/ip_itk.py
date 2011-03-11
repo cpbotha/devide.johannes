@@ -14,13 +14,9 @@ BASENAME = "Insight"
 CVS_REPO = ":pserver:anonymous:insight@www.itk.org:/cvsroot/" + BASENAME
 CVS_VERSION = "-r ITK-3-20" # 
 
-CS_BASENAME = "CableSwig"
-# password part of REPO spec
-CS_CVS_REPO = ":pserver:anonymous@www.itk.org:/cvsroot/" + CS_BASENAME
-CABLESWIG_CVS_VERSION = "-r ITK-3-20"
+W64SWIG_PATCH = "itk320-win64swig-workaround.diff"
 
 dependencies = ['CMake']
-
 
 class ITK(InstallPackage):
     
@@ -61,7 +57,21 @@ class ITK(InstallPackage):
         # WrapITK external projects
         # itkvtkglue needs this during its get() stage!
         config.WRAPITK_SOURCE_DIR = os.path.join(self.source_dir,
-                                             'Wrapping/WrapITK')
+                                            'Wrapping/WrapITK')
+
+        # now apply patch if necessary
+        # only on win64
+        if config.WINARCH_STR != "x64":
+            return
+
+        patch_dst = os.path.join(config.archive_dir, W64SWIG_PATCH)
+        if not os.path.exists(patch_dst):
+            utils.output("Applying PATCH: win64 swig vs 2008 workaround")
+            patch_src = os.path.join(config.patches_dir,W64SWIG_PATCH)
+            shutil.copy(patch_src, patch_dst)
+            os.chdir(self.source_dir)
+            ret = os.system("%s -p0 < %s" % (config.PATCH, patch_dst))
+
 
     def unpack(self):
         pass
