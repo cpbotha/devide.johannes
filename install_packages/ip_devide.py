@@ -36,11 +36,14 @@ class DeVIDE(InstallPackage):
             utils.output("DeVIDE already checked out, skipping step.")
 
         else:
+            # we're checking out a version of DeVIDE that matches the version
+            # of DeVIDE. SVN_REL = DEVIDE_REL = JOHANNES_REL
             os.chdir(config.archive_dir)
             ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
             if ret != 0:
                 utils.error("Could not SVN checkout DeVIDE.  "
                             "Fix and try again.")
+
 
     def unpack(self):
         """No unpack step.
@@ -66,6 +69,7 @@ class DeVIDE(InstallPackage):
             [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
               (config.JOHANNES_REL,))],
             devide_py)
+
 
     def build(self):
         pass
