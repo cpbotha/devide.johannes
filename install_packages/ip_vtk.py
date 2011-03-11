@@ -227,7 +227,7 @@ class VTK(InstallPackage):
                 utils.error("Could not install VTK.  Fix and try again.")
 
 
-        
+
     def clean_build(self):
         utils.output("Removing build and installation directories.")
         if os.path.exists(self.inst_dir):

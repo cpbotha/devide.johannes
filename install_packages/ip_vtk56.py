@@ -198,6 +198,17 @@ class VTK56(InstallPackage):
             if ret != 0:
                 utils.error("Could not install VTK.  Fix and try again.")
 
+        # now do some surgery on VTKConfig.cmake and
+        # VTKLibraryDepends.cmake so builds of VTK-dependent libraries
+        # with only the DRE to link with Just Work(tm)
+        for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
+                os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
+            print fn
+            utils.re_sub_filter_file(
+                    [(config.inst_dir, '${VTK_INSTALL_PREFIX}/..')], 
+                    fn)
+
+
 
         
     def clean_build(self):
