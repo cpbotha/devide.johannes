@@ -5,6 +5,7 @@
 import config
 from install_package import InstallPackage
 import os
+import re
 import shutil
 import sys
 import utils
@@ -201,11 +202,15 @@ class VTK56(InstallPackage):
         # now do some surgery on VTKConfig.cmake and
         # VTKLibraryDepends.cmake so builds of VTK-dependent libraries
         # with only the DRE to link with Just Work(tm)
+
+        # on windows, we need to replace backslash with forward slash
+        # as that's the style used by the config files. On *ix mostly
+        # harmless
+        idp = re.sub(r'\\','/', config.inst_dir)
         for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
                 os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
-            print fn
             utils.re_sub_filter_file(
-                    [(config.inst_dir, '${VTK_INSTALL_PREFIX}/..')], 
+                    [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
                     fn)
 
 
