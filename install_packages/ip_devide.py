@@ -44,6 +44,22 @@ class DeVIDE(InstallPackage):
                 utils.error("Could not SVN checkout DeVIDE.  "
                             "Fix and try again.")
 
+            # now modify the version unpacked devide.py
+            # we have to do this, because we've checked out SVN_REL
+            # which is DEVIDE_REL which is JOHANNES_REL, but devide's
+            # built-in SVN version could be different, because it was
+            # not stamped. We want the DeVIDE version number in the
+            # shipping software to reflect the johannes version that
+            # builds it all.
+            utils.output("Modifying DeVIDE version to reflect that of johannes.")
+            devide_py = os.path.join(self.source_dir, 'devide.py')
+            # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
+            # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
+            # "$JOHANNES_REL") 
+            utils.re_sub_filter_file(
+                [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
+                  (config.JOHANNES_REL,))],
+                devide_py)
 
     def unpack(self):
         """No unpack step.
@@ -59,16 +75,6 @@ class DeVIDE(InstallPackage):
 
         shutil.copytree(self.source_dir, self.inst_dir)
 
-        # now modify the version unpacked devide.py
-        utils.output("Modifying DeVIDE version")
-        devide_py = os.path.join(self.inst_dir, 'devide.py')
-        # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
-        # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
-        # "$JOHANNES_REL") 
-        utils.re_sub_filter_file(
-            [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
-              (config.JOHANNES_REL,))],
-            devide_py)
 
 
     def build(self):
