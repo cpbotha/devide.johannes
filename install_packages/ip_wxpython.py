@@ -205,15 +205,18 @@ class WXPython(InstallPackage):
             return
 
         utils.goto_archive()
-        # innotek installer, run in unattended mode
-        # FIXME: put pythonpath in environment, else the installer
-        # complains at the end that it can't find the right python
-        # to byte compile
+        # Inno Setup installer, run in unattended mode
+        # http://unattended.sourceforge.net/installers.php
+        # he installer complains at the end that it can't find the right python
+        # to byte compile. To work around this, TEMPORARILY add the following to the
+        # registry: [HKEY_LOCAL_MACHINE\SOFTWARE\Python\PythonCore\2.7\InstallPath] 
+        # ="C:\build\jwd\inst\python\"
+        # use the built-in _winreg module for this.
         cmd = '%s /DIR=%s /sp- /silent /norestart' % \
         (WXP_ARCHIVE, config.PYTHON_SITE_PACKAGES)
         ret = os.system(cmd)
         if ret != 0:
-            utils.error('Error install wxPython.')
+            utils.error('Error installing wxPython.')
 
     def install_posix(self):
         os.chdir(self.build_dir)
