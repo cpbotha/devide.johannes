@@ -18,7 +18,7 @@ if os.name == 'posix':
           (MPL_ARCHIVE,)
 
 elif os.name == 'nt':
-    if config.WINARCH == 'win64':
+    if config.WINARCH_STR == 'x64':
         WINTHINGY = 'win-amd64'
 
     else:
