@@ -67,9 +67,7 @@ def download_python():
         fname = 'Python-%s.tar.bz2' % (PYVER_STR,)
         url = '%s/%s' % (urlbase, fname)
     elif os.name == 'nt':
-        import platform
-        a = platform.architecture()[0]
-        if a == '32bit':
+        if config.WINARCH == '32bit':
             fname = 'python-%s.msi' % (PYVER_STR,)
             url = '%s/%s' % (urlbase, fname) 
         else:
