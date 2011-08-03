@@ -73,8 +73,8 @@ def download_python():
         else:
             fname = 'python-%s.amd64.msi' % (PYVER_STR,)
             url = '%s/%s' % (urlbase, fname)
-
-	print "##### Bootstrapping with %s Python. #####" % (a,)
+            
+        print "##### Bootstrapping with %s Python. #####" % (config.WINARCH,)
 
     utils.goto_archive()
     utils.urlget(url)
