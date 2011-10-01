@@ -1,7 +1,4 @@
-As explained in the johannes README.txt, porting the first stages of
-johannes (python, numpy, wxpython, matplotlib) to Windows is probably
-not going to happen.   However, johannes CAN build the difficult
-stuff, also automatically and nicely localised in a folder.
+Getting johannes to build everything on Windows:
 
 1. First get and install all the prerequisites:
 -----------------------------------------------
@@ -36,7 +33,7 @@ I can recommend cpbotha.net/software/envedit for easy path editing.
 It's BSD open source by yours truly.
 
 [1] http://www.python.org/ftp/python/2.6.2/python-2.6.2.msi
-[2] http://subversion.tigris.org/files/documents/15/45953/Setup-Subversion-1.6.2.msi
+[2] http://www.sliksvn.com/pub/Slik-Subversion-1.6.17-win32.msi
 [3] http://sourceforge.net/projects/nsis/files/NSIS%202/2.45/nsis-2.45-setup.exe/download
 
 2. Now let johannes do its magic:

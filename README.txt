@@ -2,7 +2,7 @@ This package contains johannes, a very scary *ix build system for DeVIDE.
 Johannes now also Does Windows(tm) in all bits, see WINDOWS.txt for
 details on that.  This file deals primarily with *ix.
 
-johannes is copyright 2007-2009 Charl P. Botha <c.p.botha@tudelft.nl>
+johannes is copyright 2007-2011 Charl P. Botha <c.p.botha@tudelft.nl>
 and is made available under the New BSD License.
 
 Before starting, you need at least the following packages (or
