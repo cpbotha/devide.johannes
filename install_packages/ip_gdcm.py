@@ -123,14 +123,20 @@ class GDCM(InstallPackage):
                 "Could not install gdcm.  Fix and try again.")
  
     def clean_build(self):
-        # nuke the build dir, the source dir is pristine and there is
-        # no installation
-        utils.output("Removing build dir.")
+        utils.output("Removing build and installation directories.")
+        
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+            
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
-
+    
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
+    
     def get_installed_version(self):
         import gdcm
         return gdcm.Version.GetVersion()
-
-
+    
