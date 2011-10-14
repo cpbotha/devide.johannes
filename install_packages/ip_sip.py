@@ -5,7 +5,7 @@ import shutil
 import utils
 from subprocess import call
 
-VERSION = "4.10.2"
+VERSION = "4.12.4"
 BASENAME = "sip"
 
 if os.name == "nt":
@@ -87,11 +87,37 @@ class SIP(InstallPackage):
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine
-        utils.output("Removing build dir.")
+        utils.output("Removing build and installation directories.")
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
-        # TODO: can we uninstall it?
         
+        self.clean_install()
+        
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        PYTHON_DIR = os.path.dirname(config.PYTHON_EXECUTABLE)
+        SITE_PACKAGES_DIR = os.path.join(PYTHON_DIR, 'Lib', 'site-packages')
+        INCLUDE_DIR = os.path.join(PYTHON_DIR, 'include')
+        
+        # Remove files
+        self.try_to_remove_file(PYTHON_DIR, 'sip.exe')
+        self.try_to_remove_file(SITE_PACKAGES_DIR, 'sip.pyd')
+        self.try_to_remove_file(SITE_PACKAGES_DIR, 'sipconfig.py')
+        self.try_to_remove_file(SITE_PACKAGES_DIR, 'sipconfig.pyc')
+        self.try_to_remove_file(SITE_PACKAGES_DIR, 'sipdistutils.py')
+        self.try_to_remove_file(SITE_PACKAGES_DIR, 'sipdistutils.pyc')
+        self.try_to_remove_file(INCLUDE_DIR, 'sip.h')
+        
+        # Remove the sip dir
+        sip_dir = os.path.join(PYTHON_DIR, 'sip')
+        if os.path.exists(sip_dir):
+            shutil.rmtree(sip_dir)
+    
+    def try_to_remove_file(self, folder, file):
+        path = os.path.join(folder, file)
+        if os.path.exists(path):
+            os.remove(path)
+    
     def get_installed_version(self):
         python_dir = os.path.dirname(config.PYTHON_EXECUTABLE)
         reader = os.popen(os.path.join(python_dir, 'sip -V'))

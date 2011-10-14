@@ -4,7 +4,7 @@ import os
 import shutil
 import utils
 
-VERSION = "4.6.2"
+VERSION = "4.7.4"
 BASENAME = "qt"
 
 if os.name == "nt":

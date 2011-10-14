@@ -4,7 +4,7 @@ import os
 import shutil
 import utils
 
-VERSION = "4.7.3"
+VERSION = "4.8.5"
 BASENAME = "PyQt"
 
 if os.name == "nt":
@@ -108,9 +108,27 @@ class PyQt(InstallPackage):
  
     def clean_build(self):
         # nuke the build dir, the source dir is pristine
-        utils.output("Removing build dir.")
+        utils.output("Removing build and installation directories.")
         if os.path.exists(self.build_dir):
             shutil.rmtree(self.build_dir)
+        
+        self.clean_install()
+        
+    def clean_install(self):
+        utils.output("Removing installation directory.")
+        
+        # Remove the PyQt dir
+        pyqt_dir = os.path.join(self.site_packages, 'PyQt4')
+        if os.path.exists(pyqt_dir):
+            shutil.rmtree(pyqt_dir)
+            
+        # Remove qt.py
+        self.try_to_remove_file(self.site_packages, 'qt.py')
+    
+    def try_to_remove_file(self, folder, file):
+        path = os.path.join(folder, file)
+        if os.path.exists(path):
+            os.remove(path)
 
     def get_installed_version(self):
         import qt 
