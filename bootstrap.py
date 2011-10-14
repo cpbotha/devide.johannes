@@ -140,8 +140,13 @@ def main():
             if ret != 0:
                 utils.error(
                         'Failed locally installing Python.  EFS / msiexec problems?')
-
-
+        
+        # Remove antigravity easter egg, which can be annoying at times
+        antigravity = os.path.join(py_inst_dir, 'Lib', 'antigravity.py')
+        if os.path.exists(antigravity):
+            utils.output('Removing antigravity.')
+            os.remove(antigravity)
+        
         sxs_manifest_dest = os.path.join(
                 py_inst_dir, 'Microsoft.VC90.CRT.manifest')
         if not os.path.exists(sxs_manifest_dest):
