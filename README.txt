@@ -13,13 +13,14 @@ gtk2-dev | libgtk2.0-dev, libxt-dev,
 libfreetype-dev, libpng-dev, libzlib-dev (these three for matplotlib)
 libatlas-dev (*optional* for faster numpy)
 libgl-dev, lubglu-dev
+libosmesa6-dev
 
 * On Ubuntu / Debian, the following will install all necessary packages:
   sudo apt-get install cvs subversion chrpath g++ gcc \
   libsqlite3-dev libncurses-dev libreadline5-dev \
   libgtk2.0-dev \
   libxt-dev libfreetype6-dev libpng12-dev libz-dev libbz2-dev \
-  libgl1-mesa-dev libglu1-mesa-dev
+  libgl1-mesa-dev libglu1-mesa-dev libosmesa6-dev
 
 A. For a NORMAL full build (the default), do the following:
   
