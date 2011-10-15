@@ -3,7 +3,7 @@
 # this will create the working directory tree and download the python tarball
 # copyright cpbotha.net
 
-PYVER="2.7.1"
+PYVER="2.7.2"
 
 if [ -z $1 ]; then
 echo "Specify working directory as first parameter."

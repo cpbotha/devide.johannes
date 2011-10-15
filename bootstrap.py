@@ -9,7 +9,7 @@
 # 3. johannes.py will be run by the python that is locally built by
 # EITHER bootstrap.py OR bootstrap_stage{1,2}.sh
 
-PYVER_STR = '2.7.1'
+PYVER_STR = '2.7.2'
 
 import config
 import getopt

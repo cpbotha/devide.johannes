@@ -3,7 +3,7 @@
 # this will build and install python in the johannes working directory
 # copyright cpbotha.net
 
-PYVER=2.7.1
+PYVER=2.7.2
 
 # change this to 0 if you DON'T want this script to do its
 # rudimentary dependency checking.
