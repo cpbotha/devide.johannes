@@ -89,7 +89,6 @@ class SetupEnvironment(InstallPackage):
     def get(self):
         if not os.path.exists(self.dre_src_dir):
             utils.error("Couldn't find DRE source dir. Has the DeVIDE package been built?")
-                            "Fix and try again.")
 
     def install(self):
 
