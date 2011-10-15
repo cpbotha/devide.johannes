@@ -26,14 +26,16 @@ class DeVIDE(InstallPackage):
         # setup some devide config variables (we need to do this in anycase,
         # because they're config vars and other modules might want them)
         config.DEVIDE_PY = os.path.join(self.inst_dir, 'devide.py')
+        config.DEVIDE_INST_DIR = self.inst_dir
+        config.DEVIDE_SRC_DIR = self.source_dir
 
     def get(self):
         if os.path.exists(self.source_dir):
             utils.output("DeVIDE already checked out, skipping step.")
 
         else:
-            # we're checking out a version of DeVIDE that matches the version
-            # of DeVIDE. SVN_REL = DEVIDE_REL = JOHANNES_REL
+            # with the new setup, this checkout has SUBDIRECTORIES
+            # devide, dre and vtkdevide!
             os.chdir(config.archive_dir)
             ret = os.system("%s clone %s -u %s" % (config.HG, HG_REPO, CHANGESET_ID))
             if ret != 0:
@@ -48,7 +50,7 @@ class DeVIDE(InstallPackage):
             # shipping software to reflect the johannes version that
             # builds it all.
             utils.output("Modifying DeVIDE version to reflect that of johannes.")
-            devide_py = os.path.join(self.source_dir, 'devide.py')
+            devide_py = os.path.join(self.source_dir, 'devide', 'devide.py')
             # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
             # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
             # "$JOHANNES_REL") 
@@ -74,7 +76,7 @@ class DeVIDE(InstallPackage):
                 'DeVIDE already present in inst dir.  Skipping step.')
             return
 
-        shutil.copytree(self.source_dir, self.inst_dir)
+        shutil.copytree(os.path.join(self.source_dir, 'devide'), self.inst_dir)
 
 
 
@@ -82,7 +84,6 @@ class DeVIDE(InstallPackage):
         pass
 
     def install(self):
-        config.DEVIDE_INST_DIR = self.inst_dir
         self.copy_devide_to_inst()
 
     def clean_build(self):
