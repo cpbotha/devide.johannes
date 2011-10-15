@@ -10,9 +10,9 @@ import shutil
 import sys
 
 BASENAME = "devide"
-SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
+HG_REPO = "https://code.google.com/p/%s/" % (BASENAME,)
 # this should be the same release as johannes and the rest of devide
-SVN_REL = config.DEVIDE_REL
+CHANGESET_ID = config.DEVIDE_CHANGESET_ID
 
 dependencies = []
 
@@ -21,10 +21,6 @@ class DeVIDE(InstallPackage):
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, BASENAME)
-        self.full_version = '%s.%s.0' % (SVN_REL, config.JOHANNES_REL)
-        #self.inst_dir = os.path.join(config.inst_dir,
-        #                             '%s-%s' % (BASENAME,
-        #                                        self.full_version))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
         # setup some devide config variables (we need to do this in anycase,
@@ -39,9 +35,9 @@ class DeVIDE(InstallPackage):
             # we're checking out a version of DeVIDE that matches the version
             # of DeVIDE. SVN_REL = DEVIDE_REL = JOHANNES_REL
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
+            ret = os.system("%s clone %s -u %s" % (config.HG, HG_REPO, CHANGESET_ID))
             if ret != 0:
-                utils.error("Could not SVN checkout DeVIDE.  "
+                utils.error("Could not hg clone DeVIDE.  "
                             "Fix and try again.")
 
             # now modify the version unpacked devide.py
@@ -56,10 +52,15 @@ class DeVIDE(InstallPackage):
             # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
             # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
             # "$JOHANNES_REL") 
-            utils.re_sub_filter_file(
-                [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
-                  (config.JOHANNES_REL,))],
-                devide_py)
+            
+            # FIXME: update for mercurial setup
+            # we have config.DEVIDE_CHANGESET_ID
+            # and we could get the changeset id of this johannes checkout as well.
+            
+            #utils.re_sub_filter_file(
+            #    [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
+            #      (config.JOHANNES_REL,))],
+            #    devide_py)
 
     def unpack(self):
         """No unpack step.

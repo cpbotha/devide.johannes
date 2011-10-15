@@ -8,6 +8,7 @@
 # e.g. SVN = 'svn'
 
 SVN = 'svn'
+HG = 'hg'
 CVS = 'cvs -z3'
 GIT = 'git'
 PATCH = 'patch'
