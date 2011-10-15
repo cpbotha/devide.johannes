@@ -9,30 +9,20 @@ import shutil
 import utils
 
 BASENAME = "vtkdevide"
-#SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
-# this should be the same release as johannes and the rest of devide
-#SVN_REL = config.DEVIDE_REL
 
 dependencies = ['VTK', 'DeVIDE']
 
 class VTKDEVIDE(InstallPackage):
     
     def __init__(self):
-        self.source_dir = os.path.join(config.archive_dir, BASENAME)
+        self.source_dir = os.path.join(config.DEVIDE_SRC_DIR, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
     def get(self):
-        if os.path.exists(self.source_dir):
-            utils.output("vtkdevide already checked out, skipping step.")
-
-        else:
-            os.chdir(config.archive_dir)
-            #ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
-            ret = 1
-            if ret != 0:
-                utils.error("Could not SVN checkout.  Fix and try again.")
+        if not os.path.exists(self.source_dir):
+            utils.error("Couldn't find vtkdevide source dir. Build DeVIDE package first.")
 
     def unpack(self):
         # no unpack step
