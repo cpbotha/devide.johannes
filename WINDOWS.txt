@@ -1,0 +1,59 @@
+Getting johannes to build everything on Windows:
+
+1. First get and install all the prerequisites:
+-----------------------------------------------
+
+* Get and install Python 2.6 from [1].  This will only be used for
+  bootstrapping, so a Python 2.5 should also do.
+* SVN: get and install the command-line client from [2].
+  The installer will modify your PATH variable. 
+* GIT: get and install the Windows installer (Git-1.7.4-*.exe at the time
+  of this writing) from http://git-scm.com/
+  Select the option where you can run git from a cmd window (second of the three)
+* CVS: get the WinCVS ZIP from 
+  http://sourceforge.net/projects/cvsgui/files/WinCvs/WinCvs%202.0.2-4/WinCvs2_0_2-4.zip/download
+  and then extract the CVSNT installer
+  from there and install it.  The installer will modify your PATH
+  variable.
+* patch: get from http://gnuwin32.sourceforge.net/packages/patch.htm
+  and install.  Add its install directory to your path.
+  NB: On Windows 7, the gnuwin32 patch will segfault. Follow the instructions
+  on http://math.nist.gov/oommf/software-patchsets/patch_on_Windows7.html
+  to fix. The howto recommends installing the manifest IN the patch.exe
+  binary, it could already be sufficient just to store the patch.exe.manifest
+  in the same folder as patch.exe.
+* Get and install the NSIS installer builder from [3].  Put its install
+  directory on your system PATH.
+* Visual Studio 2008: Make sure the latest service pack installed, SP1
+  at the time of this writing (August 1, 2009).  Add the Visual Studio
+  2008 devenv.com directory to your path.  On this win32 image,
+  that's: C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
+
+I can recommend cpbotha.net/software/envedit for easy path editing.
+It's BSD open source by yours truly.
+
+[1] http://www.python.org/ftp/python/2.6.2/python-2.6.2.msi
+[2] http://www.sliksvn.com/pub/Slik-Subversion-1.6.17-win32.msi
+[3] http://sourceforge.net/projects/nsis/files/NSIS%202/2.45/nsis-2.45-setup.exe/download
+
+2. Now let johannes do its magic:
+---------------------------------
+
+python \where\you\put\it\bootstrap.py -w your_working_dir
+your_working_dir\jpython \where\you\put\it\johannes.py -w your_working_dir
+
+Wait a few hours.  When the build is done, results are as explained in
+the RESULTS section of the main johannes README.txt file.
+
+APPENDIX:
+---------
+
+Let's say you don't really want DeVIDE, but you'd like to use johannes
+to build for example just VTK and/or ITK.  You can!
+
+Follow all instructions under 1., then do for example:
+
+your_working_dir\jpython \where\you\put\it\johannes.py -w your_working_dir -p itk,vtk
+
+See johannes --help for clues to package names.
+

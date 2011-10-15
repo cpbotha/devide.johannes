@@ -1,0 +1,21 @@
+? itk320-win64swig-workaround.diff
+Index: Code/IO/itkImageIORegion.h
+===================================================================
+RCS file: /cvsroot/Insight/Insight/Code/IO/itkImageIORegion.h,v
+retrieving revision 1.25
+diff -u -r1.25 itkImageIORegion.h
+--- Code/IO/itkImageIORegion.h	12 Jul 2009 10:52:54 -0000	1.25
++++ Code/IO/itkImageIORegion.h	10 Mar 2011 17:07:48 -0000
+@@ -57,6 +57,12 @@
+   typedef ImageIORegion Self;
+   typedef Region        Superclass;
+ 
++  /* these have been put here to work-around a SWIG / Visual Studio 2008 / Win64 bug.
++   * see this thread: http://www.itk.org/pipermail/insight-users/2011-February/039799.html
++   */
++  typedef unsigned int size_t;
++  typedef int ptrdiff_t;
++
+   /** these types correspond to those of itk::Size, itk::Offset and itk::Index */
+   typedef size_t                  SizeValueType;
+   typedef ptrdiff_t               IndexValueType;
