@@ -9,11 +9,11 @@ import shutil
 import utils
 
 BASENAME = "vtkdevide"
-SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
+#SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + BASENAME
 # this should be the same release as johannes and the rest of devide
-SVN_REL = config.DEVIDE_REL
+#SVN_REL = config.DEVIDE_REL
 
-dependencies = ['VTK']
+dependencies = ['VTK', 'DeVIDE']
 
 class VTKDEVIDE(InstallPackage):
     
@@ -29,7 +29,8 @@ class VTKDEVIDE(InstallPackage):
 
         else:
             os.chdir(config.archive_dir)
-            ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
+            #ret = os.system("%s co %s -r%s" % (config.SVN, SVN_REPO, SVN_REL))
+            ret = 1
             if ret != 0:
                 utils.error("Could not SVN checkout.  Fix and try again.")
 
