@@ -8,12 +8,13 @@ import os
 import shutil
 import utils
 
-dependencies = []
+# this depends on the DeVIDE checkout, because it's built from the same source
+dependencies = ['DeVIDE']
 
 DRE_BASENAME = "dre"
-DRE_SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + DRE_BASENAME
+#DRE_SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + DRE_BASENAME
 # this should be the same release as johannes and the rest of devide
-DRE_SVN_REL = config.DEVIDE_REL
+#DRE_SVN_REL = config.DEVIDE_REL
 
 
 posix_cfg = """
@@ -65,7 +66,7 @@ class SetupEnvironment(InstallPackage):
 
     def __init__(self):
         self.dre_src_dir = os.path.join(
-                config.archive_dir, DRE_BASENAME)
+                config.DEVIDE_SRC_DIR, DRE_BASENAME)
 
         self.dreams_dest_dir = os.path.join(
                 config.inst_dir, 'dreams')
@@ -86,15 +87,8 @@ class SetupEnvironment(InstallPackage):
                 config.inst_dir, shfn)
 
     def get(self):
-        if os.path.exists(self.dre_src_dir):
-            utils.output("DRE already checked out, skipping step.")
-
-        else:
-            os.chdir(config.archive_dir)
-            ret = os.system("%s co %s -r%s" % 
-                    (config.SVN, DRE_SVN_REPO, DRE_SVN_REL))
-            if ret != 0:
-                utils.error("Could not SVN checkout DRE.  "
+        if not os.path.exists(self.dre_src_dir):
+            utils.error("Couldn't find DRE source dir. Has the DeVIDE package been built?")
                             "Fix and try again.")
 
     def install(self):
