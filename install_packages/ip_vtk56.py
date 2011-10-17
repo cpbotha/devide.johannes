@@ -199,19 +199,19 @@ class VTK56(InstallPackage):
             if ret != 0:
                 utils.error("Could not install VTK.  Fix and try again.")
 
-        # now do some surgery on VTKConfig.cmake and
-        # VTKLibraryDepends.cmake so builds of VTK-dependent libraries
-        # with only the DRE to link with Just Work(tm)
+            # now do some surgery on VTKConfig.cmake and
+            # VTKLibraryDepends.cmake so builds of VTK-dependent libraries
+            # with only the DRE to link with Just Work(tm)
 
-        # on windows, we need to replace backslash with forward slash
-        # as that's the style used by the config files. On *ix mostly
-        # harmless
-        idp = re.sub(r'\\','/', config.inst_dir)
-        for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
-                os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
-            utils.re_sub_filter_file(
-                    [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
-                    fn)
+            # on windows, we need to replace backslash with forward slash
+            # as that's the style used by the config files. On *ix mostly
+            # harmless
+            idp = re.sub(r'\\','/', config.inst_dir)
+            for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
+                    os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
+                utils.re_sub_filter_file(
+                        [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
+                        fn)
 
 
 
