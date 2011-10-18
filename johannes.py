@@ -180,6 +180,7 @@ def main():
         # - instantiate ip_name.Name
         #
         ip_names = [
+                'pip',
                 'NumPy', 
                 'WXPython',
                 'matplotlib', 
