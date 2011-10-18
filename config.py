@@ -42,6 +42,11 @@ import sys
 # FIXME: change devide installpackage to find hg id of the johannes that
 # builds it.
 DEVIDE_CHANGESET_ID = "776121277873"
+# this should be the date of the above changeset ID
+# and probably the new-style DeVIDE versioning
+# so for release: DeVIDE v11.9.16
+# for dev: DeVIDE vDEV11.9.16
+DEVIDE_DATESTR = "11.9.16"
 
 BUILD_TARGET = 'RelWithDebInfo'
 
