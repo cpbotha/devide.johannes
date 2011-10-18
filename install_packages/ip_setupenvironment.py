@@ -21,6 +21,9 @@ posix_cfg = """
 # DRE config written by johannes build system
 # %%(dre_top)s will be replaced by the DRE top-level directory.
 
+[env:path]
+python: %(python_binary_path)s
+
 [env:ld_library_path]
 python: %(python_library_path)s
 wxpython: %(wx_lib_path)s
@@ -45,6 +48,8 @@ nt_cfg = """
 # %%(dre_top)s will be replaced by the DRE top-level directory.
 
 [env:path]
+python: %(python_binary_path)s
+python_scripts: %(python_scripts_path)s
 wxpython: %(wx_lib_path)s
 vtk: %(vtk_sodir)s
 gdcm: %(gdcm_lib)s
@@ -115,6 +120,7 @@ class SetupEnvironment(InstallPackage):
 
         vardict = {'python_binary_path' : config.python_binary_path,
                    'python_library_path' : config.python_library_path,
+                   'python_scripts_path' : config.python_scripts_path,
                    'devide_inst_dir' : config.DEVIDE_INST_DIR,
                    'wx_lib_path' : config.WX_LIB_PATH,
                    'vtk_sodir' : config.VTK_SODIR,

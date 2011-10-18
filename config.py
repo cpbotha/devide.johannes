@@ -123,9 +123,10 @@ def init(wd, the_profile):
     global profile
     profile = the_profile
 
-    global python_library_path, python_binary_path
-    python_library_path = os.path.join(inst_dir, 'python/lib')
-    python_binary_path = os.path.join(inst_dir, 'python/bin')
+    global python_library_path, python_binary_path, python_scripts_path
+    python_library_path = os.path.join(inst_dir, 'python', 'lib')
+    python_binary_path = os.path.join(inst_dir, 'python', 'bin')
+    python_scripts_path = os.path.join(inst_dir, 'python', 'Scripts')
 
     # platform dependent stuff =========================================
     # use conditionals based on os.name (posix, nt) and sys.platform (linux2,
