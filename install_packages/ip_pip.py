@@ -71,7 +71,7 @@ class pip(InstallPackage):
         # then pip # ##############################################
 
         os.chdir(config.working_dir) # we need to be elsewhere!
-        ret = os.system('%s -c "from pkg_resources import load_entry_point"' % (sys.executable,))
+        ret = os.system('%s -c "import pip"' % (sys.executable,))
         if ret == 0:
             utils.output('pip already installed.  Skipping step.')
 
