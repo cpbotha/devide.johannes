@@ -111,7 +111,8 @@ echo "export LD_LIBRARY_PATH=$WD/inst/python/lib" >> $ENV_FILE
 echo "export PATH=$WD/inst/python/bin/:\$PATH" >> $ENV_FILE
 
 echo "JOHANNES #####"
-echo "Successfully built Python.  Start the build system with "
+echo "Successfully built Python.  "
+echo "Setup johannes.cfg in build_dir, then start the build system with "
 echo ". $WD/$ENV_FILE"
 echo "$WD/inst/python/bin/python johannes.py -w $WD"
 
