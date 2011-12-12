@@ -10,7 +10,7 @@ import sys
 import utils
 from distutils import sysconfig
 
-MPL_VER = "1.0.1"
+MPL_VER = "1.1.0"
 
 if os.name == 'posix':
     MPL_ARCHIVE = "matplotlib-%s.tar.gz" % (MPL_VER,)
