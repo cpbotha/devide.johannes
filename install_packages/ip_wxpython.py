@@ -11,7 +11,7 @@ from install_package import InstallPackage
 import utils
 from distutils import sysconfig
 
-WXP_VER = '2.8.11.0'
+WXP_VER = '2.8.12.1'
 WXP_URL_BASE = "http://surfnet.dl.sourceforge.net/sourceforge/wxpython/%s"
 
 if os.name == 'posix':
