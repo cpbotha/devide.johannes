@@ -9,7 +9,7 @@ import shutil
 import sys
 import utils
 
-NUMPY_VER = "1.5.1"
+NUMPY_VER = "1.6.1"
 NUMPY_BASENAME = "numpy-" + NUMPY_VER
 NUMPY_DIRBASE = NUMPY_BASENAME 
 
@@ -21,10 +21,10 @@ elif os.name == 'nt':
     NUMPY_URL_BASE = "http://graphics.tudelft.nl/~cpbotha/files/devide/johannes_support/gohlke/%s"
 
     if config.WINARCH == '32bit':
-        NUMPY_ARCHIVE = "%s.win32-py2.7.exe" % (NUMPY_BASENAME,)   
+        NUMPY_ARCHIVE = "numpy-unoptimized-%s.win32-py2.7.exe" % (NUMPY_VER,)
 
     else:
-        NUMPY_ARCHIVE = "%s.win-amd64-py2.7.exe" % (NUMPY_BASENAME,)   
+        NUMPY_ARCHIVE = "numpy-unoptimized-%s.win-amd64-py2.7.exe" % (NUMPY_VER,)
 
     # now construct the full URL
     NUMPY_URL = NUMPY_URL_BASE % (NUMPY_ARCHIVE,)
