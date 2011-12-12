@@ -82,14 +82,14 @@ class VTK58(InstallPackage):
         else:
             utils.goto_archive()
 
-            # ret = os.system("git clone %s %s" % (GIT_REPO, BASENAME))
-            # if ret != 0:
-                # utils.error("Could not clone VTK repo.  Fix and try again.")
+            ret = os.system("git clone %s %s" % (GIT_REPO, BASENAME))
+            if ret != 0:
+                utils.error("Could not clone VTK repo.  Fix and try again.")
 
-            # os.chdir(self.source_dir)
-            # ret = os.system("git checkout %s" % (GIT_TAG,))
-            # if ret != 0:
-                # utils.error("Could not checkout VTK v5.6.1. Fix and try again.")
+            os.chdir(self.source_dir)
+            ret = os.system("git checkout %s" % (GIT_TAG,))
+            if ret != 0:
+                utils.error("Could not checkout VTK v5.6.1. Fix and try again.")
 
 
             # # EXC PATCH
