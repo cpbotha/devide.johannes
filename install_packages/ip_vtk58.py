@@ -184,6 +184,12 @@ class VTK58(InstallPackage):
             # with VTK PV-3-2-1.  This is only on installations with
             # EasyInstall / Python Eggs, then the VTK setup.py uses
             # EasyInstall and not standard distutils.  gah!
+            
+            # just tested with VTK 5.8.0 and Python 2.7.2
+            # it indeed installs VTK_PYTHON/VTK-5.8.0-py2.7.egg
+            # but due to the site.py and easy-install.pth magic in there,
+            # adding VTK_PYTHON to the PYTHONPATH still works. We can keep
+            # pip, yay!
             if not os.path.exists(config.VTK_PYTHON):
                 os.makedirs(config.VTK_PYTHON)
 
