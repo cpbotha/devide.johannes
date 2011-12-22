@@ -41,10 +41,10 @@ class ExposureRender(InstallPackage):
                 utils.error("Could not update Exposure Render. Fix and try again.")
 
     def configure(self):
-        #if os.path.exists(
-        #   os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
-        #   utils.output("Exposure Render build already configured.")
-        #   return
+        if os.path.exists(
+           os.path.join(self.build_dir, 'CMakeFiles/cmake.check_cache')):
+           utils.output("Exposure Render build already configured.")
+           return
         
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
@@ -80,12 +80,11 @@ class ExposureRender(InstallPackage):
             utils.error("Could not configure Exposure Render.  Fix and try again.")
 		
     def build(self):
-        #TODO:
-        posix_file = os.path.join(self.build_dir,
-            'bin/libvtkWidgetsPython.so')
-        nt_file = os.path.join(self.build_dir, 'bin', config.BUILD_TARGET, 
-                'vtkWidgetsPythonD.dll')
-
+        posix_file = os.path.join(self.build_dir, config.BUILD_TARGET,
+            'libvtkErCorePython.so') #TODO: check whether this is the correct file to test on
+        nt_file = os.path.join(self.build_dir, config.BUILD_TARGET, 
+                'vtkErCorePythonD.dll')
+        
         if utils.file_exists(posix_file, nt_file):
             utils.output("Exposure Render already built.  Skipping build step.")
 
@@ -96,9 +95,8 @@ class ExposureRender(InstallPackage):
                 utils.error("Error building Exposure Render.  Fix and try again.")
 
     def install(self):
-        #TODO:
-        posix_file = os.path.join(self.inst_dir, 'bin/vtkpython')
-        nt_file = os.path.join(self.inst_dir, 'bin', 'vtkpython.exe')
+        posix_file = os.path.join(self.inst_dir, 'bin/ErGUI')
+        nt_file = os.path.join(self.inst_dir, 'bin', 'ErGUI.exe')
 
         if utils.file_exists(posix_file, nt_file):    
             utils.output("Exposure Render already installed.  Skipping install step.")
