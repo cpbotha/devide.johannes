@@ -64,11 +64,15 @@ class ExposureRender(InstallPackage):
                 "-DBUILD_SHARED_LIBS=ON " \
                 "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                 "-DCMAKE_INSTALL_PREFIX=%s " \
+                "-DPYTHON_INCLUDE_DIR=%s " \
+                "-DPYTHON_LIBRARY=%s " \
                 "-DQT_MOC_EXECUTABLE=%s " \
                 "-DQT_QMAKE_EXECUTABLE=%s " \
                 "-DQT_UIC_EXECUTABLE=%s " \
                 "-DVTK_DIR:PATH=%s" \
                                 % (self.inst_dir,
+                                   config.PYTHON_INCLUDE_PATH,
+                                   config.PYTHON_LIBRARY,
                                    QT_MOC_EXECUTABLE,
                                    QT_QMAKE_EXECUTABLE,
                                    QT_UIC_EXECUTABLE,
