@@ -169,7 +169,6 @@ def main():
                 'VTK', 
                 'IPython', 
                 'VTKTUDOSS', 
-                'VTKDEVIDE', 
                 'ITK', 
                 'SWIG',
                 'CableSwig',
@@ -179,6 +178,7 @@ def main():
                 'ITKTUDOSS',
                 'GDCM',  
                 'DeVIDE',
+                'VTKDEVIDE', 
                 'SetupEnvironment', 
                 ]
 
