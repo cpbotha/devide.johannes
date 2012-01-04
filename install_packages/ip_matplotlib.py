@@ -167,9 +167,6 @@ class matplotlib(InstallPackage):
             shutil.rmtree(matplotlib_instdir)
 
     def get_installed_version(self):
-        if WIN64:
-            return "No numpy on Win64."
-
         import matplotlib
         return matplotlib.__version__
 
