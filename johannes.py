@@ -161,25 +161,25 @@ def main():
         #
         ip_names = [
                 'pip',
-                'NumPy', 
+                'NumPy',
                 'WXPython',
-                'matplotlib', 
-                'CMake', 
+                'matplotlib',
+                'CMake',
                 'DCMTK',
-                'VTK', 
-                'IPython', 
-                'VTKTUDOSS', 
-                'ITK', 
+                'VTK56',
+                'IPython',
+                'VTKTUDOSS',
+                'ITK',
                 'SWIG',
                 'CableSwig',
                 'WrapITK',
-                'ItkVtkGlue', 
-                'itkPyBuffer', 
+                'ItkVtkGlue',
+                'itkPyBuffer',
                 'ITKTUDOSS',
-                'GDCM',  
+                'GDCM',
                 'DeVIDE',
-                'VTKDEVIDE', 
-                'SetupEnvironment', 
+                'VTKDEVIDE',
+                'SetupEnvironment'
                 ]
 
 
