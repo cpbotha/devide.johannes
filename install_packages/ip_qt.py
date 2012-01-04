@@ -95,13 +95,7 @@ class Qt(InstallPackage):
         
         # Just copy the bin folder
         shutil.copytree(config.QT_BUILD_BIN, config.QT_BIN)
-        
-    def clean_build(self):
-        # nuke the build dir, the source dir is pristine
-        utils.output("Removing build dir.")
-        if os.path.exists(self.build_dir):
-            shutil.rmtree(self.build_dir)
-        
+    
     def get_installed_version(self):
         # This only works when PyQt is installed
         import qt 

@@ -2,6 +2,9 @@
 # All rights reserved.
 # See COPYRIGHT for details.
 
+import utils
+import os
+import shutil
 
 class InstallPackage:
 
@@ -29,12 +32,18 @@ class InstallPackage:
     def clean_build(self):
         """This method should clean up in such a way that the next build
         of this package will result in AT LEAST all steps from configure
-        and onwards.
+        and onwards. By default, it removes the build dir and calls
+        clean_install().
         """
-        pass
+        utils.output("Removing build and installation directories.")
+        if os.path.exists(self.build_dir):
+            shutil.rmtree(self.build_dir)
+        self.clean_install()
     
     def clean_install(self):
         """ Only cleans up the install directory.
         """
-        pass
+        utils.output("Removing installation directory.")
+        if os.path.exists(self.inst_dir):
+            shutil.rmtree(self.inst_dir)
     
