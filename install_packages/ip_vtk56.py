@@ -209,9 +209,10 @@ class VTK56(InstallPackage):
             idp = re.sub(r'\\','/', config.inst_dir)
             for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
                     os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
-                utils.re_sub_filter_file(
-                        [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
-                        fn)
+                if os.path.exists(fn):
+                    utils.re_sub_filter_file(
+                            [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
+                            fn)
 
 
 
