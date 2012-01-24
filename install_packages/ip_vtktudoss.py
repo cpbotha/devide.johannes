@@ -15,7 +15,7 @@ import utils
 
 BASENAME = "vtktudoss"
 SVN_REPO = "http://vtktudoss.googlecode.com/svn/trunk/"
-SVN_REL = 28 
+SVN_REL = 36 
 
 dependencies = ['VTK']
 
@@ -52,6 +52,7 @@ class VTKTUDOSS(InstallPackage):
         if not os.path.exists(self.build_dir):
             os.mkdir(self.build_dir)
 
+        
         cmake_params = "-DBUILD_SHARED_LIBS=ON " \
                        "-DBUILD_CONTRIB=ON " \
                        "-DBUILD_CONTRIB_STLIB=ON " \
@@ -59,7 +60,15 @@ class VTKTUDOSS(InstallPackage):
                        "-DCMAKE_BACKWARDS_COMPATIBILITY=2.6 " \
                        "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
-                       "-DVTK_DIR=%s" % (self.inst_dir, config.VTK_DIR)
+                       "-DPYTHON_EXECUTABLE=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_INCLUDE_PATH=%s " \
+                       "-DVTK_DIR=%s" % \
+                       (self.inst_dir, 
+                        config.PYTHON_EXECUTABLE,
+                        config.PYTHON_LIBRARY,
+                        config.PYTHON_INCLUDE_PATH,
+                        config.VTK_DIR)
 
         # we only add this under posix as a work-around to compile the
         # STLib code under g++
