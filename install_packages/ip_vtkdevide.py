@@ -43,9 +43,15 @@ class VTKDEVIDE(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DVTK_DIR=%s " \
                        "-DDCMTK_INCLUDE_PATH=%s " \
-                       "-DDCMTK_LIB_PATH=%s" % \
+                       "-DDCMTK_LIB_PATH=%s " \
+                       "-DPYTHON_EXECUTABLE=%s " \
+                       "-DPYTHON_LIBRARY=%s " \
+                       "-DPYTHON_INCLUDE_PATH=%s" % \
                        (self.inst_dir, config.VTK_DIR,
-                        config.DCMTK_INCLUDE, config.DCMTK_LIB)
+                        config.DCMTK_INCLUDE, config.DCMTK_LIB,
+                        config.PYTHON_EXECUTABLE,
+                        config.PYTHON_LIBRARY,
+                        config.PYTHON_INCLUDE_PATH)
 
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
