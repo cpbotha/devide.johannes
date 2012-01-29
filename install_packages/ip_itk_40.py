@@ -98,10 +98,13 @@ class ITK_40(InstallPackage):
                        "-DITK_USE_REVIEW=ON " \
                        "-DUSE_WRAP_ITK=ON " \
                        "-DITK_WRAP_PYTHON=ON " \
+                       "-DITK_USE_SYSTEM_SWIG=ON " \
+                       "-DSWIG_DIR=%s " \
+                       "-DSWIG_EXECUTABLE=%s " \
                        "-DITK_USE_ORIENTED_IMAGE_DIRECTION=ON " \
                        "-DITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE=ON " \
                        "_DITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY=ON " \
-                                              % (self.inst_dir,)
+                                              % (self.inst_dir, config.SWIG_DIR, config.SWIG_EXECUTABLE)
         
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
