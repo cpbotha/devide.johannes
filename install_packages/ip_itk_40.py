@@ -50,14 +50,15 @@ class ITK_40(InstallPackage):
             if ret != 0:
                 utils.error("Could not clone ITK repo.  Fix and try again.")
 
+            os.chdir(self.source_dir)
             # FIXME: error checking
             ret = os.system("git submodule update --init")
 
-            os.chdir(self.source_dir)
             ret = os.system("git checkout %s" % (GIT_TAG,))
             if ret != 0:
                 utils.error("Could not checkout ITK 4.0.0. Fix and try again.")
 
+            # FIXME: error checking
             ret = os.system("git submodule update")
 
         # also the source dir for other installpackages that wish to build
