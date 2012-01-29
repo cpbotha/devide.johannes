@@ -97,7 +97,7 @@ class ITK_40(InstallPackage):
                        "-DCMAKE_INSTALL_PREFIX=%s " \
                        "-DITK_USE_REVIEW=ON " \
                        "-DUSE_WRAP_ITK=ON " \
-                       "-DWRAP_ITK_PYTHON=ON " \
+                       "-DITK_WRAP_PYTHON=ON " \
                        "-DITK_USE_ORIENTED_IMAGE_DIRECTION=ON " \
                        "-DITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE=ON " \
                        "_DITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY=ON " \
