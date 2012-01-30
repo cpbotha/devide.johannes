@@ -10,6 +10,7 @@ import utils
 import sys
 
 BASENAME = "Insight"
+LIB_BASENAME = "ITK-4.0"
 # password part of REPO spec
 GIT_REPO = "http://itk.org/ITK.git"
 GIT_TAG = "v4.0.0"
@@ -28,9 +29,12 @@ class ITK_40(InstallPackage):
         config.ITK_INSTALL_PREFIX = os.path.join(self.inst_dir)
         # on Windows, contains the main ITK dlls
         config.ITK_BIN = os.path.join(self.inst_dir, 'bin')
-        # this is the dir with the cmake config and on *ix the main
-        # SOs (on Win these are in ITK_BIN)
-        config.ITK_DIR = os.path.join(self.inst_dir, 'lib/InsightToolkit')
+        # on *ix this contains the main SOs
+        config.ITK_LIB = os.path.join(self.inst_dir, 'lib')
+
+        # this contains the .py and python .so files
+        config.ITK_PYTHON = os.path.join(config.ITK_LIB, LIB_BASENAME, 'Python')
+
         if os.name == 'posix':
             itd = 'itkTestDriver'
         elif os.name == 'nt':
@@ -113,9 +117,10 @@ class ITK_40(InstallPackage):
             utils.error("Could not configure ITK.  Fix and try again.")
 
     def build(self):
-        
+       
+        # ITK 4.0 style!
         posix_file = os.path.join(self.build_dir,
-                'bin/libITKCommon.so')
+                'lib', '_ITKCommonPython.so')
 
         nt_file = os.path.join(self.build_dir, 'bin',
                 config.BUILD_TARGET, 
@@ -131,9 +136,9 @@ class ITK_40(InstallPackage):
                 utils.error("Error building ITK.  Fix and try again.")
 
     def install(self):
-        nt_file = os.path.join(config.ITK_BIN, 'ITKCommon.dll')
+        nt_file = os.path.join(config.ITK_PYTHON, 'ITKCommonPython.dll')
         posix_file = os.path.join(
-                config.ITK_DIR, 'libITKCommon.so')
+                config.ITK_PYTHON, '_ITKCommonPython.so')
        
         if utils.file_exists(posix_file, nt_file):
             utils.output("ITK already installed.  Skipping step.")
