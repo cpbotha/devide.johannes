@@ -8,7 +8,7 @@ import os
 import shutil
 import utils
 
-CMAKE_VER = "2.8.6"
+CMAKE_VER = "2.8.7"
 
 
 if os.name == 'posix':
