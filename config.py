@@ -75,6 +75,10 @@ VTK_LIB = ''
 VTK_SODIR = ''
 VTK_PYTHON = ''
 
+ITK_LIB = ''
+ITK_BIN = ''
+ITK_PYTHON = ''
+
 GDCM_LIB = ''
 GDCM_PYTHON = ''
 
