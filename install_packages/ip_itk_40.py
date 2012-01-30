@@ -21,6 +21,7 @@ class ITK_40(InstallPackage):
     
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
+        config.ITK_SOURCE_DIR = self.source_dir
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
@@ -31,7 +32,8 @@ class ITK_40(InstallPackage):
         config.ITK_BIN = os.path.join(self.inst_dir, 'bin')
         # on *ix this contains the main SOs
         config.ITK_LIB = os.path.join(self.inst_dir, 'lib')
-
+        # cmake configuration files
+        config.ITK_DIR = os.path.join(config.ITK_LIB, 'cmake', LIB_BASENAME)
         # this contains the .py and python .so files
         config.ITK_PYTHON = os.path.join(config.ITK_LIB, LIB_BASENAME, 'Python')
 
@@ -107,7 +109,7 @@ class ITK_40(InstallPackage):
                        "-DSWIG_EXECUTABLE=%s " \
                        "-DITK_USE_ORIENTED_IMAGE_DIRECTION=ON " \
                        "-DITK_IMAGE_BEHAVES_AS_ORIENTED_IMAGE=ON " \
-                       "_DITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY=ON " \
+                       "-DITK_USE_CENTERED_PIXEL_COORDINATES_CONSISTENTLY=ON " \
                                               % (self.inst_dir, config.SWIG_DIR, config.SWIG_EXECUTABLE)
         
         ret = utils.cmake_command(self.build_dir, self.source_dir,
