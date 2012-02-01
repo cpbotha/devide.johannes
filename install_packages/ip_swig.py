@@ -11,7 +11,7 @@ import sys
 
 # updated from 1.3.39 to see if that would fix wrapitk 3.20 issues
 # on win64
-SWIG_VER = "2.0.4"
+SWIG_VER = "2.0.1"
 BASENAME = "swig"
 BASE_URL = \
         "http://surfnet.dl.sourceforge.net/sourceforge/swig/"
