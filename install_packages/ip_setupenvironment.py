@@ -32,7 +32,7 @@ gdcm: %(gdcm_lib)s
 dcmtk: %(dcmtk_lib)s
 vtkdevide: %(vtkdevide_lib)s
 vtktudoss: %(vtktudoss_lib)s
-itk: %(itk_lib)s:%(itk_python)s
+itk: %(itk_lib)s:%(wrapitk_lib)s
 
 [env:pythonpath]
 devide: %(devide_inst_dir)s
@@ -40,7 +40,7 @@ vtk: %(vtk_python)s:%(vtk_sodir)s
 gdcm: %(gdcm_python)s:%(gdcm_lib)s
 vtkdevide: %(vtkdevide_python)s:%(vtkdevide_lib)s
 vtktudoss: %(vtktudoss_python)s:%(vtktudoss_lib)s
-itk: %(itk_python)s
+itk: %(wrapitk_python)s:%(wrapitk_lib)s
 """
 
 nt_cfg = """
@@ -55,7 +55,7 @@ vtk: %(vtk_sodir)s
 gdcm: %(gdcm_lib)s
 vtkdevide: %(vtkdevide_lib)s
 vtktudoss: %(vtktudoss_lib)s
-itk:%(itk_lib)s;%(itk_python)s
+itk:%(itk_bin)s;%(wrapitk_lib)s
 
 [env:pythonpath]
 devide: %(devide_inst_dir)s
@@ -63,7 +63,7 @@ vtk: %(vtk_python)s;%(vtk_sodir)s
 gdcm: %(gdcm_python)s;%(gdcm_lib)s
 vtkdevide: %(vtkdevide_python)s;%(vtkdevide_lib)s
 vtktudoss:%(vtktudoss_python)s;%(vtktudoss_lib)s
-itk:%(itk_python)s
+itk:%(wrapitk_python)s;%(wrapitk_lib)s
 
 """
 
@@ -133,8 +133,9 @@ class SetupEnvironment(InstallPackage):
                    'vtktudoss_lib' : config.VTKTUDOSS_LIB,
                    'vtktudoss_python' : config.VTKTUDOSS_PYTHON,
                    'itk_bin' : config.ITK_BIN,
-                   'itk_lib' : config.ITK_LIB,
-                   'itk_python' : config.ITK_PYTHON}
+                   'itk_lib' : config.ITK_DIR,
+                   'wrapitk_lib' : config.WRAPITK_LIB,
+                   'wrapitk_python' : config.WRAPITK_PYTHON}
 
         # replace all instances of the installation dir with the
         # variable $MYDIR / %MYDIR%
