@@ -15,6 +15,7 @@ SVN_REPO = \
 SVN_REL = 527
 
 BO_PATCH = "wrapitk_maint_bigobj_cl64.diff"
+VTK58_PATCH = "itk320-vtk58-wrapitk.diff"
 
 dependencies = ['CMake', 'ITK', 'CableSwig', 'SWIG']
 
@@ -46,6 +47,15 @@ class WrapITK(InstallPackage):
             shutil.copy(patch_src, patch_dst)
             os.chdir(self.source_dir)
             ret = os.system("%s -p0 < %s" % (config.PATCH, patch_dst))
+
+        patch_dst = os.path.join(config.archive_dir, VTK58_PATCH)
+        if not os.path.exists(patch_dst):
+            utils.output("Applying PATCH: wrapitk / itk320 VTK58 patch")
+            patch_src = os.path.join(config.patches_dir, VTK58_PATCH)
+            shutil.copy(patch_src, patch_dst)
+            os.chdir(self.source_dir)
+            ret = os.system("%s -p0 < %s" % (config.PATCH, patch_dst))
+
 
     def unpack(self):
         # no unpack step
