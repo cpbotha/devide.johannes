@@ -23,7 +23,7 @@ VTK_BASE_VERSION = "vtk-5.8"
 #    by making use of a special output window class
 # 3. gives up the GIL around all VTK calls.  This is also necessary
 #    for 2 not to deadlock on multi-cores.
-EXC_PATCH = "pyvtk561_tryexcept_and_pyexceptions.diff"
+EXC_PATCH = "pyvtk580_tryexcept_and_pyexceptions.diff"
 
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
@@ -42,8 +42,8 @@ class VTK58(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
-        self.exc_patch_filename = os.path.join(config.patches_dir,
-                                               EXC_PATCH)
+        self.exc_patch_src = os.path.join(config.patches_dir, EXC_PATCH)
+        self.exc_patch_dst = os.path.join(config.archive_dir, EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.patches_dir,
                                                  VTKPRPRTY_PATCH)
 
@@ -92,15 +92,19 @@ class VTK58(InstallPackage):
                 utils.error("Could not checkout VTK v5.6.1. Fix and try again.")
 
 
-            # # EXC PATCH
-            # utils.output("Applying EXC patch")
-            # os.chdir(self.source_dir)
-            # # default git-generated patch, so needs -p1
-            # ret = os.system(
-                # "%s -p1 < %s" % (config.PATCH, self.exc_patch_filename))
-            # if ret != 0:
-                # utils.error(
-                    # "Could not apply EXC patch.  Fix and try again.")
+        if not os.path.exists(self.exc_patch_dst):
+            utils.output("Applying EXC patch")
+            # we do this copy so we can see if the patch has been done yet or not
+            shutil.copyfile(self.exc_patch_src, self.exc_patch_dst)
+
+            os.chdir(self.source_dir)
+            # default git-generated patch, so needs -p1
+            ret = os.system(
+                "%s -p1 < %s" % (config.PATCH, self.exc_patch_dst))
+
+            if ret != 0:
+                utils.error(
+                    "Could not apply EXC patch.  Fix and try again.")
 
             # # VTKPRPRTY PATCH
             # utils.output("Applying VTKPRPRTY patch")
