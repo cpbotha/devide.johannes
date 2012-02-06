@@ -25,7 +25,8 @@ Getting johannes to build everything on Windows:
   on http://math.nist.gov/oommf/software-patchsets/patch_on_Windows7.html
   to fix. The howto recommends installing the manifest IN the patch.exe
   binary, it could already be sufficient just to store the patch.exe.manifest
-  in the same folder as patch.exe.
+  in the same folder as patch.exe. The easiest solution is to put patch.exe
+  somewhere other than Program Files.
 * Get and install the NSIS installer builder from [3].  Put its install
   directory on your system PATH.
 * Visual Studio 2008: Make sure the latest service pack installed, SP1
