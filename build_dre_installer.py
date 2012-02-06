@@ -274,24 +274,6 @@ def windows_prereq_check():
             '%s /version' % (MAKE_NSIS,),
             '^(v[0-9\.]+)$')
 
-    # now check that setuptools is NOT installed (it screws up
-    # everything on Windows)
-    try:
-        import setuptools
-    except ImportError:
-        # this is what we want
-        print PPF, 'setuptools not found. Good!'
-        sut_v = True
-    else:
-        print PPF, """setuptools is installed.
-
-setuptools will break the DeVIDE dist build.  Please uninstall by doing:
-\Python25\Scripts\easy_install -m setuptools
-del \Python25\Lib\site-packages\setuptools*.*
-You can reinstall later by using ez_setup.py again.
-"""
-        sut_v = False
-
     # check that the user has put the correct vcredist_[].exe in the
     # archive dir
     if os.path.exists(os.path.join(
@@ -306,7 +288,7 @@ the johannes archive directory.
 """
 
 
-    return v and sut_v and vcr
+    return v and vcr
 
 
 
