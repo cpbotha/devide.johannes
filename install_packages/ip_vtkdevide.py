@@ -9,20 +9,33 @@ import shutil
 import utils
 
 BASENAME = "vtkdevide"
+HG_REPO = "https://code.google.com/p/devide.%s/" % (BASENAME,)
+# this should be the same release as johannes and the rest of devide
+CHANGESET_ID = config.VTKDEVIDE_CHANGESET_ID
 
-dependencies = ['VTK', 'DeVIDE']
+
+dependencies = ['VTK']
 
 class VTKDEVIDE(InstallPackage):
     
     def __init__(self):
-        self.source_dir = os.path.join(config.DEVIDE_SRC_DIR, BASENAME)
+        self.source_dir = os.path.join(config.archive_dir, BASENAME)
         self.build_dir = os.path.join(config.build_dir, '%s-build' %
                                       (BASENAME,))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
 
     def get(self):
-        if not os.path.exists(self.source_dir):
-            utils.error("Couldn't find vtkdevide source dir. Build DeVIDE package first.")
+        if os.path.exists(self.source_dir):
+            utils.output("vtkdevide already checked out, skipping step.")
+
+        else:
+            os.chdir(config.archive_dir)
+            ret = os.system("%s clone %s -u %s %s" % (config.HG, HG_REPO, CHANGESET_ID, BASENAME))
+            if ret != 0:
+                utils.error("Could not hg clone vtkdevide.  "
+                            "Fix and try again.")
+
+
 
     def unpack(self):
         # no unpack step
