@@ -34,8 +34,6 @@ class DeVIDE(InstallPackage):
             utils.output("DeVIDE already checked out, skipping step.")
 
         else:
-            # with the new setup, this checkout has SUBDIRECTORIES
-            # devide, dre and vtkdevide!
             os.chdir(config.archive_dir)
             ret = os.system("%s clone %s -u %s" % (config.HG, HG_REPO, CHANGESET_ID))
             if ret != 0:
@@ -49,8 +47,8 @@ class DeVIDE(InstallPackage):
             # not stamped. We want the DeVIDE version number in the
             # shipping software to reflect the johannes version that
             # builds it all.
-            utils.output("Modifying DeVIDE version to reflect that of johannes.")
-            devide_py = os.path.join(self.source_dir, 'devide', 'devide.py')
+            utils.output("Modifying DeVIDE version.")
+            devide_py = os.path.join(self.source_dir, 'devide.py')
             # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
             # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
             # "$JOHANNES_REL") 
@@ -59,10 +57,9 @@ class DeVIDE(InstallPackage):
             # we have config.DEVIDE_CHANGESET_ID
             # and we could get the changeset id of this johannes checkout as well.
             
-            #utils.re_sub_filter_file(
-            #    [('(DEVIDE_VERSION\s*=.*)SVN_REVISION(.*)', '\\1"%s"\\2' %
-            #      (config.JOHANNES_REL,))],
-            #    devide_py)
+            utils.re_sub_filter_file(
+                [('(VERSION\s*=\s*)\"(.*)\"', '\\1"%s"' % (config.DEVIDE_DATESTR,))],
+                devide_py)
 
     def unpack(self):
         """No unpack step.
@@ -76,7 +73,7 @@ class DeVIDE(InstallPackage):
                 'DeVIDE already present in inst dir.  Skipping step.')
             return
 
-        shutil.copytree(os.path.join(self.source_dir, 'devide'), self.inst_dir)
+        shutil.copytree(self.source_dir, self.inst_dir)
 
 
 
