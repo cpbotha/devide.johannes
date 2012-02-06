@@ -12,10 +12,9 @@ import utils
 dependencies = ['DeVIDE']
 
 DRE_BASENAME = "dre"
-#DRE_SVN_REPO = "http://devide.googlecode.com/svn/trunk/" + DRE_BASENAME
+HG_REPO = "https://code.google.com/p/devide.%s/" % (DRE_BASENAME,)
 # this should be the same release as johannes and the rest of devide
-#DRE_SVN_REL = config.DEVIDE_REL
-
+CHANGESET_ID = config.DRE_CHANGESET_ID
 
 posix_cfg = """
 # DRE config written by johannes build system
@@ -70,8 +69,7 @@ itk:%(wrapitk_python)s;%(wrapitk_lib)s
 class SetupEnvironment(InstallPackage):
 
     def __init__(self):
-        self.dre_src_dir = os.path.join(
-                config.DEVIDE_SRC_DIR, DRE_BASENAME)
+        self.dre_src_dir = os.path.join(config.archive_dir, DRE_BASENAME)
 
         self.dreams_dest_dir = os.path.join(
                 config.inst_dir, 'dreams')
@@ -83,17 +81,31 @@ class SetupEnvironment(InstallPackage):
 
         if os.name == 'nt':
             shfn = 'dre.cmd'
+            shpyfn = 'drepython.cmd'
         else:
             shfn = 'dre'
+            shpyfn = 'drepython'
 
         self.dresh_src = os.path.join(
                 self.dre_src_dir, 'core', shfn)
+        self.dreshpy_src = os.path.join(
+                self.dre_src_dir, 'core', shpyfn)
         self.dresh_dest = os.path.join(
                 config.inst_dir, shfn)
+        self.dreshpy_dest = os.path.join(
+                config.inst_dir, shpyfn)
 
     def get(self):
-        if not os.path.exists(self.dre_src_dir):
-            utils.error("Couldn't find DRE source dir. Has the DeVIDE package been built?")
+        if os.path.exists(self.dre_src_dir):
+            utils.output("DRE already checked out, skipping step.")
+
+        else:
+            os.chdir(config.archive_dir)
+            ret = os.system("%s clone %s -u %s %s" % (config.HG, HG_REPO, CHANGESET_ID, DRE_BASENAME))
+            if ret != 0:
+                utils.error("Could not hg clone DRE.  "
+                            "Fix and try again.")
+
 
     def install(self):
 
@@ -106,18 +118,16 @@ class SetupEnvironment(InstallPackage):
                     self.dreams_dest_dir)
             utils.output('Copied %s.' % (self.dreams_dest_dir,))
 
-        if os.path.exists(self.drepy_dest):
-            utils.output('%s already present.' % (self.drepy_dest,))
-        else:
-            shutil.copy2(self.drepy_src, self.drepy_dest)
-            utils.output('Copied %s.' % (self.drepy_dest,))
+        driver_paths = ((self.drepy_src, self.drepy_dest), (self.dresh_src, self.dresh_dest),
+                        (self.dreshpy_src, self.dreshpy_dest))
 
-        if os.path.exists(self.dresh_dest):
-            utils.output('%s already present.' % (self.dresh_dest,))
-        else:
-            shutil.copy2(self.dresh_src, self.dresh_dest)
-            utils.output('Copied %s.' % (self.dresh_dest,))
-
+        for d in driver_paths:
+            if os.path.exists(d[1]):
+                utils.output('%s already present.' % (d[1],))
+            else:
+                shutil.copy2(d[0], d[1])
+                utils.output('Copied %s.' % (d[1],))
+        
         vardict = {'python_binary_path' : config.python_binary_path,
                    'python_library_path' : config.python_library_path,
                    'python_scripts_path' : config.python_scripts_path,
