@@ -170,6 +170,14 @@ class SetupEnvironment(InstallPackage):
         cf.close()
         utils.output('Write DRE CFG.')
 
+        # and then we have to fix all of the shebangs that distutils sets as absolute paths!
+        if os.name == 'posix':
+            pyscripts = utils.find_files(config.python_binary_path, 
+                    '.*', exclude_pats=['python$','python[0-9]\.[0-9]$'])[0]
+            
+            for pyscript in pyscripts:
+                utils.re_sub_filter_file([('#!.*', '#!/usr/bin/env python')], pyscript)
+
 
     def get_installed_version(self):
         return None
