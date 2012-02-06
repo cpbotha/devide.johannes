@@ -359,6 +359,9 @@ def re_sub_filter_file(repls, filename):
             
     shutil.copyfile(newfilename, filename)
 
+    os.unlink(newfilename)
+    os.unlink(origfilename)
+
 def execute_in_vs_environment(post_commands, pre_commands='', communicate=''):
     """ Executes the specified commands as if from the Visual Studio 
         command prompt. "vcvarsall.bat" needs to be on the PATH for this.
