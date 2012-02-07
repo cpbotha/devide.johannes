@@ -41,12 +41,12 @@ import sys
 # which changeset of DeVIDE this johannes changeset is able to build
 # FIXME: change devide installpackage to find hg id of the johannes that
 # builds it.
-DEVIDE_CHANGESET_ID = "29f40998b95f"
+DEVIDE_CHANGESET_ID = "585cea9bf587"
 # this should be the date of the above changeset ID
 # and probably the new-style DeVIDE versioning
 # so for release: DeVIDE v11.9.16
 # for dev: DeVIDE vDEV11.9.16
-DEVIDE_DATESTR = "12.2.6"
+DEVIDE_DATESTR = "12.2.7"
 
 DRE_CHANGESET_ID = "b75e1ba9b0a6"
 VTKDEVIDE_CHANGESET_ID = "bdc8e1f7e6e6"
