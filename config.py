@@ -41,7 +41,7 @@ import sys
 # which changeset of DeVIDE this johannes changeset is able to build
 # FIXME: change devide installpackage to find hg id of the johannes that
 # builds it.
-DEVIDE_CHANGESET_ID = "585cea9bf587"
+DEVIDE_CHANGESET_ID = "5695faaaa814"
 # this should be the date of the above changeset ID
 # and probably the new-style DeVIDE versioning
 # so for release: DeVIDE v11.9.16
@@ -49,7 +49,7 @@ DEVIDE_CHANGESET_ID = "585cea9bf587"
 DEVIDE_DATESTR = "12.2.7"
 
 DRE_CHANGESET_ID = "b75e1ba9b0a6"
-VTKDEVIDE_CHANGESET_ID = "bdc8e1f7e6e6"
+VTKDEVIDE_CHANGESET_ID = "bdc8e1f9e6e6"
 
 BUILD_TARGET = 'RelWithDebInfo'
 
@@ -146,7 +146,6 @@ def init(wd, the_profile):
     global JOHANNES_REVISION_ID
     status, output = get_status_output("%s id %s" % (HG, johannes_dir))
     JOHANNES_REVISION_ID = output.split(' ')[0]
-    print JOHANNES_REVISION_ID
 
     global profile
     profile = the_profile

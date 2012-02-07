@@ -40,25 +40,18 @@ class DeVIDE(InstallPackage):
                 utils.error("Could not hg clone DeVIDE.  "
                             "Fix and try again.")
 
-            # now modify the version unpacked devide.py
-            # we have to do this, because we've checked out SVN_REL
-            # which is DEVIDE_REL which is JOHANNES_REL, but devide's
-            # built-in SVN version could be different, because it was
-            # not stamped. We want the DeVIDE version number in the
-            # shipping software to reflect the johannes version that
-            # builds it all.
+            # inject version information into devide.py
             utils.output("Modifying DeVIDE version.")
             devide_py = os.path.join(self.source_dir, 'devide.py')
-            # we want to change DEVIDE_VERSION = '%s.%s' % (VERSION,
-            # SVN_REVISION) to DEVIDE_VERSION = '%s.%s' % (VERSION,
-            # "$JOHANNES_REL") 
-            
-            # FIXME: update for mercurial setup
-            # we have config.DEVIDE_CHANGESET_ID
-            # and we could get the changeset id of this johannes checkout as well.
-            
+           
+            status, output = utils.get_status_output("%s id %s" % (config.HG, self.source_dir))
+            devide_revision_id = output.split(' ')[0]
+
             utils.re_sub_filter_file(
-                [('(VERSION\s*=\s*)\"(.*)\"', '\\1"%s"' % (config.DEVIDE_DATESTR,))],
+                [('(VERSION\s*=\s*)\"(.*)\"', '\\1"%s"' % (config.DEVIDE_DATESTR,)),
+                 ('(DEVIDE_REVISION_ID\s*=\s*)\"(.*)\"', '\\1"%s"' % (devide_revision_id,)),
+                 ('(JOHANNES_REVISION_ID\s*=\s*)\"(.*)\"', '\\1"%s"' % (config.JOHANNES_REVISION_ID,)),
+                    ],
                 devide_py)
 
     def unpack(self):
