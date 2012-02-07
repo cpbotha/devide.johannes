@@ -53,6 +53,9 @@ VTKDEVIDE_CHANGESET_ID = "bdc8e1f7e6e6"
 
 BUILD_TARGET = 'RelWithDebInfo'
 
+# will be filled in by init()
+JOHANNES_REVISION_ID = "NOT SET"
+
 
 # the following variables are written by various InstallPackages
 ####################################################################
@@ -109,6 +112,18 @@ DEVIDE_INST_DIR = ''
 
 #######################################################################
 
+# UTILITY method (also available in utils.py which we don't want to import)
+def get_status_output(command):
+    """Run command, return output of command and exit code in status.
+    In general, status is None for success and 1 for command not
+    found.
+    """
+
+    ph = os.popen(command)
+    output = ph.read()
+    status = ph.close()
+    return (status, output)
+
 
 
 def init(wd, the_profile):
@@ -126,6 +141,12 @@ def init(wd, the_profile):
     johannes_dir = os.path.dirname(__file__)
     patches_dir = os.path.join(johannes_dir, 'patches')
     ip_dir = os.path.join(johannes_dir, 'install_packages')
+    
+    # get revision ID
+    global JOHANNES_REVISION_ID
+    status, output = get_status_output("%s id %s" % (HG, johannes_dir))
+    JOHANNES_REVISION_ID = output.split(' ')[0]
+    print JOHANNES_REVISION_ID
 
     global profile
     profile = the_profile
