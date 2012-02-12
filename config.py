@@ -145,7 +145,8 @@ def init(wd, the_profile):
     # get revision ID
     global JOHANNES_REVISION_ID
     status, output = get_status_output("%s id %s" % (HG, johannes_dir))
-    JOHANNES_REVISION_ID = output.split(' ')[0]
+    # strip is in case we have single token to get rid of \n
+    JOHANNES_REVISION_ID = output.split(' ')[0].strip()
 
     global profile
     profile = the_profile

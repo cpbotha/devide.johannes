@@ -45,7 +45,10 @@ class DeVIDE(InstallPackage):
             devide_py = os.path.join(self.source_dir, 'devide.py')
            
             status, output = utils.get_status_output("%s id %s" % (config.HG, self.source_dir))
-            devide_revision_id = output.split(' ')[0]
+            # on linux, hg id gives "changeset_id tip" (e.g.)
+            # on windows build image, only "changeset_id", so we have
+            # to remove EOL with strip()
+            devide_revision_id = output.split(' ')[0].strip()
 
             utils.re_sub_filter_file(
                 [('(VERSION\s*=\s*)\"(.*)\"', '\\1"%s"' % (config.DEVIDE_DATESTR,)),
