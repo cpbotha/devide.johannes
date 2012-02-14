@@ -51,6 +51,7 @@ cat > $DEPS_TEST_FN << EOF
 #include <zlib.h>
 #include <X11/Intrinsic.h>
 #include <GL/glu.h>
+#include <openssl/ssl.h>
 int main(void) {}
 EOF
 
