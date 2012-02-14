@@ -58,6 +58,7 @@ posix_deps_test_c_file = """
 #include <zlib.h>
 #include <X11/Intrinsic.h>
 #include <GL/glu.h>
+#include <openssl/ssl.h>
 int main(void) {}
 """
 
