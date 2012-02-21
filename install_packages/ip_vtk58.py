@@ -218,7 +218,8 @@ class VTK58(InstallPackage):
             # harmless
             idp = re.sub(r'\\','/', config.inst_dir)
             for fn in [os.path.join(config.VTK_DIR, 'VTKConfig.cmake'),
-                    os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake')]:
+                    os.path.join(config.VTK_DIR, 'VTKLibraryDepends.cmake'),
+                    os.path.join(config.VTK_DIR, 'VTKTargets-relwithdebinfo.cmake')]:
                 if os.path.exists(fn):
                     utils.re_sub_filter_file(
                             [(idp,  '${VTK_INSTALL_PREFIX}/..')], 
