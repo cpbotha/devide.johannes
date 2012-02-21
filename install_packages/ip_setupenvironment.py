@@ -64,6 +64,9 @@ vtkdevide: %(vtkdevide_python)s;%(vtkdevide_lib)s
 vtktudoss:%(vtktudoss_python)s;%(vtktudoss_lib)s
 itk:%(wrapitk_python)s;%(wrapitk_lib)s
 
+[env:pythonhome]
+python: %(python_binary_path)s
+
 """
 
 class SetupEnvironment(InstallPackage):
