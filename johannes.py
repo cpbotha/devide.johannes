@@ -41,6 +41,9 @@ Options are as follows:
                          or in the johannes.cfg project file.
 --no-prereq-check      : do NOT do prerequisites check.
 -v, --versions         : display installed versions of all packages.
+-t, --target           : Specify a package to execute the 'mode' action on.
+                         All build stages are performed on the non-target 
+                         packages. Does not work for auto-deps.
 
 You can also specify project-specific options (for example specifying
 install packages) in a johannes.cfg file placed at the top-level
@@ -187,11 +190,12 @@ def main():
 
         try:
             optlist, args = getopt.getopt(
-                sys.argv[1:], 'hm:p:dw:v',
+                sys.argv[1:], 'hm:p:dw:vt:',
                 ['help', 'mode=', 'install-packages=', 
                     'auto-deps',
                     'working-dir=',
-                    'no-prereq-check', 'versions'])
+                    'no-prereq-check', 'versions'
+                    'target='])
 
         except getopt.GetoptError,e:
             usage()
@@ -204,6 +208,7 @@ def main():
         no_prereq_check = False
         ip_names_cli = False
         auto_deps = False
+        target = None
         
         for o, a in optlist:
             if o in ('-h', '--help'):
@@ -236,6 +241,9 @@ def main():
 
             elif o in ('-v', '--versions'):
                 mode = 'show_versions'
+                
+            elif o in ('-t', '--target'):
+                target = a
 
         # we need at LEAST a working directory
         if not working_dir:
@@ -298,6 +306,12 @@ def main():
             else:
                 utils.output(
                         'Posix prerequisites all good.', 70, '-')
+
+        # In case of a target, check whether the target is actually specified
+        # in the ip list (does not check dependencies in case of auto-deps)
+        if target != None:
+            if not target in ip_names:
+                utils.error("Target '%s' was not found in the install package list." % target)
 
         # we're going to do some imports, so let's set the sys.path
         # correctly.
@@ -370,7 +384,6 @@ def main():
             print "\n".join(deps_errors)
             utils.error("Unsatisfied dependencies. Fix and try again.")
 
-        
         def get_stage(ip, n):
             utils.output("%s :: get()" % (n,), rpad, rpad_char)
             ip.get()
@@ -414,6 +427,12 @@ def main():
             if not n in ip_names:
                 # n is a dependency, so do everything
                 utils.output("%s (DEPENDENCY)" % (n,), 70, '#')
+                all_stages(ip, n)
+            
+            elif target != None and target != n:
+                # A target has been specified (but this ip is not it),
+                # so do everything for all other install packages we encounter.
+                utils.output("%s (NON-TARGET)" % (n,), 70, '#')
                 all_stages(ip, n)
             
             elif mode == 'get_only':
