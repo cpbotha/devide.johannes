@@ -9,6 +9,7 @@ import getopt
 import os
 import sys
 import utils
+import time
 
 def usage():
     message = """
@@ -143,6 +144,8 @@ def main():
         usage()
 
     else:
+        start_time = time.time()
+
         rpad = 60
         rpad_char = '+'
 
@@ -486,6 +489,10 @@ def main():
                     utils.error("Mode not found: %s" % (mode,))
                 
         if mode != 'show_versions':
+            # Print elapsed time and final message
+            t = time.time() - start_time
+            utils.output("Execution time (h:mm:ss): %d:%02d:%02d" %
+                                    (int(t/3600), int((t%3600)/60), t%60))
             utils.output("Now please read the RESULTS section of README.txt!")
 
 if __name__ == '__main__':
