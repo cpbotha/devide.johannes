@@ -1,0 +1,33 @@
+Index: itkVoronoiSegmentationImageFilterBase.h
+===================================================================
+RCS file: /cvsroot/Insight/Insight/Code/Algorithms/itkVoronoiSegmentationImageFilterBase.h,v
+retrieving revision 1.30
+diff -u -r1.30 itkVoronoiSegmentationImageFilterBase.h
+--- itkVoronoiSegmentationImageFilterBase.h	23 Apr 2009 03:53:37 -0000	1.30
++++ itkVoronoiSegmentationImageFilterBase.h	3 Aug 2009 20:26:43 -0000
+@@ -169,6 +169,7 @@
+   VoronoiPointer GetVoronoiDiagram(void)
+     { return m_WorkingVD; }
+     
++#if !defined(CABLE_CONFIGURATION)  // generates invalid iterator instantiation with msvc
+   /** Seeds positions are randomly set. 
+    * If you need to set seeds position then use the SetSeeds method
+    * after the InitializeSegment method .  */ 
+@@ -177,6 +178,17 @@
+     m_NumberOfSeeds = num; 
+     m_WorkingVD->SetSeeds(num,begin); 
+     } 
++#endif
++
++  /** Seeds positions are randomly set. 
++   * If you need to set seeds position then use the SetSeeds method
++   * after the InitializeSegment method .  */ 
++  void SetSeeds(SeedsType & seeds)
++    { 
++    m_NumberOfSeeds = seeds.size();
++    typename SeedsType::iterator it = seeds.begin();
++    m_WorkingVD->SetSeeds(m_NumberOfSeeds, it); 
++    } 
+     
+   /** Get the point specified by the ID given. */
+   PointType GetSeed(int SeedID)

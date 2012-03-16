@@ -1,0 +1,57 @@
+#!/bin/sh
+
+# dummy configure file to satisfy VL-e POC requirements
+# we'll generate a Makefile with a default and install targets
+# the --prefix= value will be used, the Makefile also has to
+# use DESTDIR, i.e. package has to be installed in $(DESTDIR)
+
+usage()
+{
+    echo "Dummy configure script for VL-e DeVIDE"
+    echo "Please specify at least the --prefix."
+    exit 1
+}
+
+# default prefix
+prefix='/tmp/devide'
+
+set -- `getopt -n$0 -u --longoptions="prefix:,bindir:,sbindir:,sysconfdir:,datadir:,includedir:,libdir:,localstatedir:,mandir:,infodir:" -- "" "$@"` || usage
+[ $# -eq 1 ] && usage
+
+while [ $# -gt 0 ]
+do
+    case "$1" in
+       --prefix)   prefix=$2;shift;;
+       --bindir) bindir=$2;shift;;
+       --sbindir) shift;; # eat up all options passed by vle
+       --sysconfdir) shift;;
+       --datadir) shift;;
+       --includedir) shift;;
+       --libdir) shift;;
+       --localstatedir) shift;;
+       --mandir) shift;;
+       --infodir) shift;;
+       --)        shift;break;; # end of option processing, break out of while
+       -*)        usage;; # unrecognized -something
+       *)         break;; # anything that is not an option: break out of while
+    esac
+    shift # move on to the next argument
+done
+
+# we should have prefix now...
+
+cd `dirname $0` # go to the directory containing this script
+WORKINGDIR=`pwd`
+
+# search and replace on Makefile.in
+# all the nasty single quote / double quotes and the slashes are to ensure
+# that the slashes in the expanded directories don't confuse sed, and that
+# bash doesn't do any naughty substitutions (thanks Jorik Blaas and me)
+
+QPREFIX=`echo $prefix | sed -e 's./.\\\\/.g'`
+QWORKINGDIR=`echo $WORKINGDIR | sed -e 's./.\\\\/.g'`
+
+cat Makefile.in | \
+sed \
+-e 's/^PREFIX\s*=\s*.*$/PREFIX='"$QPREFIX"'/g' \
+-e 's/^WORKINGDIR\s*=\s*.*$/WORKINGDIR='"$QWORKINGDIR"'/g' > Makefile
