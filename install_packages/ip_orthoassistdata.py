@@ -10,12 +10,12 @@ import shutil
 import sys
 import utils
 
-BASENAME = "OrthoAssist"
-HG_REPO = "https://thomas@hg.graphics.tudelft.nl/vis/thomas/OrthoAssist"
+BASENAME = "OrthoAssistData"
+HG_REPO = "https://thomas@hg.graphics.tudelft.nl/vis/thomas/OrthoAssistData"
 
 dependencies = ['CMake','Qt','VTK58','SIP','PyQt']
                   
-class OrthoAssist(InstallPackage):
+class OrthoAssistData(InstallPackage):
     
     def __init__(self):
         self.source_dir = os.path.join(config.archive_dir, BASENAME)
@@ -24,7 +24,7 @@ class OrthoAssist(InstallPackage):
     
     def get(self):
         if os.path.exists(self.source_dir):
-            utils.output("Ortho Assist already checked out, skipping step.")
+            utils.output("Ortho Assist Data already checked out, skipping step.")
 
         else:
             utils.goto_archive()
@@ -32,12 +32,12 @@ class OrthoAssist(InstallPackage):
             ret = os.system("hg clone %s %s" % (HG_REPO, BASENAME))
 			
             if ret != 0:
-                utils.error("Could not clone Ortho Assist repository.  Fix and try again.")
+                utils.error("Could not clone Ortho Assist Data repository. Fix and try again.")
             
             os.chdir(self.source_dir)
             ret = os.system("hg update")
             if ret != 0:
-                utils.error("Could not update Ortho Assist. Fix and try again.")
+                utils.error("Could not update Ortho Assist Data. Fix and try again.")
 
     def configure(self):
         pass
