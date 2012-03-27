@@ -3,6 +3,7 @@
 # this will build and install python in the johannes working directory
 # copyright cpbotha.net
 
+echo "Since 2012-03-27 this shell script is deprecated in favour of bootstrap.py"
 PYVER=2.7.2
 
 # change this to 0 if you DON'T want this script to do its

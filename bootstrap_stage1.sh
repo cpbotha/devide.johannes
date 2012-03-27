@@ -3,6 +3,7 @@
 # this will create the working directory tree and download the python tarball
 # copyright cpbotha.net
 
+echo "Since 2012-03-27 this shell script is deprecated in favour of bootstrap.py"
 PYVER="2.7.2"
 
 if [ -z $1 ]; then
