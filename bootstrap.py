@@ -1,15 +1,8 @@
 # python script for bootstrapping the johannes DeVIDE build system
 #
-# NB:
-# 1. on unix systems that don't have Python installed, you should rather
-# use bootstrap_stage1.sh and bootstrap_stage2.sh, these are
-# shell-based alternatives to bootstrap.py
-# 2. on windows systems, you have no choice: you need to have a system
-# python installed to run this bootstrap.py script.
-# 3. johannes.py will be run by the python that is locally built by
-# EITHER bootstrap.py OR bootstrap_stage{1,2}.sh
 
 PYVER_STR = '2.7.2'
+PYVER_STR2 = '2.7'
 
 import config
 import getopt
@@ -237,6 +230,16 @@ See error above.  Please fix and try again.
         ret = os.system('%s install' % ('make',))
         if ret != 0:
             utils.error('Python build error.')
+            
+        # we want for example inst/python/lib/python2.7/config/Makefile
+        pyconfig_makefile = os.path.join(
+            config.inst_dir, 'python', 'lib', 
+            'python%s' % (PYVER_STR2,), 'config', 'Makefile')
+        # it hard-codes the absolute python home in the Makefile, we replace this
+        # with something that will work when "dre shell" is active.            
+        utils.re_sub_filter_file(
+            [('^prefix\s*=.*$','prefix = ${DRE_TOP}/python')], 
+            pyconfig_makefile)
 
         # this means we have to test for dependencies and then build
         # Python.
