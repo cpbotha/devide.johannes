@@ -5,6 +5,7 @@
 import utils
 import os
 import shutil
+import types
 
 class InstallPackage:
 
@@ -46,4 +47,13 @@ class InstallPackage:
         utils.output("Removing installation directory.")
         if os.path.exists(self.inst_dir):
             shutil.rmtree(self.inst_dir)
+    
+    def list(self):
+        """ Lists the methods of this install package.
+           (Sometimes I forget what the exact names are)
+        """
+        atts = dir(self)
+        for att in atts:
+            if type(getattr(self, att)) == types.MethodType:
+                utils.output(att)
     
