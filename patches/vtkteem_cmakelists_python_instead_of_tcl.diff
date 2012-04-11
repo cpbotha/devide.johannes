@@ -1,0 +1,38 @@
+diff vtkteem\CMakeLists.txt CMakeLists.txt -u
+
+--- CMakeLists.txt
++++ CMakeLists.txt
+@@ -79,8 +79,9 @@
+ # --------------------------------------------------------------------------
+ # Wrapping
+ 
+-include("${VTK_CMAKE_DIR}/vtkWrapTcl.cmake")
+-vtk_wrap_tcl3(vtkTeem vtkTeem_TCL_SRCS "${vtkTeem_SRCS}" "")
++include("${VTK_CMAKE_DIR}/vtkWrapPython.cmake")
++INCLUDE_DIRECTORIES("${VTK_PYTHON_INCLUDE_DIR}")
++vtk_wrap_python3(vtkTeem vtkTeem_Python_SRCS "${vtkTeem_SRCS}" "")
+ 
+ # --------------------------------------------------------------------------
+ # Build the library
+@@ -88,7 +89,7 @@
+ set(lib_name vtkTeem)
+ add_library(${lib_name} 
+   ${vtkTeem_SRCS} 
+-  ${vtkTeem_TCL_SRCS} 
++  ${vtkTeem_Python_SRCS} 
+   )
+ 
+ # after teem 1.9, all the teem libraries are groups in one big libteem.so
+@@ -105,9 +106,9 @@
+ target_link_libraries(${lib_name} 
+   vtkCommon
+   vtkFiltering
+-  vtkImagingTCL
+-  vtkIOTCL
+-  vtkGraphicsTCL
++  vtkImagingPythonD
++  vtkIOPythonD
++  vtkGraphicsPythonD
+   ${Teem_LIBRARIES}
+   )
+ 

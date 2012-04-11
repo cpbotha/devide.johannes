@@ -1,0 +1,18 @@
+# notes building vtk 5.6.1
+# clone the repo
+git clone git://vtk.org/VTK.git VTK
+# checkout the correct tag
+cd VTK
+git checkout v5.6.1
+# you can list tags with git tag -l
+# my new exceptions patch
+patch -p0 < pyvtk561_tryexcept_and_pyexceptions.diff
+# property patch
+cd Rendering
+patch -p0 < vtkProperty_PyShaderVar.diff
+
+
+# notes on building itk 3.20
+might need patch ITK to break up ImageToImageFilter even further:
+http://lists.debian.org/debian-devel/2011/02/msg00188.html
+
