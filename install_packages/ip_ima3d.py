@@ -68,9 +68,10 @@ class IMA3d(InstallPackage):
                 "Could not configure %s.  Fix and try again." % BASENAME)   
     
     def build(self):
-        bin_path = os.path.join(self.build_dir,'src','multisurfaces','run-particle-system','optimize-particle-system.dir')
+        posix_file = os.path.join(self.build_dir,'bin','RelWithDebInfo','volume.o')
+        nt_file    = os.path.join(self.build_dir,'bin','RelWithDebInfo','volume.lib')
 
-        if utils.file_exists(bin_path, bin_path):    
+        if utils.file_exists(posix_file, nt_file):    
             utils.output("%s already built.  Skipping build step." % BASENAME)
 
         else:
@@ -79,6 +80,20 @@ class IMA3d(InstallPackage):
 
             if ret != 0:
                 utils.error("Could not build %s.  Fix and try again." % BASENAME)
-    
+                
+    def install(self):
+        if os.path.exists(
+            os.path.join(self.inst_dir, 'bin', 
+                'ima3d' + config.EXE_EXT)):
+            utils.output("vtkTeem already installed.  Skipping step.")
+
+        else:
+            os.chdir(self.build_dir)
+            ret = utils.make_command('IMA3d.sln', install=True)
+
+            if ret != 0:
+                utils.error(
+                    "Could not install %s. Fix and try again." % BASENAME) 
+                    
     def get_installed_version(self):
         return "N/A"
