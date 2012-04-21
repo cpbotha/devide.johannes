@@ -1,4 +1,4 @@
-# Copyright (c) Francois Malan, TU Delft.
+# Copyright (c) Francois Malan & Christian Kehl, TU Delft.
 # All rights reserved.
 # See COPYRIGHT for details.
 
@@ -124,5 +124,5 @@ class vtkTeem(InstallPackage):
             shutil.rmtree(self.inst_dir)
 
     def get_installed_version(self):
-        return "NA"
+        return "revision %s" % REVISION_NUMBER
 

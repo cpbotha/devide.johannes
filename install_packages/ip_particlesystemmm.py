@@ -1,4 +1,4 @@
-# Copyright (c) Francois Malan, TU Delft.
+# Copyright (c) Francois Malan & Christian Kehl, TU Delft.
 # All rights reserved.
 # See COPYRIGHT for details.
 

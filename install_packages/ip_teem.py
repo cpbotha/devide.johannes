@@ -1,4 +1,4 @@
-# Copyright (c) Francois Malan & Peter Kok, TU Delft.
+# Copyright (c) Francois Malan, Christian Kehl & Peter Kok, TU Delft.
 # All rights reserved.
 # See COPYRIGHT for details.
 
@@ -107,5 +107,5 @@ class Teem(InstallPackage):
             shutil.rmtree(self.inst_dir)
 
     def get_installed_version(self):
-        return "NA"
+        return "version %s" % VERSION
 
