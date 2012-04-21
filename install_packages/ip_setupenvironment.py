@@ -8,8 +8,7 @@ import os
 import shutil
 import utils
 
-# this depends on the DeVIDE checkout, because it's built from the same source
-dependencies = ['DeVIDE']
+dependencies = []
 
 DRE_BASENAME = "dre"
 HG_REPO = "https://code.google.com/p/devide.%s/" % (DRE_BASENAME,)

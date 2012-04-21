@@ -39,16 +39,17 @@ import sys
 
 # this is manually updated by the DeVIDE developers to indicate
 # which changeset of DeVIDE this johannes changeset is able to build
-# FIXME: change devide installpackage to find hg id of the johannes that
-# builds it.
-DEVIDE_CHANGESET_ID = "37b983aa76e4"
+DEVIDE_CHANGESET_ID = "5bd1581ebcab"
 # this should be the date of the above changeset ID
 # and probably the new-style DeVIDE versioning
 # so for release: DeVIDE v11.9.16
 # for dev: DeVIDE vDEV11.9.16
-DEVIDE_DATESTR = "12.2.7"
+DEVIDE_DATESTR = "12.4.18"
 
-DRE_CHANGESET_ID = "b75e1ba9b0a6"
+# contains fixes for dre_top being duplicated, hence
+# breaking the pythonhome!
+DRE_CHANGESET_ID = "34c8b63b2ac9"
+
 VTKDEVIDE_CHANGESET_ID = "bdc8e1f9e6e6"
 
 BUILD_TARGET = 'RelWithDebInfo'
