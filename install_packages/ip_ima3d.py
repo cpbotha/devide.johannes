@@ -12,7 +12,7 @@ from subprocess import call
 BASENAME = "IMA3d"
 
 #The original unmodified IMA3d code excludes Christian's changes (e.g. handling .mhd files), and can be found at http://www.cs.rug.nl/~roe/software/IMA/IMA3d.tgz
-HG_REPO  = "https://hg.graphics.tudelft.nl/vis/christian/ima3d"
+HG_REPO  = "https://hg.graphics.tudelft.nl/vis/christian/IMA3d"
 
 dependencies = []
 
