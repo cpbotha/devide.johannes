@@ -89,7 +89,7 @@ class VTK58(InstallPackage):
             os.chdir(self.source_dir)
             ret = os.system("git checkout %s" % (GIT_TAG,))
             if ret != 0:
-                utils.error("Could not checkout VTK v5.6.1. Fix and try again.")
+                utils.error("Could not checkout VTK %s. Fix and try again." % (GIT_TAG,))
 
 
         if not os.path.exists(self.exc_patch_dst):
