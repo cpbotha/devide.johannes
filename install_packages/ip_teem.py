@@ -29,7 +29,7 @@ class Teem(InstallPackage):
         self.build_dir = os.path.join(config.build_dir, '%s-%s' %
                                       (BASENAME,VERSION))
         self.inst_dir = os.path.join(config.inst_dir, BASENAME)
-        config.Teem_DIR = self.inst_dir
+        config.Teem_DIR = os.path.join(self.inst_dir, 'lib', 'Teem-%s' % VERSION)
 
     def get(self):
         if os.path.exists(self.archive_path):
