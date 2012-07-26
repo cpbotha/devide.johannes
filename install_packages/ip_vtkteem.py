@@ -49,7 +49,6 @@ class vtkTeem(InstallPackage):
             shutil.copyfile(self.tcl_py_patch_src, self.tcl_py_patch_dst)        
             
             os.chdir(self.source_dir)
-            # default git-generated patch, so needs -p1
             ret = os.system(
                 "%s < %s" % (config.PATCH, TCL_PY_PATCH))
 

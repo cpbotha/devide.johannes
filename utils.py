@@ -318,6 +318,13 @@ def unpack(archive_filename):
 
         zip.close()
 
+def unpack_archive(archive_filename):
+    """Unpack given archive_filename in the archive (sources) directory.
+    """
+
+    goto_archive()
+    unpack(archive_filename)        
+
 def unpack_build(archive_filename):
     """Unpack given archive_filename in build directory.
     """

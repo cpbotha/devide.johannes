@@ -24,7 +24,7 @@ class Teem(InstallPackage):
     def __init__(self):
         self.archive_path = os.path.join(
                 config.archive_dir, ARCHIVE_NAME)
-        self.source_dir = os.path.join(config.build_dir, '%s-%s-src' %
+        self.source_dir = os.path.join(config.archive_dir, '%s-%s-src' %
                                       (BASENAME,VERSION))
         self.build_dir = os.path.join(config.build_dir, '%s-%s' %
                                       (BASENAME,VERSION))
@@ -45,7 +45,7 @@ class Teem(InstallPackage):
             return
         
         utils.output("Unpacking %s." % BASENAME)
-        utils.unpack_build(self.archive_path)
+        utils.unpack_archive(self.archive_path)
 
     def configure(self):
         if os.path.exists(
