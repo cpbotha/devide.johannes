@@ -103,23 +103,20 @@ class VispackMorphsmooth(InstallPackage):
                 utils.error("Could not build %s.  Fix and try again." % BASENAME)
 
     def install(self):
-        '''
         if os.path.exists(
             os.path.join(self.inst_dir, 'bin', 
-                'unu' + config.EXE_EXT)):
-            utils.output("teem already installed.  Skipping step.")
+                'morphsmooth' + config.EXE_EXT)):
+            utils.output("%s already installed.  Skipping step." % BASENAME)
 
         else:
             os.chdir(self.build_dir)
-            ret = utils.make_command('teem.sln', install=True)
+            ret = utils.make_command('VispackMorphsmooth.sln', install=True)
 
             if ret != 0:
                 utils.error(
-                    "Could not install teem.  Fix and try again.")
-        '''
+                    "Could not install %s.  Fix and try again." % BASENAME)
  
     def clean_build(self):
-        '''
         # nuke the build dir and install dir. The source dir is pristine
         
         utils.output("Removing build dir.")
@@ -129,7 +126,6 @@ class VispackMorphsmooth(InstallPackage):
         utils.output("Removing install dir.")
         if os.path.exists(self.inst_dir):
             shutil.rmtree(self.inst_dir)
-        '''
 
     def get_installed_version(self):
         return "version %s" % VERSION

@@ -1,8 +1,8 @@
-Only in vispack_morphsmooth: .bzr
-Only in vispack: .svn
+This fix was verified for vispack's SVN revision #52. Future revisions may break it - please check.
+
 diff -u -r vispack/apps/correspondence/CMakeLists.txt vispack_morphsmooth/apps/correspondence/CMakeLists.txt
---- vispack/apps/correspondence/CMakeLists.txt	2012-07-25 19:38:57.633561600 +0200
-+++ vispack_morphsmooth/apps/correspondence/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/apps/correspondence/CMakeLists.txt	2012-07-27 18:41:57.843408700 +0200
++++ vispack_morphsmooth/apps/correspondence/CMakeLists.txt	2012-07-27 18:34:35.036081500 +0200
 @@ -1,7 +1,7 @@
  IF(BUILD_BIOMESH3D)
  
@@ -26,8 +26,8 @@ diff -u -r vispack/apps/correspondence/CMakeLists.txt vispack_morphsmooth/apps/c
    ADD_EXECUTABLE(linear_test linear_test.cxx)
    TARGET_LINK_LIBRARIES(linear_test matrix util lapack2 lapack1 
 diff -u -r vispack/apps/correspondence/scratch/CMakeLists.txt vispack_morphsmooth/apps/correspondence/scratch/CMakeLists.txt
---- vispack/apps/correspondence/scratch/CMakeLists.txt	2012-07-25 19:38:57.476541500 +0200
-+++ vispack_morphsmooth/apps/correspondence/scratch/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/apps/correspondence/scratch/CMakeLists.txt	2012-07-27 18:41:57.367381400 +0200
++++ vispack_morphsmooth/apps/correspondence/scratch/CMakeLists.txt	2012-07-27 18:34:35.039081700 +0200
 @@ -1,7 +1,7 @@
  IF(BUILD_BIOMESH3D)
  
@@ -51,8 +51,8 @@ diff -u -r vispack/apps/correspondence/scratch/CMakeLists.txt vispack_morphsmoot
    ADD_EXECUTABLE(linear_test linear_test.cxx)
    TARGET_LINK_LIBRARIES(linear_test matrix util lapack2 lapack1 blas F77 m)
 diff -u -r vispack/apps/distance/CMakeLists.txt vispack_morphsmooth/apps/distance/CMakeLists.txt
---- vispack/apps/distance/CMakeLists.txt	2012-07-25 19:38:58.284643400 +0200
-+++ vispack_morphsmooth/apps/distance/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/apps/distance/CMakeLists.txt	2012-07-27 18:41:58.967473000 +0200
++++ vispack_morphsmooth/apps/distance/CMakeLists.txt	2012-07-27 18:34:35.042081900 +0200
 @@ -1,10 +1,10 @@
  IF(BUILD_BIOMESH3D)
  
@@ -114,8 +114,8 @@ diff -u -r vispack/apps/distance/CMakeLists.txt vispack_morphsmooth/apps/distanc
    vol 
    image 
 diff -u -r vispack/apps/tighten/CMakeLists.txt vispack_morphsmooth/apps/tighten/CMakeLists.txt
---- vispack/apps/tighten/CMakeLists.txt	2012-07-25 19:38:57.252513900 +0200
-+++ vispack_morphsmooth/apps/tighten/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/apps/tighten/CMakeLists.txt	2012-07-27 18:41:57.084365200 +0200
++++ vispack_morphsmooth/apps/tighten/CMakeLists.txt	2012-07-27 18:39:19.506352300 +0200
 @@ -1,11 +1,11 @@
  IF(BUILD_BIOMESH3D)
  
@@ -130,7 +130,7 @@ diff -u -r vispack/apps/tighten/CMakeLists.txt vispack_morphsmooth/apps/tighten/
      matrix
      vol
      image
-@@ -21,12 +21,12 @@
+@@ -21,12 +21,15 @@
    #SET(CMAKE_CXX_FLAGS -g)
  
    # Make sure the compiler can find include files from our Hellolibrary.
@@ -146,9 +146,12 @@ diff -u -r vispack/apps/tighten/CMakeLists.txt vispack_morphsmooth/apps/tighten/
 +  TARGET_LINK_LIBRARIES(morphsmooth ${Teem_LIBRARIES} matrix vol image jpeg tiff fitsio util lapack2 lapack1 blas F77 m)
  
  ENDIF(BUILD_BIOMESH3D)
++
++INSTALL(TARGETS morphsmooth
++        RUNTIME DESTINATION bin)
 diff -u -r vispack/CMakeLists.txt vispack_morphsmooth/CMakeLists.txt
---- vispack/CMakeLists.txt	2012-07-25 19:39:23.928856200 +0200
-+++ vispack_morphsmooth/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/CMakeLists.txt	2012-07-27 18:42:36.121598000 +0200
++++ vispack_morphsmooth/CMakeLists.txt	2012-07-27 18:34:35.049082300 +0200
 @@ -1,15 +1,144 @@
  #The first, top-level directory contains the following CMakeLists.txt file.
 -# The name of our project is "VISPACK".  CMakeLists files in this project can
@@ -378,7 +381,7 @@ diff -u -r vispack/CMakeLists.txt vispack_morphsmooth/CMakeLists.txt
     )
  
     IF(WIN32 AND MSVC)
-@@ -95,28 +233,17 @@
+@@ -95,28 +233,12 @@
       ENDIF(CMAKE_C_FLAGS MATCHES "/W[0-4]")
     ENDIF(WIN32 AND MSVC)
  
@@ -407,44 +410,12 @@ diff -u -r vispack/CMakeLists.txt vispack_morphsmooth/CMakeLists.txt
    #SET(CMAKE_CXX_FLAGS -LANG:std)
    #SET(CMAKE_CXX_FLAGS -O2)
  
- ENDIF(BUILD_VISPACK_LAPACK)
-+
-+#INSTALL(TARGETS VispackMorphsmooth
-+#  RUNTIME DESTINATION bin
-+#  LIBRARY DESTINATION lib
-+#  )
+-ENDIF(BUILD_VISPACK_LAPACK)
++ENDIF(BUILD_VISPACK_LAPACK)
 \ No newline at end of file
-Only in vispack/packages/netlib/f2clibs: d_acos.c
-Only in vispack/packages/netlib/f2clibs: d_asin.c
-Only in vispack/packages/netlib/f2clibs: d_atan.c
-Only in vispack/packages/netlib/f2clibs: d_cnjg.c
-Only in vispack/packages/netlib/f2clibs: d_cos.c
-Only in vispack/packages/netlib/f2clibs: d_cosh.c
-Only in vispack/packages/netlib/f2clibs: d_exp.c
-Only in vispack/packages/netlib/f2clibs: d_imag.c
-Only in vispack/packages/netlib/f2clibs: d_prod.c
-Only in vispack/packages/netlib/f2clibs: d_sign.c
-Only in vispack/packages/netlib/f2clibs: d_sinh.c
-Only in vispack/packages/netlib/f2clibs: d_sqrt.c
-Only in vispack/packages/netlib/f2clibs: d_tanh.c
-Only in vispack/packages/netlib/f2clibs: derfc_.c
-Only in vispack/packages/netlib/f2clibs: h_sign.c
-Only in vispack/packages/netlib/f2clibs: i_sign.c
-Only in vispack/packages/netlib/f2clibs: iargc_.c
-Only in vispack/packages/netlib/f2clibs: r_acos.c
-Only in vispack/packages/netlib/f2clibs: r_asin.c
-Only in vispack/packages/netlib/f2clibs: r_atan.c
-Only in vispack/packages/netlib/f2clibs: r_atn2.c
-Only in vispack/packages/netlib/f2clibs: r_cnjg.c
-Only in vispack/packages/netlib/f2clibs: r_cosh.c
-Only in vispack/packages/netlib/f2clibs: r_imag.c
-Only in vispack/packages/netlib/f2clibs: r_sign.c
-Only in vispack/packages/netlib/f2clibs: r_sinh.c
-Only in vispack/packages/netlib/f2clibs: r_sqrt.c
-Only in vispack/packages/netlib/f2clibs: r_tanh.c
 diff -u -r vispack/src/image/CMakeLists.txt vispack_morphsmooth/src/image/CMakeLists.txt
---- vispack/src/image/CMakeLists.txt	2012-07-25 19:39:04.035363600 +0200
-+++ vispack_morphsmooth/src/image/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/src/image/CMakeLists.txt	2012-07-27 18:42:01.504618100 +0200
++++ vispack_morphsmooth/src/image/CMakeLists.txt	2012-07-27 18:34:35.052082400 +0200
 @@ -39,6 +39,6 @@
  
  TARGET_LINK_LIBRARIES(image jpeg tiff fitsio util)
@@ -456,8 +427,8 @@ diff -u -r vispack/src/image/CMakeLists.txt vispack_morphsmooth/src/image/CMakeL
 +                    ${VispackMorphsmooth_PACKAGES_DIR}/fits
 +                    ${VispackMorphsmooth_PACKAGES_DIR}/jpeg)
 diff -u -r vispack/src/param/CMakeLists.txt vispack_morphsmooth/src/param/CMakeLists.txt
---- vispack/src/param/CMakeLists.txt	2012-07-25 19:38:58.582679800 +0200
-+++ vispack_morphsmooth/src/param/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/src/param/CMakeLists.txt	2012-07-27 18:41:59.270490300 +0200
++++ vispack_morphsmooth/src/param/CMakeLists.txt	2012-07-27 18:34:35.054082600 +0200
 @@ -6,7 +6,7 @@
  # Any number of sources could be listed here.
  ADD_LIBRARY(param param.cxx y.tab.cxx lex.yy.cxx)
@@ -468,8 +439,8 @@ diff -u -r vispack/src/param/CMakeLists.txt vispack_morphsmooth/src/param/CMakeL
  
  
 diff -u -r vispack/src/vol/CMakeLists.txt vispack_morphsmooth/src/vol/CMakeLists.txt
---- vispack/src/vol/CMakeLists.txt	2012-07-25 19:38:58.973729200 +0200
-+++ vispack_morphsmooth/src/vol/CMakeLists.txt	2012-07-25 22:06:32.368999000 +0200
+--- vispack/src/vol/CMakeLists.txt	2012-07-27 18:41:59.960529800 +0200
++++ vispack_morphsmooth/src/vol/CMakeLists.txt	2012-07-27 18:34:35.057082700 +0200
 @@ -32,6 +32,6 @@
  
  TARGET_LINK_LIBRARIES(vol util image)
@@ -480,3 +451,4 @@ diff -u -r vispack/src/vol/CMakeLists.txt vispack_morphsmooth/src/vol/CMakeLists
 +INCLUDE_DIRECTORIES(${VispackMorphsmooth_PACKAGES_DIR}/tiff
 +                    ${VispackMorphsmooth_PACKAGES_DIR}/fits
 +                    ${VispackMorphsmooth_PACKAGES_DIR}/jpeg)
+Only in vispack_morphsmooth: vispack_morphsmooth_only.diff

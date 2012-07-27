@@ -7,6 +7,7 @@ from install_package import InstallPackage
 import os
 import shutil
 import utils
+import sys
 from subprocess import call
 
 REVISION_NUMBER = "8877"
@@ -100,7 +101,7 @@ class vtkTeem(InstallPackage):
     def install(self):
         if os.path.exists(
             os.path.join(self.inst_dir, 'bin', 
-                'vtkTeem' + config.SO_EXT)):
+                'vtkTeem' + config.PYE_EXT)):
             utils.output("vtkTeem already installed.  Skipping step.")
 
         else:
@@ -110,6 +111,17 @@ class vtkTeem(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not install vtkTeem. Fix and try again.")
+                    
+            else:
+                #There is a problem that the .dll is actually a .pyd but not recognized as such by DeVIDE. Rename.
+                if sys.platform == 'win32':
+                    old_name = os.path.join(self.inst_dir, 'bin', 
+                                'vtkTeem' + config.SO_EXT)
+                    new_name = os.path.join(self.inst_dir, 'bin', 
+                                'vtkTeem' + config.PYE_EXT)
+                    if os.path.isfile(old_name) and (old_name != new_name):
+                        utils.output("Renaming %s%s library to %s%s" % (BASENAME, config.SO_EXT, BASENAME, config.PYE_EXT))
+                        os.rename(old_name, new_name)
  
     def clean_build(self):
         # nuke the build dir and install dir. The source dir is pristine
