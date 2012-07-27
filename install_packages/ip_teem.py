@@ -58,9 +58,12 @@ class Teem(InstallPackage):
 
         cmake_params = "-DCMAKE_BUILD_TYPE=RelWithDebInfo " \
                        "-DCMAKE_INSTALL_PREFIX=%s " \
+                       "-DTeem_ZLIB=ON " \
+                       "-DZLIB_INCLUDE_DIR=%s/ " \
+                       "-DZLIB_LIBRARY=%s/zlib.lib " \
                         % \
-                       (self.inst_dir,)
-
+                       (self.inst_dir,config.ZLIB_ROOT,config.ZLIB_ROOT,)
+       
         ret = utils.cmake_command(self.build_dir, self.source_dir,
                 cmake_params)
 

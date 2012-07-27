@@ -5,7 +5,7 @@ import shutil
 import utils
 from subprocess import call
 
-VERSION = "1.2.6"
+VERSION = "1.2.7"
 BASENAME = "zlib"
 
 ARCHIVE_BASENAME = "%s-%s" % (BASENAME, VERSION)
@@ -45,7 +45,7 @@ class zlib(InstallPackage):
         utils.unpack_build(self.archive_path)
     
     def build(self):
-        if os.path.exists(os.path.join(self.build_dir, 'zlib.h')):
+        if os.path.exists(os.path.join(self.build_dir, 'compress.obj')) or os.path.exists(os.path.join(self.build_dir, 'compress.o')):
             utils.output("%s already built, skipping step." % BASENAME)
             return
         
