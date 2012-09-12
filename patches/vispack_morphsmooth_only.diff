@@ -1,0 +1,454 @@
+This fix was verified for vispack's SVN revision #52. Future revisions may break it - please check.
+
+diff -u -r vispack/apps/correspondence/CMakeLists.txt vispack_morphsmooth/apps/correspondence/CMakeLists.txt
+--- vispack/apps/correspondence/CMakeLists.txt	2012-07-27 18:41:57.843408700 +0200
++++ vispack_morphsmooth/apps/correspondence/CMakeLists.txt	2012-07-27 18:34:35.036081500 +0200
+@@ -1,7 +1,7 @@
+ IF(BUILD_BIOMESH3D)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VISPACK_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
++  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+   LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${NRRDIO_LIB})
+@@ -91,10 +91,10 @@
+   #SET(CMAKE_CXX_FLAGS -g)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
++  INCLUDE_DIRECTORIES(. ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+-  LINK_DIRECTORIES(${VISPACK_BINARY_DIR}/lib ${NRRDIO_LIB})
++  LINK_DIRECTORIES(${VispackMorphsmooth_BINARY_DIR}/lib ${NRRDIO_LIB})
+ 
+   ADD_EXECUTABLE(linear_test linear_test.cxx)
+   TARGET_LINK_LIBRARIES(linear_test matrix util lapack2 lapack1 
+diff -u -r vispack/apps/correspondence/scratch/CMakeLists.txt vispack_morphsmooth/apps/correspondence/scratch/CMakeLists.txt
+--- vispack/apps/correspondence/scratch/CMakeLists.txt	2012-07-27 18:41:57.367381400 +0200
++++ vispack_morphsmooth/apps/correspondence/scratch/CMakeLists.txt	2012-07-27 18:34:35.039081700 +0200
+@@ -1,7 +1,7 @@
+ IF(BUILD_BIOMESH3D)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VISPACK_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
++  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+   LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${NRRDIO_LIB})
+@@ -22,10 +22,10 @@
+   SET(CMAKE_CXX_FLAGS -g)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
++  INCLUDE_DIRECTORIES(. ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${NRRDIO_INCLUDE})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+-  LINK_DIRECTORIES(${VISPACK_BINARY_DIR}/lib ${NRRDIO_LIB})
++  LINK_DIRECTORIES(${VispackMorphsmooth_BINARY_DIR}/lib ${NRRDIO_LIB})
+ 
+   ADD_EXECUTABLE(linear_test linear_test.cxx)
+   TARGET_LINK_LIBRARIES(linear_test matrix util lapack2 lapack1 blas F77 m)
+diff -u -r vispack/apps/distance/CMakeLists.txt vispack_morphsmooth/apps/distance/CMakeLists.txt
+--- vispack/apps/distance/CMakeLists.txt	2012-07-27 18:41:58.967473000 +0200
++++ vispack_morphsmooth/apps/distance/CMakeLists.txt	2012-07-27 18:34:35.042081900 +0200
+@@ -1,10 +1,10 @@
+ IF(BUILD_BIOMESH3D)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VISPACK_INCLUDE_DIRECTORIES} ${TEEM_INCLUDE_DIRS})
++  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${Teem_INCLUDE_DIRS})
+ 
+   # Make sure the linker can find the Hello library once it is built.  
+-  LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${TEEM_LIBRARY_DIRS})
++  LINK_DIRECTORIES(${CMAKE_LIBRARY_OUTPUT_DIRECTORY} ${Teem_LIBRARY_DIRS})
+ 
+   ADD_EXECUTABLE(vol2nrrd
+     vol2nrrd.cxx
+@@ -15,7 +15,7 @@
+     ReconstructionField.cxx
+     IOScalarField.cxx)
+   TARGET_LINK_LIBRARIES(vol2nrrd
+-    ${TEEM_LIBRARIES}
++    ${Teem_LIBRARIES}
+     matrix 
+     vol 
+     image 
+@@ -31,16 +31,16 @@
+   #SET(CMAKE_CXX_FLAGS -g)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES} ${TEEM_INCLUDE_DIRS})
++  INCLUDE_DIRECTORIES(. ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${Teem_INCLUDE_DIRS})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+-  LINK_DIRECTORIES(${VISPACK_BINARY_DIR}/lib ${TEEM_LIBRARY_DIRS})
++  LINK_DIRECTORIES(${VispackMorphsmooth_BINARY_DIR}/lib ${Teem_LIBRARY_DIRS})
+ 
+ 
+   ADD_EXECUTABLE(distance3 distance3.cxx volutils.cxx AnalyticScalarFields.cxx
+   ScalarField.cxx mtxlib.cxx ReconstructionField.cxx IOScalarField.cxx)
+   TARGET_LINK_LIBRARIES(distance3
+-  ${TEEM_LIBRARIES}
++  ${Teem_LIBRARIES}
+   matrix 
+   vol 
+   image 
+@@ -57,7 +57,7 @@
+   ADD_EXECUTABLE(distance_parallel distance_parallel.cxx volutils.cxx AnalyticScalarFields.cxx
+   ScalarField.cxx mtxlib.cxx ReconstructionField.cxx IOScalarField.cxx)
+   TARGET_LINK_LIBRARIES(distance_parallel
+-  ${TEEM_LIBRARIES}
++  ${Teem_LIBRARIES}
+   matrix 
+   vol 
+   image 
+@@ -75,7 +75,7 @@
+   ADD_EXECUTABLE(vol2nrrd vol2nrrd.cxx volutils.cxx AnalyticScalarFields.cxx
+   ScalarField.cxx mtxlib.cxx ReconstructionField.cxx IOScalarField.cxx)
+   TARGET_LINK_LIBRARIES(vol2nrrd
+-  ${TEEM_LIBRARIES}
++  ${Teem_LIBRARIES}
+   matrix 
+   vol 
+   image 
+diff -u -r vispack/apps/tighten/CMakeLists.txt vispack_morphsmooth/apps/tighten/CMakeLists.txt
+--- vispack/apps/tighten/CMakeLists.txt	2012-07-27 18:41:57.084365200 +0200
++++ vispack_morphsmooth/apps/tighten/CMakeLists.txt	2012-07-27 18:39:19.506352300 +0200
+@@ -1,11 +1,11 @@
+ IF(BUILD_BIOMESH3D)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VISPACK_INCLUDE_DIRECTORIES} ${TEEM_INCLUDE_DIRS})
++  INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${Teem_INCLUDE_DIRS})
+ 
+   ADD_EXECUTABLE(morphsmooth morphsmooth.cxx volutils.cxx morphology.cxx)
+   TARGET_LINK_LIBRARIES(morphsmooth
+-    ${TEEM_LIBRARIES}
++    ${Teem_LIBRARIES}
+     matrix
+     vol
+     image
+@@ -21,12 +21,15 @@
+   #SET(CMAKE_CXX_FLAGS -g)
+ 
+   # Make sure the compiler can find include files from our Hellolibrary.
+-  INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES} ${TEEM_INCLUDE_DIRS})
++  INCLUDE_DIRECTORIES(. ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${Teem_INCLUDE_DIRS})
+ 
+   # Make sure the linker can find the Hello library once it is built.
+-  LINK_DIRECTORIES(${VISPACK_BINARY_DIR}/lib ${TEEM_LIBRARY_DIRS})
++  LINK_DIRECTORIES(${VispackMorphsmooth_BINARY_DIR}/lib ${Teem_LIBRARY_DIRS})
+ 
+   ADD_EXECUTABLE(morphsmooth morphsmooth.cxx volutils.cxx morphology.cxx)
+-  TARGET_LINK_LIBRARIES(morphsmooth ${TEEM_LIBRARIES} matrix vol image jpeg tiff fitsio util lapack2 lapack1 blas F77 m)
++  TARGET_LINK_LIBRARIES(morphsmooth ${Teem_LIBRARIES} matrix vol image jpeg tiff fitsio util lapack2 lapack1 blas F77 m)
+ 
+ ENDIF(BUILD_BIOMESH3D)
++
++INSTALL(TARGETS morphsmooth
++        RUNTIME DESTINATION bin)
+diff -u -r vispack/CMakeLists.txt vispack_morphsmooth/CMakeLists.txt
+--- vispack/CMakeLists.txt	2012-07-27 18:42:36.121598000 +0200
++++ vispack_morphsmooth/CMakeLists.txt	2012-07-27 18:34:35.049082300 +0200
+@@ -1,15 +1,144 @@
+ #The first, top-level directory contains the following CMakeLists.txt file.
+-# The name of our project is "VISPACK".  CMakeLists files in this project can
+-# refer to the root source directory of the project as ${VISPACK_SOURCE_DIR} and
+-# to the root binary directory of the project as ${VISPACK_BINARY_DIR}.
++# The name of our project is "VispackMorphsmooth".  CMakeLists files in this project can
++# refer to the root source directory of the project as ${VispackMorphsmooth_SOURCE_DIR} and
++# to the root binary directory of the project as ${VispackMorphsmooth_BINARY_DIR}.
+ 
+ # Vispack build configurations:
+ #
+-# BUILD_BIOMESH3D is set in the top-level SCIRun CMakeLists.txt file
+-# and is used when building applications used in the BioMesh3D pipeline.
++# BUILD_BIOMESH3D is used when building applications used in the BioMesh3D pipeline.
++# For only building "Tighten" this should be set to true (so that it can build on Win32)
+ #
+-# BUILD_VISPACK_LAPACK is set in the top-level SCIRun CMakeLists.txt
+-# file and is used when only building the lapack package.
++# BUILD_VISPACK_LAPACK is used when only building the lapack package. 
++# For only building "Tighten" this should be set to false
++
++#<fmalan> Here I copied a lot of the CMake directives contained in SciRun's build tree at higher levels. 
++# Since we build Vispack on its own we need to put those commands in here.
++
++PROJECT(VispackMorphsmooth)
++
++ENABLE_LANGUAGE(C)
++
++#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
++# These settings from \CMakeLists.txt
++#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
++
++IF(WIN32)
++  ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
++  ADD_DEFINITIONS(-D_BIND_TO_CURRENT_VCLIBS_VERSION=1)
++ENDIF(WIN32)
++
++SET(BUILD_BIOMESH3D ON)       #"Build BioMesh3D pipeline" - inherited from SCI VISPACK and required for building morphsmooth without LAPACK
++SET(BUILD_VISPACK_LAPACK OFF) #"Build LAPACK" - inherited from SCI VISPACK but never required for building morphsmooth
++
++IF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
++  MESSAGE( "" )
++  MESSAGE( "Building Vispack in the source directory is not allowed." )
++  MESSAGE( "(In order to clean up, you now need to run: rm -rf CMakeFiles CMakeCache.txt" )
++  MESSAGE( "" )
++  MESSAGE( FATAL_ERROR "Goodbye." )
++ENDIF(${CMAKE_SOURCE_DIR} STREQUAL ${CMAKE_BINARY_DIR})
++
++########################################################################
++# Compiler flags
++
++IF(CMAKE_COMPILER_IS_GNUCC)
++  # Always turn on more verbose warnings when compiling with gcc and g++.
++  SET(CMAKE_CXX_FLAGS "-Wall -fno-strict-aliasing ${CMAKE_CXX_FLAGS}")
++  SET(CMAKE_C_FLAGS "-Wall -fno-strict-aliasing ${CMAKE_C_FLAGS}")
++
++  # Additional warnings for debug builds
++  SET(CMAKE_CXX_FLAGS_DEBUG "-Wold-style-cast ${CMAKE_CXX_FLAGS_DEBUG}")
++ENDIF(CMAKE_COMPILER_IS_GNUCC)
++
++IF(WIN32 AND MSVC)
++  SET(CMAKE_CXX_FLAGS "/MP ${CMAKE_CXX_FLAGS}") 
++ENDIF(WIN32 AND MSVC)
++
++################################################################################################
++# Number of Bits (32 | 64) Check
++# I believe that this is only for OSX for which we don't build anyway, 
++# but you can replace 64 with 32 in lines below for debugging
++
++SET(NBITS 64)
++ADD_DEFINITIONS(-DSCI_64BITS)
++MESSAGE(STATUS "FYI: This is a ${NBITS} bit build.")
++
++########################################################################
++# Windows configuration options
++
++IF(WIN32)
++  # FIND_LIBRARY under Windows searches for *.lib files, which are
++  # found in the Microsoft SDK.
++  #
++  # The DLLs for these libraries are found in %SystemRoot%/system32.
++  #
++  # This registry key should be consistent throughout modern SDK distributions),
++  # and we're assuming that we're not going to be building on Itanium.
++
++
++  IF(NBITS EQUAL 64)
++    SET(MS_SDK_REG_PATH
++          "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows;CurrentInstallFolder]/Lib/x64"
++        CACHE INTERNAL
++          "Set up search path to Windows SDK."
++     )
++  ELSE(NBITS EQUAL 64)
++    SET(MS_SDK_REG_PATH
++          "[HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Microsoft SDKs\\Windows;CurrentInstallFolder]/Lib"
++        CACHE INTERNAL
++          "Set up search path to Windows SDK."
++     )
++  ENDIF(NBITS EQUAL 64)
++
++  IF(MSVC)
++    # Bind application to the current version of the VC libraries
++    ADD_DEFINITIONS(-D_BIND_TO_CURRENT_VCLIBS_VERSION) 
++
++    # MSVC level 3 warnings are a little ridiculous
++    SET(CMAKE_CXX_WARNING_LEVEL 1)
++    IF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
++      STRING(REGEX REPLACE "/W[0-4]" "/W1"
++              CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++    ELSE(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
++      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W1")
++    ENDIF(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
++  ENDIF(MSVC)
++	
++  #  This defines M_PI for windows
++  ADD_DEFINITIONS(-D_USE_MATH_DEFINES)
++  # defines Windows 2000 features like mouse leaving window
++  ADD_DEFINITIONS(-D_WIN32_WINNT=0x0500)
++  ADD_DEFINITIONS(-DWIN32_LEAN_AND_MEAN) # makes sure things like rad1/grp1 don't get defined
++  ADD_DEFINITIONS(-DNOMINMAX) # makes sure min and max don't get defined
++  
++  
++  IF(NOT CYGWIN)
++    SET(VC "${CMAKE_MAKE_PROGRAM}")
++    IF(CMAKE_GENERATOR MATCHES "Visual Studio 7")
++      STRING(REGEX REPLACE "Common7/IDE/VCExpress.exe" "Vc7" VC "${VC}")
++      STRING(REGEX REPLACE "Common7/IDE/devenv.com" "Vc7" VC "${VC}")
++    ELSE(CMAKE_GENERATOR MATCHES "Visual Studio 7")
++      STRING(REGEX REPLACE "Common7/IDE/devenv.com" "VC" VC "${VC}")
++      STRING(REGEX REPLACE "Common7/IDE/VCExpress.exe" "VC" VC "${VC}")
++    ENDIF(CMAKE_GENERATOR MATCHES "Visual Studio 7")
++    
++    SET (PATH_TO_VC "${VC}" CACHE PATH "Path to Visual Studio")
++    MARK_AS_ADVANCED(PATH_TO_VC)
++
++  ENDIF(NOT CYGWIN)
++ENDIF(WIN32)
++
++########################################################################
++# for now set make install directory to current binary directory
++
++#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
++# These settings (mostly) from Externals\CMakeLists.txt
++#-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
++
++SET(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_BINARY_DIR} CACHE PATH "Install path")
++
++################################################################################################
++#</fmalan>
+ 
+ IF(BUILD_BIOMESH3D OR BUILD_VISPACK_LAPACK)
+ 
+@@ -26,8 +155,6 @@
+ 
+ ENDIF(BUILD_BIOMESH3D OR BUILD_VISPACK_LAPACK)
+ 
+-PROJECT(VISPACK)
+-
+ IF(BUILD_VISPACK_LAPACK)
+ 
+   SUBDIRS(packages)
+@@ -44,33 +171,44 @@
+   #SUBDIRS(src packages apps doc)
+   SUBDIRS(packages src apps)
+ 
+-  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VISPACK_SOURCE_DIR})
++  SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${VispackMorphsmooth_SOURCE_DIR})
+ 
+   # The BioMesh3D pipeline uses Teem configured for the SCIRun build.
+-  IF(BUILD_BIOMESH3D)
+-    SET(TEEM_INCLUDE_DIRS ${SCI_TEEM_INCLUDE})
+-    SET(TEEM_LIBRARIES ${SCI_TEEM_LIBRARY} ${SCI_PNG_LIBRARY} ${SCI_ZLIB_LIBRARY})
+-    SET(TEEM_LIBRARY_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
+-
+-    IF(CMAKE_HAVE_UNISTD_H)
+-      ADD_DEFINITIONS(-DHAVE_UNISTD_H)
+-    ENDIF(CMAKE_HAVE_UNISTD_H)
+-
+-  ELSE(BUILD_BIOMESH3D)
+-    FIND_PACKAGE(TEEM REQUIRED)
+-  ENDIF(BUILD_BIOMESH3D)
+-
+-  SET(VISPACK_PACKAGES_DIR "${VISPACK_SOURCE_DIR}/packages")
+-  SET(LIBRARY_OUTPUT_PATH ${VISPACK_BINARY_DIR}/lib)
++  SET(Teem_INCLUDE_DIRS ${Teem_DIR}/../include)
++  SET(Teem_LIBRARIES ${Teem_DIR}/../teem.lib)
++  SET(Teem_LIBRARY_DIRS ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
++  
++  IF(CMAKE_HAVE_UNISTD_H)
++    ADD_DEFINITIONS(-DHAVE_UNISTD_H)
++  ENDIF(CMAKE_HAVE_UNISTD_H)
++
++  FIND_PACKAGE(Teem REQUIRED)
++  INCLUDE(${Teem_USE_FILE})
++
++  # after teem 1.9, all the teem libraries are groups in one big libteem.so
++  if ( ${Teem_VERSION_MAJOR} GREATER 1 )
++    set(Teem_LIBRARIES teem)
++  else ( ${Teem_VERSION_MAJOR} GREATER 1 )
++    if ( ${Teem_VERSION_MINOR} LESS 10 )
++      set(Teem_LIBRARIES air biff nrrd ten ell)
++    else ( ${Teem_VERSION_MINOR} LESS 10 )
++      set(Teem_LIBRARIES teem)
++    endif ( ${Teem_VERSION_MINOR} LESS 10 )
++  endif ( ${Teem_VERSION_MAJOR} GREATER 1 )    
++
++  #add_executable(VispackMorphsmooth ${CMAKE_SOURCE_DIR}/apps/tighten/morphsmooth.cxx ${CMAKE_SOURCE_DIR}/src/vol/vol.h)
++    
++  SET(VispackMorphsmooth_PACKAGES_DIR "${VispackMorphsmooth_SOURCE_DIR}/packages")
++  SET(LIBRARY_OUTPUT_PATH ${VispackMorphsmooth_BINARY_DIR}/lib)
+ 
+   IF(BUILD_BIOMESH3D)
+-    SET(VISPACK_INCLUDE_DIRECTORIES
+-          ${VISPACK_SOURCE_DIR}/src
+-          ${VISPACK_SOURCE_DIR}/src/util
+-          ${VISPACK_SOURCE_DIR}/src/image
+-          ${VISPACK_SOURCE_DIR}/src/vol
+-          ${VISPACK_SOURCE_DIR}/src/mat
+-          ${VISPACK_SOURCE_DIR}/src/param
++    SET(VispackMorphsmooth_INCLUDE_DIRECTORIES
++          ${VispackMorphsmooth_SOURCE_DIR}/src
++          ${VispackMorphsmooth_SOURCE_DIR}/src/util
++          ${VispackMorphsmooth_SOURCE_DIR}/src/image
++          ${VispackMorphsmooth_SOURCE_DIR}/src/vol
++          ${VispackMorphsmooth_SOURCE_DIR}/src/mat
++          ${VispackMorphsmooth_SOURCE_DIR}/src/param
+    )
+ 
+    IF(WIN32 AND MSVC)
+@@ -95,28 +233,12 @@
+      ENDIF(CMAKE_C_FLAGS MATCHES "/W[0-4]")
+    ENDIF(WIN32 AND MSVC)
+ 
+-  ELSE(BUILD_BIOMESH3D)
+-    SET(VISPACK_INCLUDE_DIRECTORIES
+-        ${VISPACK_SOURCE_DIR}/src
+-        ${VISPACK_SOURCE_DIR}/src/util
+-        ${VISPACK_SOURCE_DIR}/src/image
+-        ${VISPACK_SOURCE_DIR}/src/vol
+-        ${VISPACK_SOURCE_DIR}/src/mat
+-        ${VISPACK_SOURCE_DIR}/src/voxmodel
+-        ${VISPACK_SOURCE_DIR}/src/scan
+-        ${VISPACK_SOURCE_DIR}/src/param
+-        ${VISPACK_SOURCE_DIR}/src/diffuse
+-    )
+   ENDIF(BUILD_BIOMESH3D)
+ 
+-  #Finally, in the ./Demo directory, the third and final CMakeLists.txt
+-  #file is created: 
+-  # Make sure the compiler can find include files from our Hello library.
+-  INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES} ${TEEM_INCLUDE_DIRS})
+-  #INCLUDE_DIRECTORIES(. ${VISPACK_INCLUDE_DIRECTORIES})
++  INCLUDE_DIRECTORIES(. ${VispackMorphsmooth_INCLUDE_DIRECTORIES} ${Teem_INCLUDE_DIRS})
+ 
+   #Need this for the sgi
+   #SET(CMAKE_CXX_FLAGS -LANG:std)
+   #SET(CMAKE_CXX_FLAGS -O2)
+ 
+-ENDIF(BUILD_VISPACK_LAPACK)
++ENDIF(BUILD_VISPACK_LAPACK)
+\ No newline at end of file
+diff -u -r vispack/src/image/CMakeLists.txt vispack_morphsmooth/src/image/CMakeLists.txt
+--- vispack/src/image/CMakeLists.txt	2012-07-27 18:42:01.504618100 +0200
++++ vispack_morphsmooth/src/image/CMakeLists.txt	2012-07-27 18:34:35.052082400 +0200
+@@ -39,6 +39,6 @@
+ 
+ TARGET_LINK_LIBRARIES(image jpeg tiff fitsio util)
+ 
+-INCLUDE_DIRECTORIES(${VISPACK_PACKAGES_DIR}/tiff
+-                    ${VISPACK_PACKAGES_DIR}/fits
+-                    ${VISPACK_PACKAGES_DIR}/jpeg)
++INCLUDE_DIRECTORIES(${VispackMorphsmooth_PACKAGES_DIR}/tiff
++                    ${VispackMorphsmooth_PACKAGES_DIR}/fits
++                    ${VispackMorphsmooth_PACKAGES_DIR}/jpeg)
+diff -u -r vispack/src/param/CMakeLists.txt vispack_morphsmooth/src/param/CMakeLists.txt
+--- vispack/src/param/CMakeLists.txt	2012-07-27 18:41:59.270490300 +0200
++++ vispack_morphsmooth/src/param/CMakeLists.txt	2012-07-27 18:34:35.054082600 +0200
+@@ -6,7 +6,7 @@
+ # Any number of sources could be listed here.
+ ADD_LIBRARY(param param.cxx y.tab.cxx lex.yy.cxx)
+ 
+-INCLUDE_DIRECTORIES(${VISPACK_SOURCE_DIR}/include/util)
++INCLUDE_DIRECTORIES(${VispackMorphsmooth_SOURCE_DIR}/include/util)
+ 
+ 
+ 
+diff -u -r vispack/src/vol/CMakeLists.txt vispack_morphsmooth/src/vol/CMakeLists.txt
+--- vispack/src/vol/CMakeLists.txt	2012-07-27 18:41:59.960529800 +0200
++++ vispack_morphsmooth/src/vol/CMakeLists.txt	2012-07-27 18:34:35.057082700 +0200
+@@ -32,6 +32,6 @@
+ 
+ TARGET_LINK_LIBRARIES(vol util image)
+ 
+-INCLUDE_DIRECTORIES(${VISPACK_PACKAGES_DIR}/tiff
+-                    ${VISPACK_PACKAGES_DIR}/fits
+-                    ${VISPACK_PACKAGES_DIR}/jpeg)
++INCLUDE_DIRECTORIES(${VispackMorphsmooth_PACKAGES_DIR}/tiff
++                    ${VispackMorphsmooth_PACKAGES_DIR}/fits
++                    ${VispackMorphsmooth_PACKAGES_DIR}/jpeg)
+Only in vispack_morphsmooth: vispack_morphsmooth_only.diff

@@ -1,0 +1,18 @@
+Index: Code/SpatialObject/itkSpatialObjectTreeNode.h
+===================================================================
+RCS file: /cvsroot/Insight/Insight/Code/SpatialObject/itkSpatialObjectTreeNode.h,v
+retrieving revision 1.12
+diff -u -r1.12 itkSpatialObjectTreeNode.h
+--- Code/SpatialObject/itkSpatialObjectTreeNode.h	16 Jul 2007 23:15:51 -0000	1.12
++++ Code/SpatialObject/itkSpatialObjectTreeNode.h	27 Nov 2008 20:11:10 -0000
+@@ -65,10 +65,8 @@
+   void ComputeNodeToWorldTransform();
+ 
+   /** Return a list of children (the list should be deleted by the user */
+-#if !defined(CABLE_CONFIGURATION)
+   virtual ChildrenListType* GetChildren( unsigned int depth=0,
+                                          char * name=NULL) const;
+-#endif
+ 
+ protected:
+ 
