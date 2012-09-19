@@ -15,10 +15,11 @@ Getting johannes to build everything on Windows:
         (you can check that "git config --global core.autocrlf" is set to "true" instead of "input")
 * mercurial: get and install Windows installer (Mercurial-2.1-x*.exe at 
   the time of this writing) from http://mercurial.selenic.com/downloads/
-  Let the installer add the installation path to the search path.
-  Also: You'll have better luck with the win32 installer even on win64.
+  Let the installer add the installation path to the system search path.
+  Also: You'll have better luck with the win32 installer - even on win64.
   NOTE: You must have Mercurial's EOL extention enabled otherwise you will have problems with gnu32 patch.
   Instructions at: http://mercurial.selenic.com/wiki/EolExtension
+  (NB: Windows Explorer doesn't allow the creation of a file called .hgrc due to the preceding "." - you either have to use the command line to name it, use its alternative name: mercurial.ini)
 * CVS: get the WinCVS ZIP from 
   http://sourceforge.net/projects/cvsgui/files/WinCvs/WinCvs%202.0.2-4/WinCvs2_0_2-4.zip/download
   and then extract the CVSNT installer
@@ -28,10 +29,14 @@ Getting johannes to build everything on Windows:
   and install.  Add its install directory to your path.
   NB: On Windows 7, the gnuwin32 patch will segfault. Follow the instructions
   on http://math.nist.gov/oommf/software-patchsets/patch_on_Windows7.html
-  to fix. The howto recommends installing the manifest IN the patch.exe
-  binary, it could already be sufficient just to store the patch.exe.manifest
-  in the same folder as patch.exe. The easiest solution is to put patch.exe
-  somewhere other than Program Files.
+  to fix. In short this is what the fix entails:
+  In johannes' /patches subdirectory you will find a file called "patch.exe.manifest".
+  Copy this file to the same directory as Gnu32's "patch.exe".
+  Then, run a Visual Studio command prompt as administrator, and execute the following command:
+    mt -manifest patch.exe.manifest -outputresource:patch.exe;1  
+  This installs the manifest *into* the patch.exe binary (but it could possibly already be sufficient just to store the patch.exe.manifest in the same folder as patch.exe). 
+  Lastly, move patch.exe out from under C:\Program Files (x86) to a path that contains no spaces, 
+  and make sure that it is in the system path. (not sure if spaces create a problem, but let's not take chances)
 * Get and install the NSIS installer builder from [3].  Put its install
   directory on your system PATH.
 * Visual Studio 2008: Make sure the latest service pack installed, SP1
