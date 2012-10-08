@@ -11,7 +11,7 @@ import sys
 import utils
 
 BASENAME = "OrthoAssist"
-HG_REPO = "https://thomas@hg.graphics.tudelft.nl/vis/thomas/OrthoAssist"
+HG_REPO = "https://thomas@hg.graphics.tudelft.nl/vis/thomas/orthoassist"
 
 dependencies = ['CMake','Qt','VTK58','SIP','PyQt']
                   

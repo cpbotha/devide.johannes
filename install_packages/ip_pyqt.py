@@ -4,7 +4,7 @@ import os
 import shutil
 import utils
 
-VERSION = "4.9.1"
+VERSION = "snapshot-4.9.6-f7b4fc5c2e79"
 BASENAME = "PyQt"
 
 if os.name == "nt":
