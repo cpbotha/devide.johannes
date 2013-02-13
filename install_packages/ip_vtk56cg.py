@@ -136,7 +136,7 @@ class VTK56CG(InstallPackage):
                     
             # VTKQUADRIC PATCH
             utils.output("Applying VTKQUADRIC patch")
-            os.chdir(os.path.join(self.source_dir, 'Rendering'))
+            os.chdir(os.path.join(self.source_dir, 'Graphics'))
             ret = os.system(
                 "%s -p0 < %s" % (config.PATCH, self.vtkquadric_patch_filename))
             if ret != 0:
