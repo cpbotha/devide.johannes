@@ -1,0 +1,139 @@
+Index: vtkQuadricDecimation.cxx
+===================================================================
+RCS file: /cvsroot/VTK/VTK/Graphics/vtkQuadricDecimation.cxx,v
+retrieving revision 1.39.50.1
+diff -u -r1.39.50.1 vtkQuadricDecimation.cxx
+--- vtkQuadricDecimation.cxx	17 Jul 2008 20:29:18 -0000	1.39.50.1
++++ vtkQuadricDecimation.cxx	12 May 2009 10:54:30 -0000
+@@ -337,6 +337,18 @@
+       continue;
+       }
+     
++    // check for a non-collapsible edges -- AWT
++    if ( !this->IsEdgeCollapsible( endPtIds[0], endPtIds[1] ) )
++      {
++      vtkDebugMacro(<<"Non-collapsible edge detected " << edgeId << " " <<  cost);
++      // return the point to the queue but with the max cost so that 
++      // when it is recomputed it will be reconsidered
++      this->EdgeCosts->Insert(VTK_DOUBLE_MAX, edgeId);
++
++      edgeId = this->EdgeCosts->Pop(0, cost);
++      continue;
++      }
++
+     this->NumberOfEdgeCollapses++;
+         
+     // Set the new coordinates of point0.
+@@ -407,6 +419,96 @@
+ }
+ 
+ //----------------------------------------------------------------------------
++int vtkQuadricDecimation::IsEdgeCollapsible( vtkIdType pt0Id, vtkIdType pt1Id )
++{
++  bool isCollapsible = true;
++
++  vtkIdType i, j, k, m, vv;
++  vtkIdType npts, *pts;
++
++  vtkIdList* uniqueVertices  = vtkIdList::New( );
++  vtkIdList* neighbourCells  = vtkIdList::New( );
++  vtkIdList* thirdVertexList = vtkIdList::New( );
++
++  // Look for the cells which use this edge
++  this->Mesh->GetPointCells(pt0Id, this->CollapseCellIds);
++  for (i = 0; i < this->CollapseCellIds->GetNumberOfIds() && isCollapsible; i++) 
++    {
++    const vtkIdType cellId = this->CollapseCellIds->GetId(i);
++    this->Mesh->GetCellPoints(cellId, npts, pts);
++    for (j = 0; j < 3 && isCollapsible; j++) 
++      {
++      if (pts[j] == pt1Id) 
++        {
++        // Cell cellId uses this edge.  Now to look and see how many
++        // unique vertices are used by its neighbours
++
++        vtkIdType thisTriangleVerts[] = { pt0Id, pt1Id, VTK_INT_MAX };
++
++        // Work out which is the vertex of cell cellId not in the edge
++        this->Mesh->GetCellPoints( cellId, thirdVertexList );
++        for ( vv = 0; vv < 3; ++vv )
++          {
++          thisTriangleVerts[2] = thirdVertexList->GetId( vv );
++
++          if ( thisTriangleVerts[2] != thisTriangleVerts[0] && thisTriangleVerts[2] != thisTriangleVerts[0] )
++            break;
++          }
++
++        // Don't know why this should happen, but it shows there's
++        // something weird afoot
++        if ( vv == 3 )
++          continue;
++
++        // Going to build a list of vertices used
++        uniqueVertices->SetNumberOfIds( 0 );
++        uniqueVertices->Allocate( neighbourCells->GetNumberOfIds( ) );
++
++        for ( k = 0; k < 3 && isCollapsible; ++k )
++          {
++          this->Mesh->GetCellEdgeNeighbors( cellId, thisTriangleVerts[k], thisTriangleVerts[(k+1)%3], neighbourCells );
++
++          for ( m = 0; m < neighbourCells->GetNumberOfIds( ) && isCollapsible; ++m )
++            {
++            // Look for the vertex which isn't on the shared edge
++            vtkIdType farVertex = VTK_INT_MAX;
++
++            this->Mesh->GetCellPoints( cellId, thirdVertexList );
++            for ( vv = 0; vv < 3; ++vv )
++              {
++              farVertex = thirdVertexList->GetId( vv );
++
++              if ( farVertex != thisTriangleVerts[k] && farVertex != thisTriangleVerts[(k+1)%3] )
++                break;
++              }
++
++            if ( vv == 3 )
++              continue;
++
++            if ( -1 == uniqueVertices->IsId( farVertex ) )
++              {
++              uniqueVertices->InsertNextId( farVertex );
++              }
++            else
++              {
++              // We've seen this vertex before - this means we've found a 
++              // non-collapsible combination
++              isCollapsible = false;
++              }
++            }
++          }
++        }
++      }
++    }
++
++  thirdVertexList->Delete( );
++  uniqueVertices->Delete( );
++  neighbourCells->Delete( );
++
++  return ( isCollapsible ) ? 1 : 0;
++}
++
++//----------------------------------------------------------------------------
+ void vtkQuadricDecimation::InitializeQuadrics(vtkIdType numPts)
+ {
+   vtkPolyData *input = this->Mesh;
+Index: vtkQuadricDecimation.h
+===================================================================
+RCS file: /cvsroot/VTK/VTK/Graphics/vtkQuadricDecimation.h,v
+retrieving revision 1.22
+diff -u -r1.22 vtkQuadricDecimation.h
+--- vtkQuadricDecimation.h	29 Nov 2004 18:41:29 -0000	1.22
++++ vtkQuadricDecimation.h	12 May 2009 09:58:02 -0000
+@@ -169,6 +169,8 @@
+   vtkIdType GetEdgeCellId(vtkIdType p1Id, vtkIdType p2Id);
+ 
+   int IsGoodPlacement(vtkIdType pt0Id, vtkIdType pt1Id, const double *x);
++  int IsEdgeCollapsible( vtkIdType pt0Id, vtkIdType pt1Id );
++
+   int TrianglePlaneCheck(const double t0[3], const double t1[3], 
+                          const double t2[3],  const double *x);
+   void ComputeNumberOfComponents(void);
