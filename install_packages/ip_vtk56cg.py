@@ -32,6 +32,9 @@ CG_POLY_PATCH = "vtk56_PolyDataConnectivityFilter_clinicalgraphics.diff"
 # fixes attributes in vtkproperty for shader use in python
 VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 
+# Adds GetTexturePlaneActor method
+VTKIMAGEPLANE_PATCH = 'vtk56_image_plane_patch_clinicalgraphics.diff'
+
 # patch to fix quadric decimation normal errors when decimating poly data.
 VTKQUADRIC_PATCH = "vtkQuadricDecimation2.diff"
 
@@ -55,9 +58,8 @@ class VTK56CG(InstallPackage):
                                                  VTKPRPRTY_PATCH)
         self.vtkquadric_patch_filename = os.path.join(config.patches_dir,
                                                  VTKQUADRIC_PATCH)
-                                                 
-
-
+        self.vtkimageplane_patch_filename = os.path.join(config.patches_dir,
+                                                 VTKIMAGEPLANE_PATCH)
         self.cg_poly_patch_filename = os.path.join(config.patches_dir, CG_POLY_PATCH)
                                                  
         self.wxvtkrwi_displayid_segfault_patch_filename = os.path.join(
@@ -103,8 +105,7 @@ class VTK56CG(InstallPackage):
             ret = os.system("git checkout %s" % (GIT_TAG,))
             if ret != 0:
                 utils.error("Could not checkout VTK %s. Fix and try again." % (GIT_TAG,))
-
-
+            
             # EXC PATCH
             utils.output("Applying EXC patch")
             os.chdir(self.source_dir)
@@ -133,6 +134,15 @@ class VTK56CG(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply VTKPRPRTY patch.  Fix and try again.")
+                    
+            # VTKIMAGEPLANE PATCH
+            utils.output("Applying VTKIMAGEPLANE patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.vtkimageplane_patch_filename))
+            if ret != 0:
+                utils.error(
+                    "Could not apply VTKIMAGEPLANE patch.  Fix and try again.")                                
                     
             # VTKQUADRIC PATCH
             utils.output("Applying VTKQUADRIC patch")
