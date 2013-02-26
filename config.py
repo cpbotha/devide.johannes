@@ -50,7 +50,7 @@ DEVIDE_DATESTR = "12.4.18"
 # breaking the pythonhome!
 DRE_CHANGESET_ID = "34c8b63b2ac9"
 
-VTKDEVIDE_CHANGESET_ID = "bdc8e1f9e6e6"
+VTKDEVIDE_CHANGESET_ID = "bdc8e1f7e6e6"
 
 BUILD_TARGET = 'RelWithDebInfo'
 
