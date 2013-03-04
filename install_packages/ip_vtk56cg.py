@@ -38,6 +38,9 @@ VTKIMAGEPLANE_PATCH = 'vtk56_image_plane_patch_clinicalgraphics.diff'
 # patch to fix quadric decimation normal errors when decimating poly data.
 VTKQUADRIC_PATCH = "vtkQuadricDecimation2.diff"
 
+# patch to fix some display problems regarding text shadowing
+VTKTEXTSHADOW_PATCH = "vtk56_text_shadow_clinicalgraphics.diff"
+
 # recent segfault with vtk 5.6.1 and wxPython 2.8.11.0
 # see here for more info:
 # http://vtk.1045678.n5.nabble.com/wx-python-scripts-segfault-td1234471.html  
@@ -60,6 +63,8 @@ class VTK56CG(InstallPackage):
                                                  VTKQUADRIC_PATCH)
         self.vtkimageplane_patch_filename = os.path.join(config.patches_dir,
                                                  VTKIMAGEPLANE_PATCH)
+        self.vtktextshadow_patch_filename = os.path.join(config.patches_dir,
+                                                 VTKTEXTSHADOW_PATCH)                                                 
         self.cg_poly_patch_filename = os.path.join(config.patches_dir, CG_POLY_PATCH)
                                                  
         self.wxvtkrwi_displayid_segfault_patch_filename = os.path.join(
@@ -151,7 +156,16 @@ class VTK56CG(InstallPackage):
                 "%s -p0 < %s" % (config.PATCH, self.vtkquadric_patch_filename))
             if ret != 0:
                 utils.error(
-                    "Could not apply VTKQUADRIC patch.  Fix and try again.")                    
+                    "Could not apply VTKQUADRIC patch.  Fix and try again.") 
+
+            # VTKTEXTSHADOW PATCH
+            utils.output("Applying VTKTEXTSHADOW patch")
+            os.chdir(self.source_dir)
+            ret = os.system(
+                "%s -p0 < %s" % (config.PATCH, self.vtktextshadow_patch_filename))
+            if ret != 0:
+                utils.error(
+                    "Could not apply VTKTEXTSHADOW patch.  Fix and try again.")                    
 
             # WXVTKRWI_DISPLAYID_SEGFAULT patch
             utils.output("Applying VTKWXRWI_DISPLAYID_SEGFAULT patch")
