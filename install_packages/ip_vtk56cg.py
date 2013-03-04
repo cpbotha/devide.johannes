@@ -35,9 +35,6 @@ VTKPRPRTY_PATCH = "vtkProperty_PyShaderVar.diff"
 # Adds GetTexturePlaneActor method
 VTKIMAGEPLANE_PATCH = 'vtk56_image_plane_patch_clinicalgraphics.diff'
 
-# patch to fix quadric decimation normal errors when decimating poly data.
-VTKQUADRIC_PATCH = "vtkQuadricDecimation2.diff"
-
 # patch to fix some display problems regarding text shadowing
 VTKTEXTSHADOW_PATCH = "vtk56_text_shadow_clinicalgraphics.diff"
 
@@ -59,8 +56,6 @@ class VTK56CG(InstallPackage):
                                                EXC_PATCH)
         self.vtkprprty_patch_filename = os.path.join(config.patches_dir,
                                                  VTKPRPRTY_PATCH)
-        self.vtkquadric_patch_filename = os.path.join(config.patches_dir,
-                                                 VTKQUADRIC_PATCH)
         self.vtkimageplane_patch_filename = os.path.join(config.patches_dir,
                                                  VTKIMAGEPLANE_PATCH)
         self.vtktextshadow_patch_filename = os.path.join(config.patches_dir,
@@ -148,16 +143,7 @@ class VTK56CG(InstallPackage):
             if ret != 0:
                 utils.error(
                     "Could not apply VTKIMAGEPLANE patch.  Fix and try again.")                                
-                    
-            # VTKQUADRIC PATCH
-            utils.output("Applying VTKQUADRIC patch")
-            os.chdir(os.path.join(self.source_dir, 'Graphics'))
-            ret = os.system(
-                "%s -p0 < %s" % (config.PATCH, self.vtkquadric_patch_filename))
-            if ret != 0:
-                utils.error(
-                    "Could not apply VTKQUADRIC patch.  Fix and try again.") 
-
+            
             # VTKTEXTSHADOW PATCH
             utils.output("Applying VTKTEXTSHADOW patch")
             os.chdir(self.source_dir)
