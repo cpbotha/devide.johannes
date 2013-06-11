@@ -14,7 +14,7 @@ import shutil
 import utils
 
 BASENAME = "vtktud"
-SVN_REPO = "https://graphics.tudelft.nl/svn/tudvis/trunk/vtktud"
+HG_REPO = "ssh://hg@bitbucket.org/fmalan/vtktudcg"
 
 dependencies = ['VTK']
 
@@ -33,10 +33,9 @@ class VTKTUDCG(InstallPackage):
         else:
             os.chdir(config.archive_dir)
             # checkout trunk into directory vtktud
-            ret = os.system("%s co %s %s" % (config.SVN,
-                SVN_REPO, BASENAME))
+            ret = os.system("%s clone %s %s" % (config.HG, HG_REPO, BASENAME))
             if ret != 0:
-                utils.error("Could not SVN checkout.  Fix and try again.")
+                utils.error("Could not perform HG checkout.  Fix and try again.")
 
     def unpack(self):
         # no unpack step
