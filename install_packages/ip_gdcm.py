@@ -9,7 +9,7 @@ import shutil
 import utils
 
 BASENAME = "gdcm"
-GIT_REPO = "git://gdcm.git.sourceforge.net/gitroot/gdcm/gdcm"
+GIT_REPO = "git://git.code.sf.net/p/gdcm/gdcm "
 GIT_TAG = "v2.0.17"
 
 dependencies = ['SWIG', 'VTK']
